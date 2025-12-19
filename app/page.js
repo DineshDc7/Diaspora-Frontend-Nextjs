@@ -72,7 +72,7 @@ export default function Home() {
               <img
                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
                 alt="Dashboard"
-                className="rounded-lg mb-4 "
+                className="rounded-lg mb-4 h-[300px] w-full object-cover"
               />
 
               <div className="grid grid-cols-3 gap-2 text-xs">
@@ -112,10 +112,46 @@ export default function Home() {
               </div>
 
               <div className="flex justify-between mt-4 text-xs text-gray-500">
-                <p className="textColor text-sm">Real-time compliance and media-backed logs</p>
-                <p className="textColor text-sm">Businesses:<br></br> <span className="font-bold subHeadingColor">48</span></p>
-                <p className="textColor text-sm">On-time reports:<br></br> <span className="font-bold subHeadingColor">92%</span></p>
+                <p className="textColor text-sm">
+                  Real-time compliance and media-backed logs
+                </p>
+                <p className="textColor text-sm">
+                  Businesses:<br></br>{" "}
+                  <span className="font-bold subHeadingColor">48</span>
+                </p>
+                <p className="textColor text-sm">
+                  On-time reports:<br></br>{" "}
+                  <span className="font-bold subHeadingColor">92%</span>
+                </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div className="container mx-auto px-6 py-16">
+          <div className="flex justify-center items-center">
+            <div className="w-full max-w-[800px] bg-white shadow-xl rounded-xl p-8">
+              <div className="flex items-center">
+                <p className="px-3 py-1 text-sm subHeadingColor rounded-full secondaryColor">
+                 Role-aware onboarding
+                </p>
+                <p className="px-3 py-1 text-sm textColor">We'll tailor the next steps to your role</p>
+              </div>
+              <h3 className="font-semibold headingColor my-4 text-2xl">
+                    Who are you signing up as?
+               </h3>
+               <p className="textColor pb-4 font-medium">Pick the option that best describes how you'll use the platform. You can invite other roles later.</p>
+            
+                <div className="grid grid-cols-3 gap-5">
+                  <div>
+                    <div>
+                      <h3></h3>
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+            
             </div>
           </div>
         </div>
