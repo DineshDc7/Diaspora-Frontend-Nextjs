@@ -15,7 +15,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #696969;
   }
 }
 @media (min-width: 96rem) {
@@ -24,7 +24,7 @@
     }
 }
 body {
-  background: var(--background);
+  /* background: var(--background); */
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -42,9 +42,13 @@ body {
 }
 .subHeadingColor
 {
-  color: #5e5e5e;
+  color: #636363;
 }
 .textColor
 {
-  color: #696969;
+  color: #797979;
+}
+button
+{
+  cursor: pointer;
 }

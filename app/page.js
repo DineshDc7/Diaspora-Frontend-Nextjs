@@ -1,12 +1,16 @@
+"use client";
 import Header from "./components/Header";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+ const router = useRouter();
+
   return (
     <main className="min-h-screen bg-white">
       <Header />
 
       {/* Hero Section */}
-      <section className="px-6 py-16">
+      <section className="px-6 py-10">
         <div className="container mx-auto px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
@@ -32,10 +36,10 @@ export default function Home() {
               </p>
 
               <div className="mt-6 flex gap-4">
-                <button className="px-6 py-3 primaryColor text-white rounded-md font-semibold hover:bg-blue-700">
+                <button onClick={() => router.push("/admin/signup")} className="px-6 py-3 primaryColor text-white rounded-md font-semibold hover:bg-blue-700 cursor-pointer">
                   Get started
                 </button>
-                <button className="px-6 py-3 secondaryColor subHeadingColor font-semibold rounded-md hover:bg-gray-50">
+                <button onClick={() => router.push("/login")} className="px-6 py-3 secondaryColor subHeadingColor font-semibold rounded-md hover:bg-gray-50 cursor-pointer">
                   Log in
                 </button>
               </div>
@@ -94,13 +98,14 @@ export default function Home() {
                   },
                 ].map((item, i) => (
                   <div key={i} className="secondaryColor p-4 rounded-md">
-                    <div className="flex justify-between items-center">
-                      <p className="font-semibold subHeadingColor text-base ">
-                        {item.title.split(" ").map((word, index) => (
-                          <span key={index} className="block">
-                            {word}
+                    <div className="justify-between items-center">
+                      <p className="font-semibold subHeadingColor text-base">
+                        {/* {item.title.split(" ").map((word, index) => ( */}
+                          {/* <span key={index} className="block"> */}
+                          <span className="block">
+                            {item.title}
                           </span>
-                        ))}
+                        {/* ))} */}
                       </p>
                       <p className="font-semibold text-sm textColor">
                         {item.subtitle}
@@ -128,34 +133,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section>
-        <div className="container mx-auto px-6 py-16">
-          <div className="flex justify-center items-center">
-            <div className="w-full max-w-[800px] bg-white shadow-xl rounded-xl p-8">
-              <div className="flex items-center">
-                <p className="px-3 py-1 text-sm subHeadingColor rounded-full secondaryColor">
-                 Role-aware onboarding
-                </p>
-                <p className="px-3 py-1 text-sm textColor">We'll tailor the next steps to your role</p>
-              </div>
-              <h3 className="font-semibold headingColor my-4 text-2xl">
-                    Who are you signing up as?
-               </h3>
-               <p className="textColor pb-4 font-medium">Pick the option that best describes how you'll use the platform. You can invite other roles later.</p>
-            
-                <div className="grid grid-cols-3 gap-5">
-                  <div>
-                    <div>
-                      <h3></h3>
-                      <p></p>
-                    </div>
-                  </div>
-                </div>
-            
-            </div>
-          </div>
-        </div>
-      </section>
+      
     </main>
   );
 }
