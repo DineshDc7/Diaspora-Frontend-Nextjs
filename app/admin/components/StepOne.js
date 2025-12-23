@@ -2,12 +2,25 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
-const StepOne = ({ onContinue }) => {
+const StepOne = () => {
      const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const cardBase = "p-4 rounded-lg cursor-pointer transition-all duration-200";
+const roleRoutes = {
+  0: "/admin/investorSignup",
+    1: "/admin/business-owner", // create this folder if missing
+    2: "/admin/signup",
+};
 
+const onContinue = () => {
+  const selectedRoute = roleRoutes[activeIndex];
+
+  if (!selectedRoute) return;
+
+  router.push(selectedRoute);
+};
+
+  const cardBase = "p-4 rounded-lg cursor-pointer transition-all duration-200";
   const activeCard = "bg-blue-600 text-white";
   const inactiveCard = "secondaryColor";
   return (
@@ -15,7 +28,7 @@ const StepOne = ({ onContinue }) => {
       <section>
         <div className="container mx-auto md:w-[1100px] px-6 py-10">
           <div className="text-center">
-                <p className="text-sm"><span className="font-semibold">Step 1 of 2</span> Choose how you'll use Diaspora Insight </p>
+                {/* <p className="text-sm"><span className="font-semibold">Step 1 of 3</span> Choose how you'll use Diaspora Insight </p> */}
             </div>
           <div className="flex justify-center items-center">
             

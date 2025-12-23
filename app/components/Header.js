@@ -38,7 +38,7 @@ const Header = () => {
               </li>
               <li>
                 <a
-                  href="admin/signup"
+                  href="/admin"
                   className="px-2 py-1.5 text-blue-600 hover:text-blue-300"
                 >
                   Sign up

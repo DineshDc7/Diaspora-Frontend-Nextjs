@@ -4,10 +4,9 @@ import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
-const StepTwo = ({ onBack }) => {
+const StepTwo = ({ onBack, onContinue }) => {
 
-
-      const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,7 +25,7 @@ const StepTwo = ({ onBack }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    
     const payload = {
       ...formData,
       phone: `${formData.countryCode}${formData.phone}`,
@@ -39,14 +38,14 @@ const StepTwo = ({ onBack }) => {
 
     return (
         <>
-         <section>
+         <section className="">
         <div className="container mx-auto md:w-[1000px] py-10">
           <div className="grid md:grid-cols-3 grid-cols-1 gap-6">
             <div className="md:col-span-2 col-span-1 flex flex-col justify-center pr-16">
-              {/* <p className="textColor mb-4 text-sm font-semibold"><span className="font-semibold">Step 2 of 2</span> - Create your admin workspace</p> */}
+              <p className="textColor mb-4 text-sm font-semibold"><span className="font-semibold">Step 1 of 3</span> - Create your investor workspace</p>
               <div>
                 <h2 className="text-3xl font-bold mb-4 headingColor">
-                  Set up your Admin Account
+                  Set up your Investor Account
                 </h2>
                 <p className="textColor">
                   Set up tools, permissions, and workflows to manage users and
@@ -150,19 +149,31 @@ const StepTwo = ({ onBack }) => {
                 </div>
 
                 {/* Submit */}
-                <div className="space-y-3">
+                <div className="flex gap-3 items-center">
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-md primaryColor text-white font-semibold"
+                    onClick={onBack}
+                    className="w-full py-2 rounded-md secondaryColor textColor text-sm font-semibold"
                   >
-                    Create Account
+                    Back Previous Step
                   </button>
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-md secondaryColor textColor font-semibold"
+                    className="w-full py-2 rounded-md secondaryColor textColor text-sm font-semibold"
                   >
-                    Continue with Google
+                    Skip for Now
                   </button>
+                  <button
+                    type="submit"
+                    onClick={onContinue}
+                    className="w-full py-2 rounded-md primaryColor text-white text-sm font-semibold"
+                  >
+                    
+                    Continue to Step 2
+                  </button>
+                  
+                  
+                  
                 </div>
 
                 <div className="flex justify-between py-6 gap-12">
@@ -173,6 +184,9 @@ const StepTwo = ({ onBack }) => {
                 </div>
               </form>
             </div>
+
+
+
             <div className="md:col-span-1 col-span-1 mt-6 md:mt-0">
               <div className="p-6 rounded-lg shadow-lg h-full">
                 <p className="mb-2 textColor text-sm font-semibold">What you get</p>

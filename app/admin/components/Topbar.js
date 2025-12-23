@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
 import { User } from "lucide-react";
+import { useState } from "react";
 
 export default function Topbar() {
   return (
     <div className="flex justify-between items-center">
       <div>
         <div className="flex items-center gap-5 mb-2">
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <h1 className="text-2xl font-semibold headingColor">Dashboard</h1>
           <p className="px-3 py-1 text-sm font-semibold subHeadingColor rounded-full secondaryColor">
             Live portfolio overview
           </p>
@@ -20,9 +21,7 @@ export default function Topbar() {
       <div className="flex items-center gap-3">
         <div>
           <form className="relative w-full max-w-md">
-            <input
-              type="text"
-              value="value"
+            <input type="text"
               placeholder="Search Businesses, reports, officers"
               className="w-[300px] rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none"
             />
