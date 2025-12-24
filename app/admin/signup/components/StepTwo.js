@@ -41,11 +41,11 @@ const StepTwo = ({ onBack }) => {
         <>
          <section>
         <div className="container mx-auto md:w-[1000px] py-10">
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-6">
-            <div className="md:col-span-2 col-span-1 flex flex-col justify-center pr-16">
+          <div className="grid md:grid-cols-3 grid-cols-1 md:gap-6">
+            <div className="md:col-span-2 col-span-1 flex flex-col justify-center md:pr-16 px-4">
               {/* <p className="textColor mb-4 text-sm font-semibold"><span className="font-semibold">Step 2 of 2</span> - Create your admin workspace</p> */}
               <div>
-                <h2 className="text-3xl font-bold mb-4 headingColor">
+                <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
                   Set up your Admin Account
                 </h2>
                 <p className="textColor">
@@ -53,7 +53,7 @@ const StepTwo = ({ onBack }) => {
                   platform operations efficiently.
                 </p>
               </div>
-              <form className="py-6" onSubmit={handleSubmit}>
+              <form className="md:py-6 pt-4" onSubmit={handleSubmit}>
                 {/* Full Name */}
                 <div className="mb-4">
                   <label className="block text-sm font-semibold mb-2 textColor">

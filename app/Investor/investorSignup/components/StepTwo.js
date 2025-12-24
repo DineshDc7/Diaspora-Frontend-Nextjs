@@ -37,14 +37,14 @@ const StepTwo = ({ onBack, onContinue }) => {
     <>
       <section className="">
         <div className="container mx-auto md:w-[1000px] py-10">
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-6">
-            <div className="md:col-span-2 col-span-1 flex flex-col justify-center pr-16">
+          <div className="grid md:grid-cols-3 grid-cols-1 md:gap-6">
+            <div className="md:col-span-2 col-span-1 flex flex-col justify-center md:pr-16 px-5">
               <p className="textColor mb-4 text-sm font-semibold">
                 <span className="font-semibold">Step 1 of 3</span> - Create your
                 investor workspace
               </p>
               <div>
-                <h2 className="text-3xl font-bold mb-4 headingColor">
+                <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
                   Set up your Investor Account
                 </h2>
                 <p className="textColor">
@@ -198,7 +198,7 @@ const StepTwo = ({ onBack, onContinue }) => {
               </form>
             </div>
 
-            <div className="md:col-span-1 col-span-1 mt-6 md:mt-0">
+            <div className="md:col-span-1 col-span-1 md:mt-6 md:mt-0">
               <div className="p-6 rounded-lg shadow-lg h-full">
                 <p className="mb-2 textColor text-sm font-semibold">
                   What you get

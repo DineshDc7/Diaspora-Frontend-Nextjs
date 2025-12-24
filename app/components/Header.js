@@ -86,6 +86,7 @@ export default function Header() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close Menu"
+                className="mr-4"
               >
                 <X size={24} />
               </button>

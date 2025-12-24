@@ -33,11 +33,11 @@ export default function StepFour({ onBack, onContinue }) {
   };
 
   return (
-    <section className="min-h-screen py-10 ">
-      <div className="md:max-w-6xl mx-auto p-8 rounded-xl shadow-lg bg-white">
+    <section className="min-h-screen md:py-10 ">
+      <div className="md:max-w-6xl mx-auto md:p-8 p-4 rounded-xl shadow-lg bg-white">
         {/* Top Progress */}
         <div className="flex justify-between items-center mb-4">
-          <p className="textColor mb-4 text-sm font-semibold">
+          <p className="textColor md:mb-4 text-sm font-semibold">
             <span className="font-semibold">Step 3 of 3</span> - Create your
             investor workspace
           </p>
@@ -49,7 +49,7 @@ export default function StepFour({ onBack, onContinue }) {
           </div>
         </div>
 
-        <h2 className="text-3xl font-bold mb-4 headingColor">
+        <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
           Receive clear, verified reporting from day one
         </h2>
 
@@ -61,7 +61,7 @@ export default function StepFour({ onBack, onContinue }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-6">
           {/* LEFT FORM */}
-          <div className="lg:col-span-2 pr-8">
+          <div className="lg:col-span-2 md:pr-8">
             {/* Business Name */}
             <div className="mb-4">
               <label className="block text-sm font-semibold mb-2 textColor">
@@ -193,8 +193,8 @@ export default function StepFour({ onBack, onContinue }) {
               </p>
             </div>
 
-            <div className="flex justify-between gap-10">
-              <div className="p-2 secondaryColor  rounded-lg">
+            <div className="md:flex justify-between gap-10">
+              <div className="p-2 secondaryColor rounded-lg">
                 <div className="flex justify-between items-center">
                   <p className="text-sm font-semibold">Digest Style</p>
                   <p className="px-3 py-1 text-sm subHeadingColor rounded-full bg-gray-200">
@@ -206,7 +206,7 @@ export default function StepFour({ onBack, onContinue }) {
                   details.
                 </p>
               </div>
-              <div className="p-2 secondaryColor  rounded-lg">
+              <div className="p-2 secondaryColor rounded-lg md:mt-auto mt-2">
                 <div className="flex justify-between items-center">
                   <p className="text-sm font-semibold">Digest Style</p>
                   <p className="px-3 py-1 text-sm subHeadingColor rounded-full bg-gray-200">
@@ -312,8 +312,8 @@ export default function StepFour({ onBack, onContinue }) {
             </p>
           </div>
         </div>
-        <div className="flex justify-between items-center mt-8">
-          <div>
+        <div className="md:flex justify-between items-center md:mt-8">
+          <div className="mb-3 md:mb-3">
             <p className="mb-1 textColor font-semibold">
               You're ready to start. You can fine-tune report delivery from your
               dashboard anytime.
