@@ -11,11 +11,11 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="px-6 py-10">
-        <div className="container mx-auto px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto md:px-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12 gap-5 items-center">
             {/* Left Content */}
             <div>
-              <div className="flex gap-2 mb-4 ">
+              <div className="flex gap-2 mb-4">
                 <span className="px-3 py-1 text-xs subHeadingColor rounded-full secondaryColor">
                   Built for Diaspora investors & Nigerian Business Owners
                 </span>
@@ -24,7 +24,7 @@ export default function Home() {
                 </span>
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight headingColor">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight headingColor">
                 High-trust accountability for diaspora investors and Nigerian
                 businesses.
               </h1>
@@ -58,9 +58,9 @@ export default function Home() {
             </div>
 
             {/* Right Card */}
-            <div className="bg-white shadow-xl rounded-xl p-8">
+            <div className="bg-white shadow-xl rounded-xl md:p-8 p-4">
               <div className="flex items-center justify-between mb-6">
-                <div>
+                <div className=" w-[50%] md:w-auto">
                   <h3 className="font-semibold headingColor">
                     Portfolio overview
                   </h3>
