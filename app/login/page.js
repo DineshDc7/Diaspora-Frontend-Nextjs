@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Header from "../components/Header";
+import LoginHeader from "../components/LoginHeader";
 import { useState } from "react";
 
 const Page = () => {
@@ -21,7 +21,7 @@ const Page = () => {
   return (
     <>
     <main className="min-h-screen bg-white">
-      <Header />
+      <LoginHeader />
       <section>
         <div className="container mx-auto px-6 py-16 flex justify-center items-center">
           <form

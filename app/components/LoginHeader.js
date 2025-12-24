@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
-export default function Header() {
+export default function LoginHeader() {
   const [open, setOpen] = useState(false);
 
   // Prevent background scroll when mobile menu is open
@@ -52,7 +52,7 @@ export default function Header() {
             <Link href="#" className="subHeadingColor hover:text-black">
               Support
             </Link>
-            <Link
+            {/* <Link
               href="/admin"
               className="text-blue-600 hover:text-blue-400"
             >
@@ -63,7 +63,7 @@ export default function Header() {
               className="text-blue-600 hover:text-blue-400"
             >
               Login
-            </Link>
+            </Link> */}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -107,7 +107,7 @@ export default function Header() {
               Support
             </Link>
 
-            <Link
+            {/* <Link
               href="/signup"
               className="text-blue-600 hover:text-blue-400 border-b border-gray-200 pb-3 px-6 "
               onClick={() => setOpen(false)}
@@ -121,7 +121,7 @@ export default function Header() {
               onClick={() => setOpen(false)}
             >
               Login
-            </Link>
+            </Link> */}
           </div>
         </div>
       )}
