@@ -1,11 +1,11 @@
 import React from 'react';
-import StepOne from './components/StepOne';
-import Header from '../components/RoleHeader';
+import StepOne from '../components/StepOne';
+import RoleHeader from '../components/RoleHeader';
 
 const Page = () => {
     return (
         <>
-            <Header/>
+            <RoleHeader/>
             <StepOne/>
         </>
     );

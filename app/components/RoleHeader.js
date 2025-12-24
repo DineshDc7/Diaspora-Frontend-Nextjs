@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header = () => {
+const RoleHeader = () => {
     return (
         <>
             {/* Navbar */}
@@ -32,4 +32,4 @@ const Header = () => {
     );
 }
 
-export default Header;
+export default RoleHeader;

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import React from "react";
-import Header from "../components/Header";
+import Header from "../../components/RoleHeader";
 import StepOne from "../components/StepOne";
 import StepTwo from "./components/StepTwo";
 const Page = () => {

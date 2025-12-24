@@ -36,7 +36,7 @@ export default function Home() {
               </p>
 
               <div className="mt-6 flex gap-4">
-                <button onClick={() => router.push("/admin")} className="px-6 py-3 primaryColor text-white rounded-md font-semibold hover:bg-blue-700 cursor-pointer">
+                <button onClick={() => router.push("/signup")} className="px-6 py-3 primaryColor text-white rounded-md font-semibold hover:bg-blue-700 cursor-pointer">
                   Get started
                 </button>
                 <button onClick={() => router.push("/login")} className="px-6 py-3 secondaryColor subHeadingColor font-semibold rounded-md hover:bg-gray-50 cursor-pointer">

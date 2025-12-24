@@ -2,7 +2,7 @@
 import { useState } from "react";
 import React from "react";
 import Header from "../components/Header";
-import StepOne from "../components/StepOne";
+import StepOne from "../../components/StepOne";
 import StepTwo from "./components/StepTwo";
 const Page = () => {
 const [step, setStep] = useState(1);

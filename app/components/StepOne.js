@@ -7,9 +7,9 @@ const StepOne = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
 const roleRoutes = {
-  0: "/admin/investorSignup",
+  0: "/Investor/investorSignup",
     // 1: "/admin/business-owner", // create this folder if missing
-    1:"/admin/ownersignup",
+    1:"/business_owner/ownersignup",
     2: "/admin/signup",
 };
 
@@ -227,9 +227,9 @@ const onContinue = () => {
                   </p>
                 </div>
                 <div className="flex gap-4">
-                  <button className="px-6 py-3 secondaryColor subHeadingColor rounded-md font-semibold hover:bg-blue-700">
+                  {/* <button className="px-6 py-3 secondaryColor subHeadingColor rounded-md font-semibold hover:bg-blue-700">
                     Back
-                  </button>
+                  </button> */}
                   <button  onClick={onContinue} className="px-6 py-3 primaryColor text-white rounded-md font-semibold hover:bg-blue-700">
                     Continue
                   </button>
