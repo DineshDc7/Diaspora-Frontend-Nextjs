@@ -27,11 +27,11 @@ export default function StepThree({ onBack, onContinue }) {
   };
 
   return (
-    <section className="min-h-screen py-10 ">
-      <div className="md:max-w-6xl mx-auto p-8 rounded-xl shadow-lg bg-white">
+    <section className="min-h-screen md:py-10 ">
+      <div className="md:max-w-6xl mx-auto md:p-8 p-4 rounded-xl shadow-lg bg-white">
         {/* Top Progress */}
         <div className="flex justify-between items-center mb-4">
-          <p className="textColor mb-4 text-sm font-semibold">
+          <p className="textColor md:mb-4 text-sm font-semibold">
             <span className="font-semibold">Step 2 of 3</span> - Create your
             investor workspace
           </p>
@@ -43,7 +43,7 @@ export default function StepThree({ onBack, onContinue }) {
           </div>
         </div>
 
-        <h2 className="text-3xl font-bold mb-4 headingColor">
+        <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
           Add your first business
         </h2>
 
@@ -54,7 +54,7 @@ export default function StepThree({ onBack, onContinue }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-6">
           {/* LEFT FORM */}
-          <div className="lg:col-span-2 pr-8">
+          <div className="lg:col-span-2 md:pr-8">
             {/* Business Name */}
             <div className="mb-4">
               <label className="block text-sm font-semibold mb-2 textColor">
@@ -223,13 +223,13 @@ export default function StepThree({ onBack, onContinue }) {
             </p>
           </div>
         </div>
-        <div className="flex justify-between items-center mt-8">
+        <div className="md:flex justify-between items-center md:mt-8">
           <div>
             <p className="mb-1 textColor font-semibold">
               You can skip this for now and add businesses from your dashboard
               later.
             </p>
-            <p className="text-sm">
+            <p className="text-sm md:mb-auto mb-5">
               Your account is created - now connect it to real businesses.
             </p>
           </div>

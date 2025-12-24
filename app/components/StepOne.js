@@ -34,9 +34,9 @@ const onContinue = () => {
             </div>
           <div className="flex justify-center items-center">
             
-            <div className="w-full bg-white shadow-xl rounded-xl p-8">
+            <div className="w-full bg-white shadow-xl rounded-xl md:p-8 p-4">
               
-              <div className="flex items-center">
+              <div className="md:flex items-center">
                 <p className="px-3 py-1 text-sm subHeadingColor rounded-full secondaryColor">
                   Role-aware onboarding
                 </p>
@@ -217,7 +217,7 @@ const onContinue = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between mt-6">
+              <div className="md:flex justify-between mt-6">
                 <div>
                   <p className="mb-2">
                     Your choice will shape the onboarding flow.
@@ -226,7 +226,7 @@ const onContinue = () => {
                     All roles share a single source of truth for data and media.
                   </p>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4 md:mt-auto mt-5">
                   {/* <button className="px-6 py-3 secondaryColor subHeadingColor rounded-md font-semibold hover:bg-blue-700">
                     Back
                   </button> */}

@@ -79,7 +79,7 @@ export default function Home() {
                 className="rounded-lg mb-4 h-[300px] w-full object-cover"
               />
 
-              <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="grid md:grid-cols-3 gap-2 text-xs">
                 {[
                   {
                     title: "Diaspora investor",
@@ -116,7 +116,7 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="flex justify-between mt-4 text-xs text-gray-500">
+              <div className="md:flex justify-between mt-4 text-xs text-gray-500">
                 <p className="textColor text-sm">
                   Real-time compliance and media-backed logs
                 </p>
