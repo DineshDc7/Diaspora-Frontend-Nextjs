@@ -1,0 +1,60 @@
+"use client";
+
+import {
+  Home,
+  Building,
+  AlertTriangle,
+  BarChart,
+  MessageCircle,
+  Settings,
+  CreditCard,
+} from "lucide-react";
+const MenuItems = [
+  { name: "Dashboard", icon: Home },
+  { name: "Businesses", icon: Building },
+  { name: "Alerts", icon: AlertTriangle },
+  { name: "Reports", icon: BarChart },
+  { name: "Messages", icon: MessageCircle },
+  { name: "Settings", icon: Settings },
+  { name: "Billing", icon: CreditCard },
+];
+export default function Sidebar() {
+  return (
+    <aside className="w-64 bg-gray-900 border-r px-4 py-6">
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
+          <a href="/">
+            <h1>DI</h1>
+          </a>
+        </div>
+        <div>
+          <a href="/">
+            <h4 className="font-semibold text-lg text-white">
+              Diaspora Insight
+            </h4>
+          </a>
+          <p className="text-xs text-gray-400">
+            Accountability for cross-border capital
+          </p>
+        </div>
+      </div>
+
+       <nav className="space-y-2 py-6">
+        {MenuItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.name}
+              className="w-full text-white text-left px-4 py-2 rounded-sm hover:bg-blue-50 hover:text-gray-800 font-medium"
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} />
+                <span>{item.name}</span>
+              </div>
+            </button>
+          );
+        })}
+      </nav>
+    </aside>
+  );
+}
