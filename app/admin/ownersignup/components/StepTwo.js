@@ -5,9 +5,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
 const StepTwo = ({ onBack }) => {
-
-
-      const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,18 +33,16 @@ const StepTwo = ({ onBack }) => {
     console.log("Form Submitted:", payload);
   };
 
-
-
-    return (
-        <>
-         <section>
+  return (
+    <>
+      <section>
         <div className="container mx-auto md:w-[1000px] py-10">
           <div className="grid md:grid-cols-3 grid-cols-1 gap-6">
             <div className="md:col-span-2 col-span-1 flex flex-col justify-center pr-16">
               {/* <p className="textColor mb-4 text-sm font-semibold"><span className="font-semibold">Step 2 of 2</span> - Create your admin workspace</p> */}
               <div>
                 <h2 className="text-3xl font-bold mb-4 headingColor">
-                  Set up your Admin Account
+                  Set up your Business Owner Account
                 </h2>
                 <p className="textColor">
                   Set up tools, permissions, and workflows to manage users and
@@ -92,7 +88,7 @@ const StepTwo = ({ onBack }) => {
                     Contact Number
                   </label>
                   <div className="flex gap-2">
-                   <div className="relative">
+                    <div className="relative">
                       <select
                         name="countryCode"
                         value={formData.countryCode}
@@ -173,35 +169,59 @@ const StepTwo = ({ onBack }) => {
                 </div>
 
                 <div className="flex justify-between py-6 gap-12">
-                    <div>
-                        <p className="text-sm textColor">We use your details only to secure and personalize your workspace.</p>
-                    </div>
-                    <div><button onClick={onBack} className="text-blue-500 text-sm font-semibold">Back to role selection </button></div>
+                  <div>
+                    <p className="text-sm textColor">
+                      We use your details only to secure and personalize your
+                      workspace.
+                    </p>
+                  </div>
+                  <div>
+                    <button
+                      onClick={onBack}
+                      className="text-blue-500 text-sm font-semibold"
+                    >
+                      Back to role selection{" "}
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
             <div className="md:col-span-1 col-span-1 mt-6 md:mt-0">
               <div className="p-6 rounded-lg shadow-lg h-full">
-                <p className="mb-2 textColor text-sm font-semibold">What you get</p>
-                <h3 className="subHeadingColor font-semibold text-base">One view of all your businesses</h3>
-                <p className="textColor text-sm mb-2">
-                  This handy tool helps you create dummy text for all your layout needs. We are gradually adding new functionality and we welcome your suggestions and feedback.
+                <p className="mb-2 textColor text-sm font-semibold">
+                  What you get
                 </p>
-                <h3 className="subHeadingColor font-semibold text-base">One view of all your businesses</h3>
+                <h3 className="subHeadingColor font-semibold text-base">
+                  One view of all your businesses
+                </h3>
                 <p className="textColor text-sm mb-2">
-                  This handy tool helps you create dummy text for all your layout needs. We are gradually adding new functionality and we welcome your suggestions and feedback.
+                  This handy tool helps you create dummy text for all your
+                  layout needs. We are gradually adding new functionality and we
+                  welcome your suggestions and feedback.
                 </p>
-                <h3 className="subHeadingColor font-semibold text-base">One view of all your businesses</h3>
+                <h3 className="subHeadingColor font-semibold text-base">
+                  One view of all your businesses
+                </h3>
                 <p className="textColor text-sm mb-2">
-                  This handy tool helps you create dummy text for all your layout needs. We are gradually adding new functionality and we welcome your suggestions and feedback.
+                  This handy tool helps you create dummy text for all your
+                  layout needs. We are gradually adding new functionality and we
+                  welcome your suggestions and feedback.
+                </p>
+                <h3 className="subHeadingColor font-semibold text-base">
+                  One view of all your businesses
+                </h3>
+                <p className="textColor text-sm mb-2">
+                  This handy tool helps you create dummy text for all your
+                  layout needs. We are gradually adding new functionality and we
+                  welcome your suggestions and feedback.
                 </p>
               </div>
             </div>
           </div>
         </div>
-      </section>   
-        </>
-    );
-}
+      </section>
+    </>
+  );
+};
 
 export default StepTwo;

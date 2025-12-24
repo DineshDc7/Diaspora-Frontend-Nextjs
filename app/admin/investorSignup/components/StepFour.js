@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 
 export default function StepFour({ onBack, onContinue }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function StepFour({ onBack, onContinue }) {
     location: "",
     sector: "",
     monthlySales: "",
-    reportingFrequency: "",
+    timezone: "",
     contact: "",
   });
 
@@ -93,18 +94,26 @@ export default function StepFour({ onBack, onContinue }) {
                 <label className="block text-sm font-semibold mb-2 textColor">
                   Weekly highlights
                 </label>
-                <select
-                  name="sector"
-                  value={formData.sector}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
-                >
-                  <option value="">Select Weekly highlights</option>
-                  <option>Retail</option>
-                  <option>Agriculture</option>
-                  <option>Logistics</option>
-                  <option>Manufacturing</option>
-                </select>
+
+                <div className="relative w-full">
+                  <select
+                    name="highlights"
+                    value={formData.sector}
+                    onChange={handleChange}
+                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                  >
+                    <option value="">Select Weekly highlights</option>
+                    <option>Retail</option>
+                    <option>Agriculture</option>
+                    <option>Logistics</option>
+                    <option>Manufacturing</option>
+                  </select>
+
+                  {/* Dropdown Arrow */}
+                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -115,35 +124,53 @@ export default function StepFour({ onBack, onContinue }) {
                   Preferred channel
                 </label>
 
-                <select
-                  name="sector"
-                  value={formData.monthlySales}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
-                >
-                  <option value="">Select Preferred channel</option>
-                  <option>Retail</option>
-                  <option>Agriculture</option>
-                  <option>Logistics</option>
-                  <option>Manufacturing</option>
-                </select>
+                <div className="relative w-full">
+                  <select
+                    name="preferred"
+                    value={formData.monthlySales}
+                    onChange={handleChange}
+                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                  >
+                    <option value="">Select Weekly highlights</option>
+                    <option>Retail</option>
+                    <option>Agriculture</option>
+                    <option>Logistics</option>
+                    <option>Manufacturing</option>
+                  </select>
+
+                  {/* Dropdown Arrow */}
+                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold mb-2 textColor">
                   Time zone
                 </label>
-                <select
-                  name="reportingFrequency"
-                  value={formData.reportingFrequency}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
-                >
-                  <option>Time zone</option>
+
+
+                <div className="relative w-full">
+                  <select
+                    name="timezone"
+                    value={formData.timezone}
+                    onChange={handleChange}
+                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                  >
+                    <option>Time zone</option>
                   <option>Daily updates</option>
                   <option>Weekly updates</option>
                   <option>Monthly updates</option>
-                </select>
+                  </select>
+
+                  {/* Dropdown Arrow */}
+                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
+
+
               </div>
             </div>
 
@@ -166,26 +193,31 @@ export default function StepFour({ onBack, onContinue }) {
               </p>
             </div>
 
-
             <div className="flex justify-between gap-10">
-                <div className="p-2 secondaryColor  rounded-lg">
-                    <div className="flex justify-between items-center">
-                        <p className="text-sm font-semibold">Digest Style</p>
-                        <p className="px-3 py-1 text-sm subHeadingColor rounded-full bg-gray-200">
-                          Recommended
-                        </p>
-                    </div>
-                    <p className="text-sm textColor mt-3">One concise email with portfolio KPIs, risks, and links to details.</p>
+              <div className="p-2 secondaryColor  rounded-lg">
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold">Digest Style</p>
+                  <p className="px-3 py-1 text-sm subHeadingColor rounded-full bg-gray-200">
+                    Recommended
+                  </p>
                 </div>
-                <div className="p-2 secondaryColor  rounded-lg">
-                    <div className="flex justify-between items-center">
-                        <p className="text-sm font-semibold">Digest Style</p>
-                        <p className="px-3 py-1 text-sm subHeadingColor rounded-full bg-gray-200">
-                          Recommended
-                        </p>
-                    </div>
-                    <p className="text-sm textColor mt-3">One concise email with portfolio KPIs, risks, and links to details.</p>
+                <p className="text-sm textColor mt-3">
+                  One concise email with portfolio KPIs, risks, and links to
+                  details.
+                </p>
+              </div>
+              <div className="p-2 secondaryColor  rounded-lg">
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold">Digest Style</p>
+                  <p className="px-3 py-1 text-sm subHeadingColor rounded-full bg-gray-200">
+                    Recommended
+                  </p>
                 </div>
+                <p className="text-sm textColor mt-3">
+                  One concise email with portfolio KPIs, risks, and links to
+                  details.
+                </p>
+              </div>
             </div>
 
             {/* Actions */}
@@ -217,17 +249,13 @@ export default function StepFour({ onBack, onContinue }) {
                 </p>
                 <p className="textColor">
                   Overall compliance <br></br>
-                  <span className="subHeadingColor font-semibold">
-                    89%
-                  </span>
+                  <span className="subHeadingColor font-semibold">89%</span>
                 </p>
               </div>
               <div className="flex gap-10">
                 <p className="textColor">
                   Avg monthly sales <br></br>
-                  <span className="subHeadingColor font-semibold">
-                    42.5M
-                  </span>
+                  <span className="subHeadingColor font-semibold">42.5M</span>
                 </p>
                 <p className="textColor">
                   Flagged items <br></br>
@@ -236,33 +264,46 @@ export default function StepFour({ onBack, onContinue }) {
               </div>
 
               <div className="flex gap-10">
-                <p className="textColor text-xs">
-                  3 businesses at risk
-                </p>
-                <p className="textColor text-xs">
-                  2 overdue monthly reports
-                </p>
+                <p className="textColor text-xs">3 businesses at risk</p>
+                <p className="textColor text-xs">2 overdue monthly reports</p>
               </div>
             </div>
 
-
             <div className="bg-white p-4 rounded-lg my-3">
-                <div className="mb-2">
-                    <p className="text-xs font-semibold subHeadingColor">Portfolio summary generated</p>
-                    <p className="text-xs textColor">All numbers reconciled from daily reports and verified uploads.</p>
-                </div>
-                <div className="mb-2">
-                    <p className="text-xs font-semibold subHeadingColor">Alert: sales drop {">"}20%</p>
-                    <p className="text-xs textColor">Kano Retail Hub -24% vs last month 2 receipts flagged for review.</p>
-                </div>
-                <div className="mb-2">
-                    <p className="text-xs font-semibold subHeadingColor">Media verification complete</p>
-                    <p className="text-xs textColor">18 new photos and 6 videos confirmed by field officers.</p>
-                </div>
-                <div className="">
-                    <p className="text-xs font-semibold subHeadingColor">Next summary scheduled </p>
-                    <p className="text-xs textColor">Automatic delivery on the 1st of next month at 09:00 WAT.</p>
-                </div>
+              <div className="mb-2">
+                <p className="text-xs font-semibold subHeadingColor">
+                  Portfolio summary generated
+                </p>
+                <p className="text-xs textColor">
+                  All numbers reconciled from daily reports and verified
+                  uploads.
+                </p>
+              </div>
+              <div className="mb-2">
+                <p className="text-xs font-semibold subHeadingColor">
+                  Alert: sales drop {">"}20%
+                </p>
+                <p className="text-xs textColor">
+                  Kano Retail Hub -24% vs last month 2 receipts flagged for
+                  review.
+                </p>
+              </div>
+              <div className="mb-2">
+                <p className="text-xs font-semibold subHeadingColor">
+                  Media verification complete
+                </p>
+                <p className="text-xs textColor">
+                  18 new photos and 6 videos confirmed by field officers.
+                </p>
+              </div>
+              <div className="">
+                <p className="text-xs font-semibold subHeadingColor">
+                  Next summary scheduled{" "}
+                </p>
+                <p className="text-xs textColor">
+                  Automatic delivery on the 1st of next month at 09:00 WAT.
+                </p>
+              </div>
             </div>
 
             <p className="text-xs text-gray-500 mt-4">
@@ -294,7 +335,6 @@ export default function StepFour({ onBack, onContinue }) {
               Skip for Now
             </button>
             <button
-              onClick={handleContinue}
               className="w-fit px-4 py-2 rounded-md primaryColor text-white text-sm font-semibold"
             >
               Finish Setup

@@ -9,7 +9,7 @@ const StepOne = () => {
 const roleRoutes = {
   0: "/admin/investorSignup",
     // 1: "/admin/business-owner", // create this folder if missing
-    1:"/admin/investorSignup",
+    1:"/admin/ownersignup",
     2: "/admin/signup",
 };
 

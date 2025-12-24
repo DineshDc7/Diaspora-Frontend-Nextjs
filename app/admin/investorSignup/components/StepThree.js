@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 
 export default function StepThree({ onBack, onContinue }) {
   const router = useRouter();
@@ -87,18 +88,26 @@ export default function StepThree({ onBack, onContinue }) {
                 <label className="block text-sm font-semibold mb-2 textColor">
                   Sector
                 </label>
-                <select
-                  name="sector"
-                  value={formData.sector}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
-                >
-                  <option value="">Select sector</option>
-                  <option>Retail</option>
-                  <option>Agriculture</option>
-                  <option>Logistics</option>
-                  <option>Manufacturing</option>
-                </select>
+
+                <div className="relative w-full">
+                  <select
+                    name="sector"
+                    value={formData.sector}
+                    onChange={handleChange}
+                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                  >
+                    <option value="">Select sector</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Agriculture">Agriculture</option>
+                    <option value="Logistics">Logistics</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                  </select>
+
+                  {/* Dropdown Arrow */}
+                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -122,16 +131,24 @@ export default function StepThree({ onBack, onContinue }) {
                 <label className="block text-sm font-semibold mb-2 textColor">
                   Reporting frequency
                 </label>
-                <select
-                  name="reportingFrequency"
-                  value={formData.reportingFrequency}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
-                >
-                  <option>Daily updates</option>
-                  <option>Weekly updates</option>
-                  <option>Monthly updates</option>
-                </select>
+
+                <div className="relative w-full">
+                  <select
+                    name="sector"
+                    value={formData.reportingFrequency}
+                    onChange={handleChange}
+                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                  >
+                    <option>Daily updates</option>
+                    <option>Weekly updates</option>
+                    <option>Monthly updates</option>
+                  </select>
+
+                  {/* Dropdown Arrow */}
+                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -208,7 +225,10 @@ export default function StepThree({ onBack, onContinue }) {
         </div>
         <div className="flex justify-between items-center mt-8">
           <div>
-            <p className="mb-1 textColor font-semibold">You can skip this for now and add businesses from your dashboard later.</p>
+            <p className="mb-1 textColor font-semibold">
+              You can skip this for now and add businesses from your dashboard
+              later.
+            </p>
             <p className="text-sm">
               Your account is created - now connect it to real businesses.
             </p>
