@@ -7,9 +7,9 @@ const StepOne = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
 const roleRoutes = {
-  0: "/investor/investorSignup",
+  0: "/investor/investorsignup",
     // 1: "/admin/business-owner", // create this folder if missing
-    1:"/business_owner/ownersignup",
+    1:"/business-owner/ownersignup",
     2: "/admin/signup",
 };
 

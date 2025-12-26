@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+// import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
@@ -72,7 +72,7 @@ export default function Header() {
             onClick={() => setOpen(true)}
             aria-label="Open Menu"
           >
-            <Menu size={24} />
+            {/* <Menu size={24} />/ */}
           </button>
         </div>
       </header>
@@ -88,7 +88,7 @@ export default function Header() {
                 aria-label="Close Menu"
                 className="mr-4"
               >
-                <X size={24} />
+                {/* <X size={24} /> */}
               </button>
             </div>
 

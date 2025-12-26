@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+// import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginHeader() {
@@ -72,7 +72,7 @@ export default function LoginHeader() {
             onClick={() => setOpen(true)}
             aria-label="Open Menu"
           >
-            <Menu size={24} />
+            {/* <Menu size={24} /> */}
           </button>
         </div>
       </header>
@@ -87,7 +87,7 @@ export default function LoginHeader() {
                 onClick={() => setOpen(false)}
                 aria-label="Close Menu"
               >
-                <X size={24} />
+                {/* <X size={24} /> */}
               </button>
             </div>
 
