@@ -19,18 +19,18 @@ export default function Topbar() {
       </div>
 
       <div className="flex items-center gap-3">
-        <div>
+        {/* <div>
           <form className="relative w-full max-w-md">
             <input type="text"
               placeholder="Search Businesses, reports, officers"
               className="w-[300px] rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 placeholder-gray-400 outline-none"
             />
           </form>
-        </div>
+        </div> */}
         <div className="flex gap-2 items-center">
-          <p className="px-2 py-auto rounded-full bg-red-500 w-fit text-white">
+          {/* <p className="px-2 py-auto rounded-full bg-red-500 w-fit text-white">
             3
-          </p>
+          </p> */}
           <div className="px-2 py-2 rounded-full bg-neutral-100">
             <User />
           </div>
