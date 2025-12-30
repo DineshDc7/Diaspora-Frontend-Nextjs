@@ -3,25 +3,26 @@
 import {
   Home,
   Building,
-  AlertTriangle,
+  Users,
   BarChart,
-  MessageCircle,
   Settings,
-  CreditCard,
+  LogOut,
 } from "lucide-react";
 const MenuItems = [
-  { name: "Dashboard", icon: Home },
-  { name: "Businesses", icon: Building },
-  { name: "Alerts", icon: AlertTriangle },
+  { name: "Dashboard", icon: Home, href: "/admin/dashboard" },
+  { name: "Businesses", icon: Building, href: "/admin/business" },
   { name: "Reports", icon: BarChart },
-  { name: "Messages", icon: MessageCircle },
-  { name: "Settings", icon: Settings },
-  { name: "Billing", icon: CreditCard },
+  { name: "Users", icon: Users },
 ];
-export default function Sidebar() {
+const MenuItemsbuttom = [
+  // { name: "Setting", icon: Settings },
+  { name: "Logout", icon: LogOut },
+];
+export default function Sidebar(){
   return (
-    <aside className="w-64 bg-gray-900 border-r px-4 py-6">
-      <div className="flex items-center gap-2">
+    <aside className="fixed top-0 left-0 ">
+      <div className="w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh]">
+        <div className="flex items-center gap-2">
         <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
           <a href="/">
             <h1>DI</h1>
@@ -43,9 +44,28 @@ export default function Sidebar() {
         {MenuItems.map((item) => {
           const Icon = item.icon;
           return (
+            <a 
+              key={item.name} href={item.href}
+              className="w-full text-white text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium"
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} />
+                <span>{item.name}</span>
+              </div>
+            </a>
+          );
+        })}
+      </nav>
+
+
+      <div style={{position:"absolute", bottom:"5%"}}>
+        <nav className="space-y-2 py-6">
+        {MenuItemsbuttom.map((item) => {
+          const Icon = item.icon;
+          return (
             <button
               key={item.name}
-              className="w-full text-white text-left px-4 py-2 rounded-sm hover:bg-blue-50 hover:text-gray-800 font-medium"
+              className="w-full text-white text-left px-4  hover:text-gray-800 font-medium"
             >
               <div className="flex items-center gap-3">
                 <Icon size={16} />
@@ -55,6 +75,8 @@ export default function Sidebar() {
           );
         })}
       </nav>
+      </div>
+      </div>
     </aside>
   );
 }
