@@ -3,7 +3,7 @@ import { Eye } from 'lucide-react';
 export default function BusinessTable() {
   return (
     <>
-      <div className="shadow-md rounded-lg bg-white p-4">
+      <div className="shadow-lg rounded-lg bg-white p-4">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="headingColor text-lg font-semibold">Businesses</h2>
@@ -58,10 +58,10 @@ export default function BusinessTable() {
                 <tr>
                   <td className="py-4">
                     <div>
-                      <h4 className="subHeadingColor font-semibold text-sm">
+                      <h4 className="headingColor font-semibold text-sm">
                         Kantor imigrasi kelas i denpasar
                       </h4>
-                      <p className="textColor text-xs">9910566557</p>
+                      <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
                   <td className="py-4">
@@ -83,10 +83,10 @@ export default function BusinessTable() {
                 <tr>
                   <td className="py-4">
                     <div>
-                      <h4 className="subHeadingColor font-semibold text-sm">
+                      <h4 className="headingColor font-semibold text-sm">
                         Kantor imigrasi kelas i denpasar
                       </h4>
-                      <p className="textColor text-xs">9910566557</p>
+                      <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
                   <td className="py-4">
@@ -108,10 +108,10 @@ export default function BusinessTable() {
                 <tr>
                   <td className="py-4">
                     <div>
-                      <h4 className="subHeadingColor font-semibold text-sm">
+                      <h4 className="headingColor font-semibold text-sm">
                         Kantor imigrasi kelas i denpasar
                       </h4>
-                      <p className="textColor text-xs">9910566557</p>
+                      <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
                   <td className="py-4">
@@ -133,10 +133,10 @@ export default function BusinessTable() {
                 <tr>
                   <td className="py-4">
                     <div>
-                      <h4 className="subHeadingColor font-semibold text-sm">
+                      <h4 className="headingColor font-semibold text-sm">
                         Kantor imigrasi kelas i denpasar
                       </h4>
-                      <p className="textColor text-xs">9910566557</p>
+                      <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
                   <td className="py-4">

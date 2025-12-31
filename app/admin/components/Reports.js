@@ -3,7 +3,7 @@ import { Eye } from "lucide-react";
 const Reports = () => {
   return (
     <>
-      <div className="shadow-md rounded-lg bg-white p-4">
+      <div className="shadow-lg rounded-lg bg-white p-4">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="headingColor text-lg font-semibold">Reports</h2>
@@ -51,7 +51,7 @@ const Reports = () => {
               <tbody>
                 <tr>
                   <td className="py-4">
-                    <h4 className="subHeadingColor font-semibold text-sm">
+                    <h4 className="headingColor font-semibold text-sm">
                       Nairobi Fresh Mart
                     </h4>
                   </td>
@@ -80,7 +80,7 @@ const Reports = () => {
                 </tr>
                 <tr>
                   <td className="py-4">
-                    <h4 className="subHeadingColor font-semibold text-sm">
+                    <h4 className="headingColor font-semibold text-sm">
                       Nairobi Fresh Mart
                     </h4>
                   </td>
@@ -109,7 +109,7 @@ const Reports = () => {
                 </tr>
                 <tr>
                   <td className="py-4">
-                    <h4 className="subHeadingColor font-semibold text-sm">
+                    <h4 className="headingColor font-semibold text-sm">
                       Nairobi Fresh Mart
                     </h4>
                   </td>
@@ -138,7 +138,7 @@ const Reports = () => {
                 </tr>
                 <tr>
                   <td className="py-4">
-                    <h4 className="subHeadingColor font-semibold text-sm">
+                    <h4 className="headingColor font-semibold text-sm">
                       Nairobi Fresh Mart
                     </h4>
                   </td>

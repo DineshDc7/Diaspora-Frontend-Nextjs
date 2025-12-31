@@ -96,7 +96,7 @@ export default function AdminBusiness() {
                       <tr>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
+                            <h4 className="headingColor font-semibold text-sm">
                               Kantor imigrasi kelas i denpasar
                             </h4>
                             <p className="textColor text-xs">9910566557</p>
@@ -128,7 +128,7 @@ export default function AdminBusiness() {
                       <tr>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
+                            <h4 className="headingColor font-semibold text-sm">
                               Kantor imigrasi kelas i denpasar
                             </h4>
                             <p className="textColor text-xs">9910566557</p>
@@ -160,7 +160,7 @@ export default function AdminBusiness() {
                       <tr>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
+                            <h4 className="headingColor font-semibold text-sm">
                               Kantor imigrasi kelas i denpasar
                             </h4>
                             <p className="textColor text-xs">9910566557</p>
@@ -192,7 +192,7 @@ export default function AdminBusiness() {
                       <tr>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
+                            <h4 className="headingColor font-semibold text-sm">
                               Kantor imigrasi kelas i denpasar
                             </h4>
                             <p className="textColor text-xs">9910566557</p>

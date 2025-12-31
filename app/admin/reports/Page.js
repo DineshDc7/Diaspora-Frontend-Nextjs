@@ -97,7 +97,7 @@ export default function AdminUser() {
                   <tbody>
                     <tr>
                       <td className="py-4">
-                        <h4 className="subHeadingColor font-semibold text-sm">
+                        <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
@@ -135,7 +135,7 @@ export default function AdminUser() {
                     </tr>
                     <tr>
                       <td className="py-4">
-                        <h4 className="subHeadingColor font-semibold text-sm">
+                        <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
@@ -173,7 +173,7 @@ export default function AdminUser() {
                     </tr>
                     <tr>
                       <td className="py-4">
-                        <h4 className="subHeadingColor font-semibold text-sm">
+                        <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
@@ -211,7 +211,7 @@ export default function AdminUser() {
                     </tr>
                     <tr>
                       <td className="py-4">
-                        <h4 className="subHeadingColor font-semibold text-sm">
+                        <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
