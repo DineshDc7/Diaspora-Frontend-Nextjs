@@ -1,13 +1,18 @@
+
 "use client";
 
 import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
-const StepTwo = ({ onBack }) => {
-const router = useRouter();
+import { authApi } from "@/lib/api/auth";
 
-      const [showPassword, setShowPassword] = useState(false);
+const StepTwo = ({ onBack }) => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,16 +23,39 @@ const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError("");
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    router.push("/admin/dashboard");
-    
+    if (loading) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: "ADMIN",
+        mobile: formData.phone
+          ? `${formData.countryCode || ""}${formData.phone}`
+          : null,
+      };
+
+      await authApi.register(payload);
+
+      router.push("/admin/dashboard");
+    } catch (err) {
+      setError(err?.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
 
@@ -49,6 +77,11 @@ const router = useRouter();
                 </p>
               </div>
               <form className="md:py-6 pt-4" onSubmit={handleSubmit}>
+                {error ? (
+                  <div className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {error}
+                  </div>
+                ) : null}
                 {/* Full Name */}
                 <div className="mb-4">
                   <label className="block text-sm font-semibold mb-2 textColor">
@@ -155,9 +188,10 @@ const router = useRouter();
                 <div className="space-y-3">
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-md primaryColor text-white font-semibold"
+                    disabled={loading}
+                    className="w-full py-3 rounded-md primaryColor text-white font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Create Account
+                    {loading ? "Creating..." : "Create Account"}
                   </button>
                   {/* <button
                     type="submit"
@@ -171,7 +205,15 @@ const router = useRouter();
                     <div>
                         <p className="text-sm textColor">We use your details only to secure and personalize your workspace.</p>
                     </div>
-                    <div><button onClick={onBack} className="text-blue-500 text-sm font-semibold">Back to role selection </button></div>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={onBack}
+                        className="text-blue-500 text-sm font-semibold"
+                      >
+                        Back to role selection
+                      </button>
+                    </div>
                 </div>
               </form>
             </div>

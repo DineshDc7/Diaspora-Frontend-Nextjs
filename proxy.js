@@ -1,0 +1,41 @@
+import { NextResponse } from "next/server";
+
+export function proxy(req) {
+  const { pathname } = req.nextUrl;
+
+  // Cookies set by Node backend
+  const accessToken = req.cookies.get("accessToken")?.value;
+  const role = req.cookies.get("user_role")?.value;
+
+  const isAdmin = pathname.startsWith("/admin");
+  const isInvestor = pathname.startsWith("/investor");
+  const isOwner = pathname.startsWith("/business-owner");
+
+  const isProtected = isAdmin || isInvestor || isOwner;
+
+  // Not logged in → login
+  if (isProtected && !accessToken) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Role-based access
+  if (isAdmin && role && role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/not-authorized", req.url));
+  }
+
+  if (isInvestor && role && role !== "INVESTOR") {
+    return NextResponse.redirect(new URL("/not-authorized", req.url));
+  }
+
+  if (isOwner && role && role !== "BUSINESS_OWNER") {
+    return NextResponse.redirect(new URL("/not-authorized", req.url));
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/admin/:path*", "/investor/:path*", "/business-owner/:path*"],
+};
