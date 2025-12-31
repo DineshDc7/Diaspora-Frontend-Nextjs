@@ -11,7 +11,7 @@ import {
 const MenuItems = [
   { name: "Dashboard", icon: Home, href: "/admin/dashboard" },
   { name: "Businesses", icon: Building, href: "/admin/business" },
-  { name: "Reports", icon: BarChart },
+  { name: "Reports", icon: BarChart, href: "/admin/reports" },
   { name: "Users", icon: Users, href: "/admin/user" },
 ];
 const MenuItemsbuttom = [
