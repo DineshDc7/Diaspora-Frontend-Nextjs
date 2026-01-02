@@ -11,14 +11,14 @@ const businesses = [
   "Green Valley Foods",
   "Urban Retail",
 ];
-export default function AdminUser() {
+export default function AdminReport() {
   const [open, setOpen] = useState(false);
   const [selectedBusiness, setSelectedBusiness] =
     useState("Nairobi Fresh Mart");
 
-  const clearFilter = () => {
-    setSelectedBusiness("");
-  };
+  // const clearFilter = () => {
+  //   setSelectedBusiness("");
+  // };
 
   return (
     <>
@@ -58,7 +58,7 @@ export default function AdminUser() {
               {/* Clear Filter */}
               {selectedBusiness && (
                 <button
-                  onClick={clearFilter}
+                  // onClick={clearFilter}
                   className="text-sm font-semibold text-blue-600 hover:underline"
                 >
                   Clear Filter
