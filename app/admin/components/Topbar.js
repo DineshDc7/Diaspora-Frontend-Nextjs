@@ -4,8 +4,8 @@ import { User, Menu } from "lucide-react";
 
 export default function Topbar({ onMenuClick, title, subtitle }) {
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center gap-3">
+    <div className="md:flex justify-between items-center">
+      <div className="flex items-start gap-3">
         <button onClick={() => onMenuClick && onMenuClick()} className="md:hidden p-2 rounded-md">
           <Menu />
         </button>

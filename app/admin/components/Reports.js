@@ -21,26 +21,26 @@ const Reports = () => {
           </div>
         </div>
         <div className="bg-neutral-50 p-4 mt-3">
-          <div className="py-5">
-            <table className="table-fixed w-full">
+          <div className="py-5 overflow-x-auto">
+            <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Business</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">Date</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Sales</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">Expenses</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Customers</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[10%]">
                     <h5 className="subHeadingColor text-base">Profit</h5>
                   </th>
                   {/* <th className="text-start pb-4 border-b border-gray-100">

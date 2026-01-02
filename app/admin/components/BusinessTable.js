@@ -31,8 +31,8 @@ export default function BusinessTable() {
         <div className="bg-neutral-50 p-4 mt-3">
           
 
-          <div className="py-5">
-            <table className="table-fixed w-full">
+          <div className="py-5 overflow-x-auto">
+            <table className="w-full">
               <thead>
                 <tr>
                   <th className="text-start pb-4 border-b border-gray-100 w-[40%]">

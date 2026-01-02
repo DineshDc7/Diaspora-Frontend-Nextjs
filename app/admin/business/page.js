@@ -8,6 +8,7 @@ import { useState } from "react";
 
 export default function AdminBusiness() {
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
@@ -31,7 +32,7 @@ export default function AdminBusiness() {
                 </div>
                 <div>
                   <button
-                    onClick={() => setOpen(true)}
+                    onClick={() => setOpenModal(true)}
                     className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
                   >
                     <Building2 className="w-5 h-5" /> Add Business
@@ -49,8 +50,8 @@ export default function AdminBusiness() {
                   />
                 </div>
 
-                <div className="py-5">
-                  <table className="table-fixed w-full border border-[#f1f3f7]">
+                <div className="py-5 overflow-x-auto">
+                  <table className="w-full border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -234,13 +235,13 @@ export default function AdminBusiness() {
       </div>
 
       {/* Modal */}
-      {open && (
+      {openModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
             {/* Header */}
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Add New Business</h2>
-              <button onClick={() => setOpen(false)}>
+              <button onClick={() => setOpenModal(false)}>
                 <X className="h-5 w-5" color="#797979" />
               </button>
             </div>
@@ -315,7 +316,7 @@ export default function AdminBusiness() {
               {/* Actions */}
               <div className="flex justify-end gap-3 pt-4">
                 <button
-                  onClick={() => setOpen(false)}
+                  onClick={() => setOpenModal(false)}
                   type="button"
                   className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 w-full"
                 >

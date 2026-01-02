@@ -22,11 +22,12 @@ export default function Sidebar({ open, setOpen }) {
   return (
     <aside className="">
       <div
-        className={`fixed inset-0 bg-black/40 z-30 md:hidden transition-opacity ${open ? 'block' : 'hidden'}`}
+        className={`fixed inset-0 bg-black/40 z-30 md:hidden transition-opacity duration-300 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setOpen && setOpen(false)}
+        aria-hidden={!open}
       />
 
-      <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}>
+      <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}>
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
           <a href="/">
