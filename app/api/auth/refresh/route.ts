@@ -3,4 +3,5 @@ export async function GET() {
     JSON.stringify({ status: "ok" }),
     { status: 200 }
   );
+  
 }
