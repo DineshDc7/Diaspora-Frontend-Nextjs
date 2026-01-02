@@ -43,7 +43,7 @@ const onContinue = () => {
                 <p className="px-3 py-1 text-sm textColor">
                   We`ll tailor the next steps to your role
                 </p>
-              </div>90=--
+              </div>
               <h3 className="font-semibold headingColor my-4 text-2xl">
                 Who are you signing up as?
               </h3>
