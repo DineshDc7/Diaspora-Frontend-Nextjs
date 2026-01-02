@@ -41,14 +41,14 @@ const onContinue = () => {
                   Role-aware onboarding
                 </p>
                 <p className="px-3 py-1 text-sm textColor">
-                  We'll tailor the next steps to your role
+                  We`ll tailor the next steps to your role
                 </p>
-              </div>
+              </div>90=--
               <h3 className="font-semibold headingColor my-4 text-2xl">
                 Who are you signing up as?
               </h3>
               <p className="textColor pb-4 font-medium">
-                Pick the option that best describes how you'll use the platform.
+                Pick the option that best describes how you`ll use the platform.
                 You can invite other roles later.
               </p>
 
