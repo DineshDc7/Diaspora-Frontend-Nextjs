@@ -12,19 +12,22 @@ export default function AdminBusiness() {
   return (
     <>
       <div className="flex min-h-screen bg-white">
-        <Sidebar />
+        <Sidebar open={open} setOpen={setOpen} />
 
-        <main className="flex-1 ml-64 p-6">
+        <main className="flex-1 lg:ml-64 p-6">
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-4 space-y-6">
               <div className="flex justify-between items-center">
-                <div className="mb-2">
-                  <h1 className="text-2xl font-semibold headingColor">
-                    Businesses
-                  </h1>
-                  <p className="py-2 text-sm textColor">
-                    Managing 4 businesses
-                  </p>
+                <div className="mb-2 flex items-center gap-3">
+                  <button onClick={() => setOpen(true)} className="md:hidden p-2 rounded-md">☰</button>
+                  <div>
+                    <h1 className="text-2xl font-semibold headingColor">
+                      Businesses
+                    </h1>
+                    <p className="py-2 text-sm textColor">
+                      Managing 4 businesses
+                    </p>
+                  </div>
                 </div>
                 <div>
                   <button

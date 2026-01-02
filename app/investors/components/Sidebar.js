@@ -18,9 +18,15 @@ const MenuItems = [
   { name: "Settings", icon: Settings },
   { name: "Billing", icon: CreditCard },
 ];
-export default function Sidebar() {
+export default function Sidebar({ open, setOpen }) {
   return (
-    <aside className="w-64 bg-gray-900 border-r px-4 py-6">
+    <aside className="">
+      <div
+        className={`fixed inset-0 bg-black/40 z-30 md:hidden transition-opacity ${open ? 'block' : 'hidden'}`}
+        onClick={() => setOpen && setOpen(false)}
+      />
+
+      <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}>
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
           <a href="/">
@@ -36,6 +42,9 @@ export default function Sidebar() {
           <p className="text-xs text-gray-400">
             Accountability for cross-border capital
           </p>
+        </div>
+        <div className="md:hidden ml-auto">
+          <button onClick={() => setOpen && setOpen(false)} className="text-white">✕</button>
         </div>
       </div>
 
@@ -55,6 +64,7 @@ export default function Sidebar() {
           );
         })}
       </nav>
+      </div>
     </aside>
   );
 }

@@ -19,12 +19,41 @@ const MenuItemsbuttom = [
   { name: "Logout", icon: LogOut },
 ];
 
-export default function Sidebar(){
+export default function Sidebar({ open, setOpen }){
   return (
-    <aside className="fixed top-0 left-0 ">
-      <div className="w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh]">
+    <aside className="lg:fixed">
+      {/* Overlay for small screens */}
+      <div
+        className={`fixed inset-0 bg-black/40 z-30 md:hidden transition-opacity ${open ? 'block' : 'hidden'}`}
+        onClick={() => setOpen && setOpen(false)}
+      />
+
+      <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:shadow-none`}>
         <div className="flex items-center gap-2">
-        <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
+          <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
+            <a href="/">
+              <h1>DI</h1>
+            </a>
+          </div>
+          <div>
+            <a href="/">
+              <h4 className="font-semibold text-lg text-white">
+                Diaspora Insight
+              </h4>
+            </a>
+            <p className="text-xs text-gray-400">
+              Accountability for cross-border capital
+            </p>
+          </div>
+          {/* close button for small screens */}
+          <div className="md:hidden ml-auto">
+            <button onClick={() => setOpen && setOpen(false)} className="text-white">
+              ✕
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+        {/* <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
           <a href="/">
             <h1>DI</h1>
           </a>
@@ -38,7 +67,7 @@ export default function Sidebar(){
           <p className="text-xs text-gray-400">
             Accountability for cross-border capital
           </p>
-        </div>
+        </div> */}
       </div>
 
        <nav className="space-y-2 py-6">

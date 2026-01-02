@@ -23,14 +23,17 @@ export default function AdminReport() {
   return (
     <>
       <div className="flex min-h-screen bg-white">
-        <Sidebar />
+        <Sidebar open={open} setOpen={setOpen} />
 
-        <main className="flex-1 ml-64 p-6">
+        <main className="flex-1 lg:ml-64 p-6">
           <div>
             <div className="flex justify-between items-center">
-              <div>
-                <h2 className="headingColor text-lg font-semibold">Reports</h2>
-                <p className="textColor">8 total reports</p>
+              <div className="flex items-center gap-3">
+                <button onClick={() => setOpen(true)} className="md:hidden p-2 rounded-md">☰</button>
+                <div>
+                  <h2 className="headingColor text-lg font-semibold">Reports</h2>
+                  <p className="textColor">8 total reports</p>
+                </div>
               </div>
             </div>
             <div className="flex items-center justify-between gap-4 mt-5 mb-4">
