@@ -91,7 +91,6 @@ export default function AdminReport() {
                   </Listbox>
                 </div>
 
-
               </div>
               {/* Clear Filter */}
               {selectedBusiness && (
