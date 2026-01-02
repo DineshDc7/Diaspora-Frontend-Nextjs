@@ -18,6 +18,7 @@ const MenuItemsbuttom = [
   // { name: "Setting", icon: Settings },
   { name: "Logout", icon: LogOut },
 ];
+
 export default function Sidebar(){
   return (
     <aside className="fixed top-0 left-0 ">
