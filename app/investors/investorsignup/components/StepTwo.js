@@ -1,13 +1,10 @@
-
 "use client";
 
 import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
-const StepTwo = ({ onBack }) => {
-  const router = useRouter();
-
+const StepTwo = ({ onBack, onContinue }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -19,40 +16,43 @@ const StepTwo = ({ onBack }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setError("");
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    router.push("/admin/dashboard");
+
+    const payload = {
+      ...formData,
+      phone: `${formData.countryCode}${formData.phone}`,
+    };
+
+    console.log("Form Submitted:", payload);
   };
 
   return (
     <>
-      <section>
+      <section className="">
         <div className="container mx-auto md:w-[1000px] py-10">
           <div className="grid md:grid-cols-3 grid-cols-1 md:gap-6">
-            <div className="md:col-span-2 col-span-1 flex flex-col justify-center md:pr-16 px-4">
-              {/* <p className="textColor mb-4 text-sm font-semibold"><span className="font-semibold">Step 2 of 2</span> - Create your admin workspace</p> */}
+            <div className="md:col-span-2 col-span-1 flex flex-col justify-center md:pr-16 px-5">
+              <p className="textColor mb-4 text-sm font-semibold">
+                <span className="font-semibold">Step 1 of 3</span> - Create your
+                investor workspace
+              </p>
               <div>
                 <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
-                  Set up your Admin Account
+                  Set up your Investor Account
                 </h2>
                 <p className="textColor">
                   Set up tools, permissions, and workflows to manage users and
                   platform operations efficiently.
                 </p>
               </div>
-              <form className="md:py-6 pt-4" onSubmit={handleSubmit}>
-                {error ? (
-                  <div className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-                    {error}
-                  </div>
-                ) : null}
+              <form className="py-6" onSubmit={handleSubmit}>
                 {/* Full Name */}
                 <div className="mb-4">
                   <label className="block text-sm font-semibold mb-2 textColor">
@@ -156,20 +156,27 @@ const StepTwo = ({ onBack }) => {
                 </div>
 
                 {/* Submit */}
-                <div className="space-y-3">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full py-3 rounded-md primaryColor text-white font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {loading ? "Creating..." : "Create Account"}
-                  </button>
+                <div className="flex gap-3 items-center">
                   {/* <button
                     type="submit"
-                    className="w-full py-3 rounded-md secondaryColor textColor font-semibold"
+                    onClick={onBack}
+                    className="w-full py-2 rounded-md secondaryColor textColor text-sm font-semibold"
                   >
-                    Continue with Google
+                    Back Previous Step
                   </button> */}
+                  <button
+                    type="submit"
+                    className="w-full py-2 rounded-md secondaryColor textColor text-sm font-semibold"
+                  >
+                    Skip for Now
+                  </button>
+                  <button
+                    type="submit"
+                    onClick={onContinue}
+                    className="w-full py-2 rounded-md primaryColor text-white text-sm font-semibold"
+                  >
+                    Continue to Step 2
+                  </button>
                 </div>
 
                 <div className="flex justify-between py-6 gap-12">
@@ -190,7 +197,8 @@ const StepTwo = ({ onBack }) => {
                 </div>
               </form>
             </div>
-            <div className="md:col-span-1 col-span-1 mt-6 md:mt-0">
+
+            <div className="md:col-span-1 col-span-1 md:mt-6 md:mt-0">
               <div className="p-6 rounded-lg shadow-lg h-full">
                 <p className="mb-2 textColor text-sm font-semibold">
                   What you get

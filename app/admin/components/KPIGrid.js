@@ -3,7 +3,7 @@ import { Building2, ScrollText, BadgeDollarSign, User } from "lucide-react";
 export default function KPIGrid() {
   return (
     <>
-      <div className="shadow-md rounded-lg bg-white p-4 pb-10">
+      <div className="shadow-lg rounded-lg bg-white p-4 pb-10">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="headingColor text-lg font-semibold">Portfolio KPIs</h2>

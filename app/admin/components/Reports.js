@@ -1,9 +1,9 @@
-import React from 'react';
-import { Eye } from 'lucide-react';
+import React from "react";
+import { Eye } from "lucide-react";
 const Reports = () => {
-    return (
-        <>
-            <div className="shadow-md rounded-lg bg-white p-4">
+  return (
+    <>
+      <div className="shadow-lg rounded-lg bg-white p-4">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="headingColor text-lg font-semibold">Reports</h2>
@@ -21,28 +21,26 @@ const Reports = () => {
           </div>
         </div>
         <div className="bg-neutral-50 p-4 mt-3">
-          
-
-          <div className="py-5">
-            <table className="table-fixed w-full">
+          <div className="py-5 overflow-x-auto">
+            <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Business</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">Date</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Sales</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">Expenses</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Customers</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[10%]">
                     <h5 className="subHeadingColor text-base">Profit</h5>
                   </th>
                   {/* <th className="text-start pb-4 border-b border-gray-100">
@@ -53,15 +51,19 @@ const Reports = () => {
               <tbody>
                 <tr>
                   <td className="py-4">
-                      <h4 className="subHeadingColor font-semibold text-sm">
-                        Nairobi Fresh Mart
-                      </h4>
+                    <h4 className="headingColor font-semibold text-sm">
+                      Nairobi Fresh Mart
+                    </h4>
                   </td>
                   <td className="py-4">
-                    <p className="textColor text-sm font-semibold">12/12/2025</p>
+                    <p className="textColor text-sm font-semibold">
+                      12/12/2025
+                    </p>
                   </td>
                   <td className="py-4">
-                    <p className="text-green-600 text-sm font-semibold">$1,199.91</p>
+                    <p className="text-green-600 text-sm font-semibold">
+                      $1,199.91
+                    </p>
                   </td>
                   <td className="py-4">
                     <p className="text-red-600 text-sm font-semibold">$2000</p>
@@ -75,19 +77,22 @@ const Reports = () => {
                   {/* <td className="py-4">
                     <a href="#" className="flex gap-2 items-center textprimaryColor text-sm font-semibold"><Eye className='w-5 h-5' /> View</a>
                   </td> */}
-                  
                 </tr>
                 <tr>
                   <td className="py-4">
-                      <h4 className="subHeadingColor font-semibold text-sm">
-                        Nairobi Fresh Mart
-                      </h4>
+                    <h4 className="headingColor font-semibold text-sm">
+                      Nairobi Fresh Mart
+                    </h4>
                   </td>
                   <td className="py-4">
-                    <p className="textColor text-sm font-semibold">12/12/2025</p>
+                    <p className="textColor text-sm font-semibold">
+                      12/12/2025
+                    </p>
                   </td>
                   <td className="py-4">
-                    <p className="text-green-600 text-sm font-semibold">$1,199.91</p>
+                    <p className="text-green-600 text-sm font-semibold">
+                      $1,199.91
+                    </p>
                   </td>
                   <td className="py-4">
                     <p className="text-red-600 text-sm font-semibold">$2000</p>
@@ -101,19 +106,22 @@ const Reports = () => {
                   {/* <td className="py-4">
                     <a href="#" className="flex gap-2 items-center textprimaryColor text-sm font-semibold"><Eye className='w-5 h-5' /> View</a>
                   </td> */}
-                  
                 </tr>
                 <tr>
                   <td className="py-4">
-                      <h4 className="subHeadingColor font-semibold text-sm">
-                        Nairobi Fresh Mart
-                      </h4>
+                    <h4 className="headingColor font-semibold text-sm">
+                      Nairobi Fresh Mart
+                    </h4>
                   </td>
                   <td className="py-4">
-                    <p className="textColor text-sm font-semibold">12/12/2025</p>
+                    <p className="textColor text-sm font-semibold">
+                      12/12/2025
+                    </p>
                   </td>
                   <td className="py-4">
-                    <p className="text-green-600 text-sm font-semibold">$1,199.91</p>
+                    <p className="text-green-600 text-sm font-semibold">
+                      $1,199.91
+                    </p>
                   </td>
                   <td className="py-4">
                     <p className="text-red-600 text-sm font-semibold">$2000</p>
@@ -127,19 +135,22 @@ const Reports = () => {
                   {/* <td className="py-4">
                     <a href="#" className="flex gap-2 items-center textprimaryColor text-sm font-semibold"><Eye className='w-5 h-5' /> View</a>
                   </td> */}
-                  
                 </tr>
                 <tr>
                   <td className="py-4">
-                      <h4 className="subHeadingColor font-semibold text-sm">
-                        Nairobi Fresh Mart
-                      </h4>
+                    <h4 className="headingColor font-semibold text-sm">
+                      Nairobi Fresh Mart
+                    </h4>
                   </td>
                   <td className="py-4">
-                    <p className="textColor text-sm font-semibold">12/12/2025</p>
+                    <p className="textColor text-sm font-semibold">
+                      12/12/2025
+                    </p>
                   </td>
                   <td className="py-4">
-                    <p className="text-green-600 text-sm font-semibold">$1,199.91</p>
+                    <p className="text-green-600 text-sm font-semibold">
+                      $1,199.91
+                    </p>
                   </td>
                   <td className="py-4">
                     <p className="text-red-600 text-sm font-semibold">$2000</p>
@@ -153,16 +164,14 @@ const Reports = () => {
                   {/* <td className="py-4">
                     <a href="#" className="flex gap-2 items-center textprimaryColor text-sm font-semibold"><Eye className='w-5 h-5' /> View</a>
                   </td> */}
-                  
                 </tr>
-
               </tbody>
             </table>
           </div>
         </div>
       </div>
-        </>
-    );
-}
+    </>
+  );
+};
 
 export default Reports;

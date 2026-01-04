@@ -15,24 +15,28 @@ const tabs = [
 
 export default function AdminUser() {
   const [open, setOpen] = useState(false);
+  const [openmodal, setOpenmodal] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0].id);
   
   return (
     <>
       <div className="flex min-h-screen bg-white">
-        <Sidebar />
+        <Sidebar open={open} setOpen={setOpen} />
 
-        <main className="flex-1 ml-64 p-6">
+        <main className="flex-1 lg:ml-64 p-6">
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-4 space-y-6">
               <div className="flex justify-between items-center">
-                <div className="mb-2">
-                  <h1 className="text-2xl font-semibold headingColor">Users</h1>
-                  <p className="py-2 text-sm textColor">3 registered users</p>
+                <div className="mb-2 flex items-center gap-3">
+                  <button onClick={() => setOpen(true)} className="md:hidden p-2 rounded-md">☰</button>
+                  <div>
+                    <h1 className="text-2xl font-semibold headingColor">Users</h1>
+                    <p className="py-2 text-sm textColor">3 registered users</p>
+                  </div>
                 </div>
                 <div>
                   <button
-                    onClick={() => setOpen(true)}
+                    onClick={() => setOpenmodal(true)}
                     className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
                   >
                     <Users className="w-5 h-5" /> Add User
@@ -110,8 +114,8 @@ export default function AdminUser() {
       </div>
 
               {activeTab === "allusers" && (
-                <div className="py-5">
-                  <table className="table-fixed w-full border border-[#f1f3f7]">
+                <div className="py-5 overflow-x-auto">
+                  <table className=" w-full border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -260,8 +264,8 @@ export default function AdminUser() {
                   )}
 
                   {activeTab === "admin" && (
-                <div className="py-5">
-                  <table className="table-fixed w-full border border-[#f1f3f7]">
+                <div className="py-5 overflow-x-auto">
+                  <table className="w-full border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -344,8 +348,8 @@ export default function AdminUser() {
 
 
                   {activeTab === "businessowner" && (
-                <div className="py-5">
-                  <table className="table-fixed w-full border border-[#f1f3f7]">
+                <div className="py-5 overflow-x-auto">
+                  <table className="w-full border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -432,8 +436,8 @@ export default function AdminUser() {
 
 
                   {activeTab === "investor" && (
-                <div className="py-5">
-                  <table className="table-fixed w-full border border-[#f1f3f7]">
+                <div className="py-5 overflow-x-auto">
+                  <table className="w-full border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -524,13 +528,13 @@ export default function AdminUser() {
       </div>
 
       {/* Modal */}
-      {open && (
+      {openmodal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
             {/* Header */}
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Add New User</h2>
-              <button onClick={() => setOpen(false)}>
+              <button onClick={() => setOpenmodal(false)}>
                 <X className="h-5 w-5" color="#797979" />
               </button>
             </div>
@@ -544,7 +548,7 @@ export default function AdminUser() {
                 </label>
                 <input
                   type="text"
-                  placeholder="ABC Store"
+                  placeholder="Your Name"
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -605,7 +609,7 @@ export default function AdminUser() {
               {/* Actions */}
               <div className="flex justify-end gap-3 pt-4">
                 <button
-                  onClick={() => setOpen(false)}
+                  onClick={() => setOpenmodal(false)}
                   type="button"
                   className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 w-full"
                 >

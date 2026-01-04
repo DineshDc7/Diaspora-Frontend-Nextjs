@@ -1,21 +1,26 @@
 "use client";
 import React from "react";
-import { User } from "lucide-react";
-import { useState } from "react";
+import { User, Menu } from "lucide-react";
 
-export default function Topbar() {
+export default function Topbar({ onMenuClick, title, subtitle }) {
   return (
     <div className="flex justify-between items-center">
-      <div>
-        <div className="flex items-center gap-5 mb-2">
-          <h1 className="text-2xl font-semibold headingColor">Dashboard</h1>
-          <p className="px-3 py-1 text-sm font-semibold subHeadingColor rounded-full secondaryColor">
-            Live portfolio overview
+      <div className="flex items-center gap-3">
+        <button onClick={() => onMenuClick && onMenuClick()} className="md:hidden p-2 rounded-md">
+          <Menu />
+        </button>
+
+        <div>
+          <div className="flex items-center gap-5 mb-2">
+            <h1 className="text-2xl font-semibold headingColor">{title || 'Dashboard'}</h1>
+            <p className="px-3 py-1 text-sm font-semibold subHeadingColor rounded-full secondaryColor">
+              {subtitle || 'Live portfolio overview'}
+            </p>
+          </div>
+          <p className="text-sm subHeadingColor">
+            Today · West Africa Time · Filters: All countries · All Sectors
           </p>
         </div>
-        <p className="text-sm subHeadingColor">
-          Today · West Africa Time · Filters: All countries · All Sectors
-        </p>
       </div>
 
       <div className="flex items-center gap-3">

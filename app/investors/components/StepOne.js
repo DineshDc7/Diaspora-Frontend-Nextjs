@@ -7,9 +7,9 @@ const StepOne = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
 const roleRoutes = {
-    0: "/investors/investorsignup",
+  0: "/Investor/investorSignup",
     // 1: "/admin/business-owner", // create this folder if missing
-    1:"/business-owner/ownersignup",
+    1:"/business_owner/ownersignup",
     2: "/admin/signup",
 };
 
@@ -34,21 +34,21 @@ const onContinue = () => {
             </div>
           <div className="flex justify-center items-center">
             
-            <div className="w-full bg-white shadow-xl rounded-xl md:p-8 p-4">
+            <div className="w-full bg-white shadow-xl rounded-xl p-8">
               
-              <div className="md:flex items-center">
+              <div className="flex items-center">
                 <p className="px-3 py-1 text-sm subHeadingColor rounded-full secondaryColor">
                   Role-aware onboarding
                 </p>
                 <p className="px-3 py-1 text-sm textColor">
-                  We`ll tailor the next steps to your role
+                  We'll tailor the next steps to your role
                 </p>
               </div>
               <h3 className="font-semibold headingColor my-4 text-2xl">
                 Who are you signing up as?
               </h3>
               <p className="textColor pb-4 font-medium">
-                Pick the option that best describes how you`ll use the platform.
+                Pick the option that best describes how you'll use the platform.
                 You can invite other roles later.
               </p>
 
@@ -217,7 +217,7 @@ const onContinue = () => {
                 </div>
               </div>
 
-              <div className="md:flex justify-between mt-6">
+              <div className="flex justify-between mt-6">
                 <div>
                   <p className="mb-2">
                     Your choice will shape the onboarding flow.
@@ -226,10 +226,10 @@ const onContinue = () => {
                     All roles share a single source of truth for data and media.
                   </p>
                 </div>
-                <div className="flex gap-4 md:mt-auto mt-5">
-                  {/* <button className="px-6 py-3 secondaryColor subHeadingColor rounded-md font-semibold hover:bg-blue-700">
+                <div className="flex gap-4">
+                  <button className="px-6 py-3 secondaryColor subHeadingColor rounded-md font-semibold hover:bg-blue-700">
                     Back
-                  </button> */}
+                  </button>
                   <button  onClick={onContinue} className="px-6 py-3 primaryColor text-white rounded-md font-semibold hover:bg-blue-700">
                     Continue
                   </button>
