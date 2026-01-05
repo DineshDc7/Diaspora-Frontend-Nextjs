@@ -5,11 +5,11 @@ import Topbar from "../components/Topbar";
 import { Building2, Eye, X } from "lucide-react";
 import { Search } from "lucide-react";
 import { useState } from "react";
-
+import { useIsMobile } from "../../hooks/use-mobile";
 export default function AdminBusiness() {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
+const isMobile = useIsMobile();
   return (
     <>
       <div className="flex min-h-screen bg-white">
@@ -22,9 +22,11 @@ export default function AdminBusiness() {
                 <div className="mb-2 flex items-center gap-3">
                   <button onClick={() => setOpen(true)} className="md:hidden p-2 rounded-md">☰</button>
                   <div>
-                    <h1 className="text-2xl font-semibold headingColor">
+                    {!isMobile ? (<h1 className="text-2xl font-semibold headingColor">
                       Businesses
-                    </h1>
+                    </h1>):(<h1 className="text-2xl font-semibold headingColor">
+                      Businesses
+                    </h1>)}
                     <p className="py-2 text-sm textColor">
                       Managing 4 businesses
                     </p>
