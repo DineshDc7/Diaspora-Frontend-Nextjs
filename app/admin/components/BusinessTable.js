@@ -32,22 +32,22 @@ export default function BusinessTable() {
           
 
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="min-w-[900px] w-full table-fixed border-collapse">
               <thead>
                 <tr>
-                  <th className="text-start pb-4 border-b border-gray-100 w-[40%]">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[30%]">
                     <h5 className="subHeadingColor text-base">Business</h5>
                   </th>
                   <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">Owner</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Category</h5>
                   </th>
                   <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">City</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
+                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Reports</h5>
                   </th>
                  

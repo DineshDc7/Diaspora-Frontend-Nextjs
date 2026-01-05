@@ -179,7 +179,7 @@ export default function AdminUser() {
 
               {activeTab === "allusers" && (
                 <div className="py-5 overflow-x-auto">
-                  <table className=" w-full border border-[#f1f3f7]">
+                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -329,7 +329,7 @@ export default function AdminUser() {
 
                   {activeTab === "admin" && (
                 <div className="py-5 overflow-x-auto">
-                  <table className="w-full border border-[#f1f3f7]">
+                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -413,7 +413,7 @@ export default function AdminUser() {
 
                   {activeTab === "businessowner" && (
                 <div className="py-5 overflow-x-auto">
-                  <table className="w-full border border-[#f1f3f7]">
+                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -501,7 +501,7 @@ export default function AdminUser() {
 
                   {activeTab === "investor" && (
                 <div className="py-5 overflow-x-auto">
-                  <table className="w-full border border-[#f1f3f7]">
+                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th

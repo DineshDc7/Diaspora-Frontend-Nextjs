@@ -53,7 +53,7 @@ const isMobile = useIsMobile();
                 </div>
 
                 <div className="py-5 overflow-x-auto">
-                  <table className="w-full border border-[#f1f3f7]">
+                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -124,7 +124,7 @@ const isMobile = useIsMobile();
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -156,7 +156,7 @@ const isMobile = useIsMobile();
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -188,7 +188,7 @@ const isMobile = useIsMobile();
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -220,7 +220,7 @@ const isMobile = useIsMobile();
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
