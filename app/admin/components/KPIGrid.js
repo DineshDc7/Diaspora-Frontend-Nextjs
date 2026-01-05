@@ -11,7 +11,7 @@ export default function KPIGrid() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 mt-6 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-6 gap-5">
             <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
                 <div className="flex justify-between items-center gap-2">
                   <h5 className="subHeadingColor text-base">Total Businesses</h5>

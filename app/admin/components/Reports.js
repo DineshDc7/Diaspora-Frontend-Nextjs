@@ -5,7 +5,7 @@ const Reports = () => {
     <>
       <div className="shadow-lg rounded-lg bg-white p-4">
         <div className="flex justify-between items-center">
-          <div>
+          <div className="w-[80%]">
             <h2 className="headingColor text-lg font-semibold">Reports</h2>
             <p className="textColor">
               Drill into any Nigerian business for financials, media, and
@@ -22,7 +22,7 @@ const Reports = () => {
         </div>
         <div className="bg-neutral-50 p-4 mt-3">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="min-w-[900px] w-full table-fixed border-collapse">
               <thead>
                 <tr>
                   <th className="text-start pb-4 border-b border-gray-100 w-[20%]">

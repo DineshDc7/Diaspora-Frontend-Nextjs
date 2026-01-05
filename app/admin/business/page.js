@@ -5,26 +5,28 @@ import Topbar from "../components/Topbar";
 import { Building2, Eye, X } from "lucide-react";
 import { Search } from "lucide-react";
 import { useState } from "react";
-
+import { useIsMobile } from "../../hooks/use-mobile";
 export default function AdminBusiness() {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
+const isMobile = useIsMobile();
   return (
     <>
       <div className="flex min-h-screen bg-white">
         <Sidebar open={open} setOpen={setOpen} />
 
-        <main className="flex-1 lg:ml-64 p-6">
+        <main className="flex-1 md:ml-64 p-6">
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-4 space-y-6">
               <div className="flex justify-between items-center">
                 <div className="mb-2 flex items-center gap-3">
                   <button onClick={() => setOpen(true)} className="md:hidden p-2 rounded-md">☰</button>
                   <div>
-                    <h1 className="text-2xl font-semibold headingColor">
+                    {!isMobile ? (<h1 className="text-2xl font-semibold headingColor">
                       Businesses
-                    </h1>
+                    </h1>):(<h1 className="text-2xl font-semibold headingColor">
+                      Businesses
+                    </h1>)}
                     <p className="py-2 text-sm textColor">
                       Managing 4 businesses
                     </p>
@@ -51,7 +53,7 @@ export default function AdminBusiness() {
                 </div>
 
                 <div className="py-5 overflow-x-auto">
-                  <table className="w-full border border-[#f1f3f7]">
+                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
                         <th
@@ -122,7 +124,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -154,7 +156,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -186,7 +188,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -218,7 +220,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="/admin/allports"
+                            href="/admin/allreports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
