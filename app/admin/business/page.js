@@ -122,7 +122,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="#"
+                            href="/admin/allports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -154,7 +154,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="#"
+                            href="/admin/allports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -186,7 +186,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="#"
+                            href="/admin/allports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
@@ -218,7 +218,7 @@ export default function AdminBusiness() {
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
-                            href="#"
+                            href="/admin/allports"
                             className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                           >
                             <Eye className="w-5 h-5" /> View Reports
