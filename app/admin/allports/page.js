@@ -6,6 +6,7 @@ import { Users, User, Pencil, X, Eye } from "lucide-react";
 import { useState } from "react";
 import { Listbox } from "@headlessui/react";
 import { Menu } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import AdminLayout from "../components/AdminLayout";
 const businesses = [
   "Nairobi Fresh Mart",
@@ -71,10 +72,10 @@ export default function AdminReport({ onMenuClick }) {
                           {selectedBusiness || "Select business"}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                          {/* <ChevronUpDownIcon
+                          <ChevronDown
                 className="h-5 w-5 text-gray-400"
                 aria-hidden="true"
-              /> */}
+              />
                         </span>
                       </Listbox.Button>
 
@@ -129,62 +130,62 @@ export default function AdminReport({ onMenuClick }) {
                 <table className="w-full p-2 border border-[#f1f3f7]">
                   <thead>
                     <tr>
-                      <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
+                      <th className="text-start p-4 border-b border-gray-100 w-[20%]">
                         <h5 className="subHeadingColor text-base">Business</h5>
                       </th>
-                      <th className="text-start pb-4 border-b border-gray-100 w-[10%]">
+                      <th className="text-start p-4 border-b border-gray-100 w-[10%]">
                         <h5 className="subHeadingColor text-base">Date</h5>
                       </th>
-                      <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
+                      <th className="text-start p-4 border-b border-gray-100 w-[20%]">
                         <h5 className="subHeadingColor text-base">Sales</h5>
                       </th>
-                      <th className="text-start pb-4 border-b border-gray-100 w-[10%]">
+                      <th className="text-start p-4 border-b border-gray-100 w-[10%]">
                         <h5 className="subHeadingColor text-base">Expenses</h5>
                       </th>
-                      <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
+                      <th className="text-start p-4 border-b border-gray-100 w-[20%]">
                         <h5 className="subHeadingColor text-base">Customers</h5>
                       </th>
-                      <th className="text-start pb-4 border-b border-gray-100 w-[10%]">
+                      <th className="text-start p-4 border-b border-gray-100 w-[10%]">
                         <h5 className="subHeadingColor text-base">Profit</h5>
                       </th>
-                      <th className="text-start pb-4 border-b border-gray-100 w-[10%]">
+                      <th className="text-start p-4 border-b border-gray-100 w-[10%]">
                         <h5 className="subHeadingColor text-base">Actions</h5>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="py-4">
+                      <td className="p-4">
                         <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">
                           12/12/2025
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-600 text-sm font-semibold">
                           $1,199.91
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-red-600 text-sm font-semibold">
                           $2000
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">23</p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-700 text-sm font-semibold">
                           $500
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <button
-                          onClick={() => setOpen(true)}
+                          onClick={() => setOpenModel(true)}
                           className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                         >
                           <Eye className="w-5 h-5" /> View
@@ -192,37 +193,37 @@ export default function AdminReport({ onMenuClick }) {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-4">
+                      <td className="p-4">
                         <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">
                           12/12/2025
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-600 text-sm font-semibold">
                           $1,199.91
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-red-600 text-sm font-semibold">
                           $2000
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">23</p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-700 text-sm font-semibold">
                           $500
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <button
-                          onClick={() => setOpen(true)}
+                          onClick={() => setOpenModel(true)}
                           className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                         >
                           <Eye className="w-5 h-5" /> View
@@ -230,37 +231,37 @@ export default function AdminReport({ onMenuClick }) {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-4">
+                      <td className="p-4">
                         <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">
                           12/12/2025
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-600 text-sm font-semibold">
                           $1,199.91
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-red-600 text-sm font-semibold">
                           $2000
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">23</p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-700 text-sm font-semibold">
                           $500
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <button
-                          onClick={() => setOpen(true)}
+                          onClick={() => setOpenModel(true)}
                           className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                         >
                           <Eye className="w-5 h-5" /> View
@@ -268,37 +269,37 @@ export default function AdminReport({ onMenuClick }) {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-4">
+                      <td className="p-4">
                         <h4 className="headingColor font-semibold text-sm">
                           Nairobi Fresh Mart
                         </h4>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">
                           12/12/2025
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-600 text-sm font-semibold">
                           $1,199.91
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-red-600 text-sm font-semibold">
                           $2000
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="textColor text-sm font-semibold">23</p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <p className="text-green-700 text-sm font-semibold">
                           $500
                         </p>
                       </td>
-                      <td className="py-4">
+                      <td className="p-4">
                         <button
-                          onClick={() => setOpen(true)}
+                          onClick={() => setOpenModel(true)}
                           className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
                         >
                           <Eye className="w-5 h-5" /> View
