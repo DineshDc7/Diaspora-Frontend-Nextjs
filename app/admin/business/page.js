@@ -33,12 +33,21 @@ const isMobile = useIsMobile();
                   </div>
                 </div>
                 <div>
-                  <button
+                  {!isMobile ? (
+                    <button
                     onClick={() => setOpenModal(true)}
                     className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
                   >
                     <Building2 className="w-5 h-5" /> Add Business
                   </button>
+                ):(
+                  <button
+                    onClick={() => setOpenModal(true)}
+                    className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
+                  >
+                    <Building2 className="w-5 h-5" />
+                  </button>
+                )}
                 </div>
               </div>
 
