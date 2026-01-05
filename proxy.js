@@ -7,18 +7,27 @@ export function proxy(req) {
   const accessToken = req.cookies.get("accessToken")?.value;
   const role = req.cookies.get("user_role")?.value;
 
-  const isAdmin = pathname.startsWith("/admin/signup");
-  const isInvestor = pathname.startsWith("/investor/investorsignup");
-  const isOwner = pathname.startsWith("/business-owner/business-owner");
+  // Public signup routes (should NOT require auth)
+  const isAdminSignup = pathname.startsWith("/admin/signup");
+  const isInvestorSignup = pathname.startsWith("/investor/investorsignup");
+  const isOwnerSignup = pathname.startsWith("/business-owner/business-owner");
+
+  if (isAdminSignup || isInvestorSignup || isOwnerSignup) {
+    return NextResponse.next();
+  }
+
+  // Protected areas (require login)
+  const isAdmin = pathname.startsWith("/admin");
+  const isInvestor = pathname.startsWith("/investor");
+  const isOwner = pathname.startsWith("/business-owner");
 
   const isProtected = isAdmin || isInvestor || isOwner;
 
-  // Not logged in → login
-  // if (isProtected && !accessToken) {
-  //   const url = req.nextUrl.clone();
-  //   url.pathname = "/login";
-  //   return NextResponse.redirect(url);
-  // }
+  if (isProtected && !accessToken) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
 
   // Role-based access
   if (isAdmin && role && role !== "ADMIN") {

@@ -1,10 +1,11 @@
-
 "use client";
 
 import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import { authApi } from "../../../../lib/api/auth";
+
 const StepTwo = ({ onBack }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -28,26 +29,38 @@ const StepTwo = ({ onBack }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      // TODO: Call your register API here.
-      // For now we just navigate after basic client-side submit.
-      router.push("/admin/dashboard");
-    } catch (err) {
-      const msg =
-        typeof err?.message === "string"
-          ? err.message
-          : "Something went wrong. Please try again.";
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      role: "ADMIN",
+      mobile: formData.phone
+        ? `${formData.countryCode || ""}${formData.phone}`
+        : null,
+    };
+
+    await authApi.register(payload);
+
+    // After successful register, cookies are set by backend and forwarded by Next route
+    router.push("/admin/dashboard");
+  } catch (err) {
+    const msg =
+      err?.response?.data?.message ||
+      (typeof err?.message === "string"
+        ? err.message
+        : "Something went wrong. Please try again.");
+    setError(msg);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -199,6 +212,7 @@ const StepTwo = ({ onBack }) => {
                   </div>
                   <div>
                     <button
+                      type="button"
                       onClick={onBack}
                       className="text-blue-500 text-sm font-semibold"
                     >

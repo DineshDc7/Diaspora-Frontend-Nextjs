@@ -1,28 +1,41 @@
 import axios from "axios";
 
 export async function POST(req) {
-  try {
-    const BACKEND = process.env.BACKEND_API_BASE_URL;
+    console.log("[/api/auth/register] HIT ✅");
 
-    if (!BACKEND) {
+  try {
+    const BACKEND_URL = process.env.BACKEND_API_BASE_URL;
+      console.log("[/api/auth/register] BACKEND_API_BASE_URL:", BACKEND_URL);
+
+
+    if (!BACKEND_URL) {
       return Response.json(
-        { success: false, message: "BACKEND_API_BASE_URL not configured" },
+        { success: false, message: "BACKEND_API_BASE_URL not set" },
         { status: 500 }
       );
     }
 
     const body = await req.json();
+    console.log("[/api/auth/register] body:", body);
 
-    /**
-     * Call Node backend auth/register
-     */
-    const backendRes = await axios.post(`${BACKEND}/auth/register`, body, {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-      validateStatus: () => true, // handle errors manually
-    });
+    
+    // Call Node backend
+    const backendUrl = `${String(BACKEND_URL).replace(/\/+$/, "")}/auth/register`;
+    console.log("[/api/auth/register] calling backend:", backendUrl);
+    const backendRes = await axios.post(
+      backendUrl,
+      body,
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+        validateStatus: () => true,
+      }
+    );
+    console.log("[/api/auth/register] backend status:", backendRes.status);
+    console.log("[/api/auth/register] backend data:", backendRes.data);
+    console.log("[/api/auth/register] backend set-cookie:", backendRes.headers?.["set-cookie"]);
 
-    // If backend returned error
+    // Pass backend error directly
     if (backendRes.status >= 400) {
       return Response.json(
         {
@@ -35,28 +48,36 @@ export async function POST(req) {
     }
 
     /**
-     * Forward cookies from backend → browser
-     * Backend sets: accessToken, refreshToken
+     * Forward Set-Cookie headers from backend
+     * Backend sets:
+     *  - accessToken
+     *  - refreshToken
      */
     const headers = new Headers();
-    const setCookie = backendRes.headers?.["set-cookie"];
+    const setCookie = backendRes.headers["set-cookie"];
 
     if (Array.isArray(setCookie)) {
-      setCookie.forEach((c) => headers.append("set-cookie", c));
+      setCookie.forEach((cookie) =>
+        headers.append("set-cookie", cookie)
+      );
     } else if (typeof setCookie === "string") {
       headers.append("set-cookie", setCookie);
     }
 
     /**
-     * Set user_role cookie for routing/proxy checks
+     * Add role cookie for proxy routing
      */
-    const user = backendRes.data?.data?.user || backendRes.data?.user || null;
+    const user =
+      backendRes.data?.data?.user ||
+      backendRes.data?.user ||
+      null;
+
     const role = user?.role || body?.role;
 
     if (role) {
       headers.append(
         "set-cookie",
-        `user_role=${encodeURIComponent(role)}; Path=/; SameSite=Lax;${
+        `user_role=${role}; Path=/; SameSite=Lax;${
           process.env.NODE_ENV === "production" ? " Secure;" : ""
         }`
       );
@@ -68,10 +89,7 @@ export async function POST(req) {
         message: "registered",
         user,
       }),
-      {
-        status: 201,
-        headers,
-      }
+      { status: 201, headers }
     );
   } catch (err) {
     return Response.json(
