@@ -15,7 +15,7 @@ const isMobile = useIsMobile();
       <div className="flex min-h-screen bg-white">
         <Sidebar open={open} setOpen={setOpen} />
 
-        <main className="flex-1 lg:ml-64 p-6">
+        <main className="flex-1 md:ml-64 p-6">
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-4 space-y-6">
               <div className="flex justify-between items-center">

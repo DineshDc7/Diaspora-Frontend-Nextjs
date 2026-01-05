@@ -33,7 +33,7 @@ export default function AdminReport({ onMenuClick }) {
       <div className="flex min-h-screen bg-white">
         <Sidebar open={open} setOpen={setOpen} />
 
-        <main className="flex-1 lg:ml-64 p-6">
+        <main className="flex-1 md:ml-64 p-6">
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
 

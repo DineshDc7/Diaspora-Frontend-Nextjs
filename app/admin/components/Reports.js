@@ -5,7 +5,7 @@ const Reports = () => {
     <>
       <div className="shadow-lg rounded-lg bg-white p-4">
         <div className="flex justify-between items-center">
-          <div>
+          <div className="w-[80%]">
             <h2 className="headingColor text-lg font-semibold">Reports</h2>
             <p className="textColor">
               Drill into any Nigerian business for financials, media, and

@@ -2,7 +2,7 @@
 
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import { Users, User, Pencil, X, ChevronDown,Building2,ScrollText ,BadgeDollarSign} from "lucide-react";
+import { Users, User, Pencil, X, ChevronDown, Building2, ScrollText, BadgeDollarSign } from "lucide-react";
 import { Search } from "lucide-react";
 import { useState } from "react";
 const tabs = [
@@ -18,13 +18,13 @@ export default function AdminUser() {
   const [openmodal, setOpenmodal] = useState(false);
   const [openeditmodal, setOpenEditmodal] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0].id);
-  
+
   return (
     <>
       <div className="flex min-h-screen bg-white">
         <Sidebar open={open} setOpen={setOpen} />
 
-        <main className="flex-1 lg:ml-64 p-6">
+        <main className="flex-1 md:ml-64 p-6">
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-4 space-y-6">
               <div className="flex justify-between items-center">
@@ -48,62 +48,62 @@ export default function AdminUser() {
 
 
 
-              <div className="grid grid-cols-1 md:grid-cols-4 mt-6 gap-5">
-            <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
-                <div className="flex justify-between items-center gap-2">
-                  <h5 className="subHeadingColor text-base">Total Users</h5>
-                  <p className="px-3 py-1 text-sm subHeadingColor rounded-full secondaryColor">
-                    Active
-                  </p>
-                </div>
-                <div>
-                  <h2 className="headingColor text-3xl font-semibold py-3">120</h2>
-                </div>
+              <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 mt-6 gap-5">
+                <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
+                  <div className="flex justify-between items-center gap-2">
+                    <h5 className="subHeadingColor text-base">Total Users</h5>
+                    <p className="px-3 py-1 text-sm subHeadingColor rounded-full secondaryColor">
+                      Active
+                    </p>
+                  </div>
+                  <div>
+                    <h2 className="headingColor text-3xl font-semibold py-3">120</h2>
+                  </div>
 
-                <div className="absolute right-6 bottom-6">
+                  <div className="absolute right-6 bottom-6">
                     <User className="w-10 h-10" color="#cfdced" />
+                  </div>
                 </div>
-            </div>
-            <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
-                <div className="flex justify-between items-center gap-2">
-                  <h5 className="subHeadingColor text-base">Total Admins</h5>
-                  
-                </div>
-                <div>
-                  <h2 className="headingColor text-3xl font-semibold py-3">10</h2>
-                </div>
+                <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
+                  <div className="flex justify-between items-center gap-2">
+                    <h5 className="subHeadingColor text-base">Total Admins</h5>
 
-                <div className="absolute right-6 bottom-6">
-                   <User className="w-10 h-10" color="#cfdced" />
-                </div>
-            </div>
-            <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
-                <div className="flex justify-between items-center gap-2">
-                  <h5 className="subHeadingColor text-base">Total Business Owners</h5>
-                 
-                </div>
-                <div>
-                  <h2 className="headingColor text-3xl font-semibold py-3">5</h2>
-                </div>
+                  </div>
+                  <div>
+                    <h2 className="headingColor text-3xl font-semibold py-3">10</h2>
+                  </div>
 
-                <div className="absolute right-6 bottom-6">
-                  <User className="w-10 h-10" color="#cfdced" />
-                </div>
-            </div>
-            <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
-                <div className="flex justify-between items-center gap-2">
-                  <h5 className="subHeadingColor text-base">Total Investors</h5>
-                  
-                </div>
-                <div>
-                  <h2 className="headingColor text-3xl font-semibold py-3">7</h2>
-                </div>
-
-                <div className="absolute right-6 bottom-6">
+                  <div className="absolute right-6 bottom-6">
                     <User className="w-10 h-10" color="#cfdced" />
+                  </div>
                 </div>
-            </div>
-        </div>
+                <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
+                  <div className="flex justify-between items-center gap-2">
+                    <h5 className="subHeadingColor text-base">Total Business Owners</h5>
+
+                  </div>
+                  <div>
+                    <h2 className="headingColor text-3xl font-semibold py-3">5</h2>
+                  </div>
+
+                  <div className="absolute right-6 bottom-6">
+                    <User className="w-10 h-10" color="#cfdced" />
+                  </div>
+                </div>
+                <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
+                  <div className="flex justify-between items-center gap-2">
+                    <h5 className="subHeadingColor text-base">Total Investors</h5>
+
+                  </div>
+                  <div>
+                    <h2 className="headingColor text-3xl font-semibold py-3">7</h2>
+                  </div>
+
+                  <div className="absolute right-6 bottom-6">
+                    <User className="w-10 h-10" color="#cfdced" />
+                  </div>
+                </div>
+              </div>
               {/* <div className="grid grid-cols-1 md:grid-cols-3 mt-6 gap-5">
                 <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
                   <div className="flex justify-between items-center gap-2">
@@ -161,429 +161,428 @@ export default function AdminUser() {
                 </div>
 
                 <div className="flex mt-4">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 text-sm font-medium transition font-semibold text-lg
-              ${
-                activeTab === tab.id
-                  ? "border-b-2 border-blue-600 text-blue-600"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-              {activeTab === "allusers" && (
-                <div className="py-5 overflow-x-auto">
-                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
-                    <thead>
-                      <tr className="secondaryColor">
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[25%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Name</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[18%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Email</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Phone</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Role</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Joined</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Actions</h5>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
-                              Demo Diaspora User
-                            </h4>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">
-                            diaspora@gmail.com
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">-</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                            Investor
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">11/12/2025</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <button
-                            onClick={() => setOpenEditmodal(true)}
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                          >
-                            <Pencil className="w-3 h-3" /> Edit
-                          </button>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
-                              Demo Business Owner
-                            </h4>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">
-                            diaspora@gmail.com
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">-</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-green-600 px-3 py-1 text-xs font-semibold rounded-full bg-green-100 w-fit">
-                            Owner
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">11/12/2025</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <button
-                            onClick={() => setOpenEditmodal(true)}
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                          >
-                            <Pencil className="w-3 h-3" /> Edit
-                          </button>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
-                              Demo Admin
-                            </h4>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">
-                            diaspora@gmail.com
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">-</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-gray-600 px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 w-fit">
-                            Admin
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">11/12/2025</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <button
-                            onClick={() => setOpenEditmodal(true)}
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                          >
-                            <Pencil className="w-3 h-3" /> Edit
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`px-4 py-2 text-sm font-medium transition font-semibold text-lg
+              ${activeTab === tab.id
+                          ? "border-b-2 border-blue-600 text-blue-600"
+                          : "text-gray-500 hover:text-gray-700"
+                        }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
                 </div>
-                  )}
 
-                  {activeTab === "admin" && (
-                <div className="py-5 overflow-x-auto">
-                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
-                    <thead>
-                      <tr className="secondaryColor">
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[25%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Name</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[18%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Email</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Phone</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Role</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Joined</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Actions</h5>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                     
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
-                              Demo Admin
-                            </h4>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">
-                            diaspora@gmail.com
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">-</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-gray-600 px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 w-fit">
-                            Admin
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">11/12/2025</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <button
-                            onClick={() => setOpenEditmodal(true)}
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                {activeTab === "allusers" && (
+                  <div className="py-5 overflow-x-auto">
+                    <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
+                      <thead>
+                        <tr className="secondaryColor">
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[25%]"
+                            style={{ verticalAlign: "center" }}
                           >
-                            <Pencil className="w-3 h-3" /> Edit
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                  )}
-
-
-                  {activeTab === "businessowner" && (
-                <div className="py-5 overflow-x-auto">
-                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
-                    <thead>
-                      <tr className="secondaryColor">
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[25%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Name</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[18%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Email</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Phone</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Role</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Joined</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Actions</h5>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                 
-
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
-                              Demo Business Owner
-                            </h4>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">
-                            diaspora@gmail.com
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">-</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-green-600 px-3 py-1 text-xs font-semibold rounded-full bg-green-100 w-fit">
-                            Owner
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">11/12/2025</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <button
-                            onClick={() => setOpenEditmodal(true)}
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            <h5 className="subHeadingColor text-base">Name</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[18%]"
+                            style={{ verticalAlign: "center" }}
                           >
-                            <Pencil className="w-3 h-3" /> Edit
-                          </button>
-                        </td>
-                      </tr>
-
-                    
-                    </tbody>
-                  </table>
-                </div>
-                  )}
-
-
-
-                  {activeTab === "investor" && (
-                <div className="py-5 overflow-x-auto">
-                  <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
-                    <thead>
-                      <tr className="secondaryColor">
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[25%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Name</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[18%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Email</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Phone</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Role</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Joined</h5>
-                        </th>
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
-                          <h5 className="subHeadingColor text-base">Actions</h5>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="subHeadingColor font-semibold text-sm">
-                              Demo Diaspora User
-                            </h4>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">
-                            diaspora@gmail.com
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">-</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                            Investor
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">11/12/2025</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <button
-                            onClick={() => setOpenEditmodal(true)}
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            <h5 className="subHeadingColor text-base">Email</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
                           >
-                            <Pencil className="w-3 h-3" /> Edit
-                          </button>
-                        </td>
-                      </tr>
+                            <h5 className="subHeadingColor text-base">Phone</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Role</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Joined</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Actions</h5>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <div>
+                              <h4 className="subHeadingColor font-semibold text-sm">
+                                Demo Diaspora User
+                              </h4>
+                            </div>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">
+                              diaspora@gmail.com
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">-</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                              Investor
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">11/12/2025</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <button
+                              onClick={() => setOpenEditmodal(true)}
+                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            >
+                              <Pencil className="w-3 h-3" /> Edit
+                            </button>
+                          </td>
+                        </tr>
 
-                    
+                        <tr>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <div>
+                              <h4 className="subHeadingColor font-semibold text-sm">
+                                Demo Business Owner
+                              </h4>
+                            </div>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">
+                              diaspora@gmail.com
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">-</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="text-green-600 px-3 py-1 text-xs font-semibold rounded-full bg-green-100 w-fit">
+                              Owner
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">11/12/2025</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <button
+                              onClick={() => setOpenEditmodal(true)}
+                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            >
+                              <Pencil className="w-3 h-3" /> Edit
+                            </button>
+                          </td>
+                        </tr>
 
-                      
-                    </tbody>
-                  </table>
-                </div>
-                  )}
+                        <tr>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <div>
+                              <h4 className="subHeadingColor font-semibold text-sm">
+                                Demo Admin
+                              </h4>
+                            </div>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">
+                              diaspora@gmail.com
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">-</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="text-gray-600 px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 w-fit">
+                              Admin
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">11/12/2025</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <button
+                              onClick={() => setOpenEditmodal(true)}
+                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            >
+                              <Pencil className="w-3 h-3" /> Edit
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {activeTab === "admin" && (
+                  <div className="py-5 overflow-x-auto">
+                    <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
+                      <thead>
+                        <tr className="secondaryColor">
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[25%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Name</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[18%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Email</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Phone</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Role</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Joined</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Actions</h5>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <div>
+                              <h4 className="subHeadingColor font-semibold text-sm">
+                                Demo Admin
+                              </h4>
+                            </div>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">
+                              diaspora@gmail.com
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">-</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="text-gray-600 px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 w-fit">
+                              Admin
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">11/12/2025</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <button
+                              onClick={() => setOpenEditmodal(true)}
+                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            >
+                              <Pencil className="w-3 h-3" /> Edit
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+
+                {activeTab === "businessowner" && (
+                  <div className="py-5 overflow-x-auto">
+                    <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
+                      <thead>
+                        <tr className="secondaryColor">
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[25%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Name</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[18%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Email</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Phone</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Role</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Joined</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Actions</h5>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+
+                        <tr>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <div>
+                              <h4 className="subHeadingColor font-semibold text-sm">
+                                Demo Business Owner
+                              </h4>
+                            </div>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">
+                              diaspora@gmail.com
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">-</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="text-green-600 px-3 py-1 text-xs font-semibold rounded-full bg-green-100 w-fit">
+                              Owner
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">11/12/2025</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <button
+                              onClick={() => setOpenEditmodal(true)}
+                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            >
+                              <Pencil className="w-3 h-3" /> Edit
+                            </button>
+                          </td>
+                        </tr>
+
+
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+
+
+                {activeTab === "investor" && (
+                  <div className="py-5 overflow-x-auto">
+                    <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
+                      <thead>
+                        <tr className="secondaryColor">
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[25%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Name</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[18%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Email</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Phone</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Role</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Joined</h5>
+                          </th>
+                          <th
+                            className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                            style={{ verticalAlign: "center" }}
+                          >
+                            <h5 className="subHeadingColor text-base">Actions</h5>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <div>
+                              <h4 className="subHeadingColor font-semibold text-sm">
+                                Demo Diaspora User
+                              </h4>
+                            </div>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">
+                              diaspora@gmail.com
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">-</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                              Investor
+                            </p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <p className="textColor text-sm">11/12/2025</p>
+                          </td>
+                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                            <button
+                              onClick={() => setOpenEditmodal(true)}
+                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            >
+                              <Pencil className="w-3 h-3" /> Edit
+                            </button>
+                          </td>
+                        </tr>
+
+
+
+
+                      </tbody>
+                    </table>
+                  </div>
+                )}
 
               </div>
             </div>
@@ -657,8 +656,8 @@ export default function AdminUser() {
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option>User</option>
-                        <option>Business Owner</option>
-                        <option>Investor</option>
+                    <option>Business Owner</option>
+                    <option>Investor</option>
                   </select>
 
                   {/* Dropdown Arrow */}
@@ -770,8 +769,8 @@ export default function AdminUser() {
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option>User</option>
-                        <option>Business Owner</option>
-                        <option>Investor</option>
+                    <option>Business Owner</option>
+                    <option>Investor</option>
                   </select>
 
                   {/* Dropdown Arrow */}

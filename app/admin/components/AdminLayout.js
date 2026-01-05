@@ -10,7 +10,7 @@ export default function AdminLayout({ children, title, subtitle }) {
     <div className="flex min-h-screen bg-white">
       <Sidebar open={open} setOpen={setOpen} />
 
-      <main className="flex-1 lg:ml-64 p-4 sm:p-6">
+      <main className="flex-1 md:ml-64 p-4 sm:p-6">
         <Topbar
           title={title}
           subtitle={subtitle}
