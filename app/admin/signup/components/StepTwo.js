@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
 const StepTwo = ({ onBack }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,7 +30,23 @@ const StepTwo = ({ onBack }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    router.push("/admin/dashboard");
+    setError("");
+
+    try {
+      setLoading(true);
+
+      // TODO: Call your register API here.
+      // For now we just navigate after basic client-side submit.
+      router.push("/admin/dashboard");
+    } catch (err) {
+      const msg =
+        typeof err?.message === "string"
+          ? err.message
+          : "Something went wrong. Please try again.";
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

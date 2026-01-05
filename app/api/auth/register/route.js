@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function POST(req: Request) {
+export async function POST(req) {
   try {
     const BACKEND = process.env.BACKEND_API_BASE_URL;
 
@@ -16,15 +16,11 @@ export async function POST(req: Request) {
     /**
      * Call Node backend auth/register
      */
-    const backendRes = await axios.post(
-      `${BACKEND}/auth/register`,
-      body,
-      {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-        validateStatus: () => true, // handle errors manually
-      }
-    );
+    const backendRes = await axios.post(`${BACKEND}/auth/register`, body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+      validateStatus: () => true, // handle errors manually
+    });
 
     // If backend returned error
     if (backendRes.status >= 400) {
@@ -43,7 +39,7 @@ export async function POST(req: Request) {
      * Backend sets: accessToken, refreshToken
      */
     const headers = new Headers();
-    const setCookie = backendRes.headers["set-cookie"];
+    const setCookie = backendRes.headers?.["set-cookie"];
 
     if (Array.isArray(setCookie)) {
       setCookie.forEach((c) => headers.append("set-cookie", c));
@@ -54,19 +50,13 @@ export async function POST(req: Request) {
     /**
      * Set user_role cookie for routing/proxy checks
      */
-    const user =
-      backendRes.data?.data?.user ||
-      backendRes.data?.user ||
-      null;
-
+    const user = backendRes.data?.data?.user || backendRes.data?.user || null;
     const role = user?.role || body?.role;
 
     if (role) {
       headers.append(
         "set-cookie",
-        `user_role=${encodeURIComponent(
-          role
-        )}; Path=/; SameSite=Lax;${
+        `user_role=${encodeURIComponent(role)}; Path=/; SameSite=Lax;${
           process.env.NODE_ENV === "production" ? " Secure;" : ""
         }`
       );
@@ -83,7 +73,7 @@ export async function POST(req: Request) {
         headers,
       }
     );
-  } catch (err: any) {
+  } catch (err) {
     return Response.json(
       {
         success: false,
