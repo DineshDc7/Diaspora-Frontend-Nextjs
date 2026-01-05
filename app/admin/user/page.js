@@ -66,7 +66,7 @@ export default function AdminUser() {
             </div>
             <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
                 <div className="flex justify-between items-center gap-2">
-                  <h5 className="subHeadingColor text-base">Total Admin</h5>
+                  <h5 className="subHeadingColor text-base">Total Admins</h5>
                   
                 </div>
                 <div>
@@ -79,7 +79,7 @@ export default function AdminUser() {
             </div>
             <div className="p-4 bg-neutral-50 rounded-lg shadow-sm relative">
                 <div className="flex justify-between items-center gap-2">
-                  <h5 className="subHeadingColor text-base">Total Business Owner</h5>
+                  <h5 className="subHeadingColor text-base">Total Business Owners</h5>
                  
                 </div>
                 <div>
