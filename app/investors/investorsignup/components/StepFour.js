@@ -31,6 +31,10 @@ export default function StepFour({ onBack, onContinue }) {
     console.log("Business submitted:", formData);
     router.push("/admin/investorSignup/step-2");
   };
+  const handlefinishbutton = () =>
+  {
+    router.push("/investors/overview");
+  }
 
   return (
     <section className="min-h-screen md:py-10 ">
@@ -334,7 +338,7 @@ export default function StepFour({ onBack, onContinue }) {
             <button className="w-fit px-4 py-2 rounded-md secondaryColor textColor text-sm font-semibold">
               Skip for Now
             </button>
-            <button
+            <button onClick={handlefinishbutton}
               className="w-fit px-4 py-2 rounded-md primaryColor text-white text-sm font-semibold"
             >
               Finish Setup

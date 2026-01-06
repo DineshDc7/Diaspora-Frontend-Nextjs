@@ -3,69 +3,191 @@
 import {
   Home,
   Building,
-  AlertTriangle,
+  Users,
   BarChart,
-  MessageCircle,
   Settings,
-  CreditCard,
+  LogOut,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+
 const MenuItems = [
-  { name: "Dashboard", icon: Home },
-  { name: "Businesses", icon: Building },
-  { name: "Alerts", icon: AlertTriangle },
-  { name: "Reports", icon: BarChart },
-  { name: "Messages", icon: MessageCircle },
-  { name: "Settings", icon: Settings },
-  { name: "Billing", icon: CreditCard },
+  { name: "Overview", icon: Home, href: "/business-owner/overview" },
+  { name: "Businesses Info", icon: Building, href: "/business-owner/business_info" },
+  { name: "All Reports", icon: BarChart, href: "/business-owner/allreports" },
+  // { name: "Users", icon: Users, href: "/admin/user" },
 ];
-export default function Sidebar({ open, setOpen }) {
+const MenuItemsbuttom = [
+  // { name: "Setting", icon: Settings },
+  { name: "Logout", icon: LogOut },
+];
+
+export default function Sidebar({ open, setOpen }){
+  const pathname = usePathname();
+
   return (
-    <aside className="">
+
+    <>
+    <aside className="fixed formobile"> 
+      {/* Overlay for small screens */}
       <div
-        className={`fixed inset-0 bg-black/40 z-30 md:hidden transition-opacity duration-300 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/40 z-30 md:hidden transition-opacity ${open ? 'block' : 'hidden'}`}
         onClick={() => setOpen && setOpen(false)}
-        aria-hidden={!open}
       />
 
-      <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}>
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
-          <a href="/">
-            <h1>DI</h1>
-          </a>
+      <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:shadow-none`}>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
+            <a href="/">
+              <h1>DI</h1>
+            </a>
+          </div>
+          <div>
+            <a href="/">
+              <h4 className="font-semibold text-lg text-white">
+                Diaspora Insight
+              </h4>
+            </a>
+            <p className="text-xs text-gray-400">
+              Accountability for cross-border capital
+            </p>
+          </div>
+          {/* close button for small screens */}
+          <div className="md:hidden ml-auto">
+            <button onClick={() => setOpen && setOpen(false)} className="text-white">
+              ✕
+            </button>
+          </div>
         </div>
-        <div>
-          <a href="/">
-            <h4 className="font-semibold text-lg text-white">
-              Diaspora Insight
-            </h4>
-          </a>
-          <p className="text-xs text-gray-400">
-            Accountability for cross-border capital
-          </p>
-        </div>
-        <div className="md:hidden ml-auto">
-          <button onClick={() => setOpen && setOpen(false)} className="text-white">✕</button>
-        </div>
+        <div className="flex items-center gap-2">
+        
       </div>
 
        <nav className="space-y-2 py-6">
         {MenuItems.map((item) => {
           const Icon = item.icon;
+          const isActive = pathname === item.href;
           return (
-            <button
-              key={item.name}
-              className="w-full text-white text-left px-4 py-2 rounded-sm hover:bg-blue-50 hover:text-gray-800 font-medium"
+            <a 
+              key={item.name} href={item.href}
+              className={`w-full text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium
+                ${ isActive
+              ? "text-gray-400"
+              : "text-white "
+          }
+                `}
             >
               <div className="flex items-center gap-3">
                 <Icon size={16} />
                 <span>{item.name}</span>
               </div>
-            </button>
+            </a>
+          );
+        })}
+      </nav>
+
+
+      <div style={{position:"absolute", bottom:"5%"}}>
+        <nav className="space-y-2 py-6">
+        {MenuItemsbuttom.map((item) => {
+          const Icon = item.icon;
+          return (
+            <a href="/"
+              key={item.name}
+              className="w-full text-white text-left px-4  hover:text-gray-700 font-medium"
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} />
+                <span>{item.name}</span>
+              </div>
+            </a>
           );
         })}
       </nav>
       </div>
+      </div>
     </aside>
+
+
+
+    <aside className={`fixed inset-0 bg-black/40 z-30 md:hidden md:none transition-opacity ${open ? 'block' : 'hidden'}`}
+        onClick={() => setOpen && setOpen(false)}>
+      {/* Overlay for small screens */}
+      <div
+        
+      />
+
+      <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:shadow-none`}>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
+            <a href="/">
+              <h1>DI</h1>
+            </a>
+          </div>
+          <div>
+            <a href="/">
+              <h4 className="font-semibold text-lg text-white">
+                Diaspora Insight
+              </h4>
+            </a>
+            <p className="text-xs text-gray-400">
+              Accountability for cross-border capital
+            </p>
+          </div>
+          {/* close button for small screens */}
+          <div className="md:hidden ml-auto">
+            <button onClick={() => setOpen && setOpen(false)} className="text-white">
+              ✕
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+        
+      </div>
+
+       <nav className="space-y-2 py-6">
+        {MenuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
+          return (
+            <a 
+              key={item.name} href={item.href}
+              className={`w-full text-white text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium 
+                ${ isActive
+              ? "text-gray-900"
+              : "text-white"
+          }`}
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} />
+                <span>{item.name}</span>
+              </div>
+            </a>
+          );
+        })}
+      </nav>
+
+      <div style={{position:"absolute", bottom:"5%"}}>
+        <nav className="space-y-2 py-6">
+        {MenuItemsbuttom.map((item) => {
+          const Icon = item.icon;
+          return (
+            <a href="/"
+              key={item.name}
+              className="w-full text-white text-left px-4  hover:text-gray-800 font-medium"
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} />
+                <span>{item.name}</span>
+              </div>
+            </a>
+          );
+        })}
+      </nav>
+      </div>
+      </div>
+    </aside>
+
+
+    </>
   );
 }
