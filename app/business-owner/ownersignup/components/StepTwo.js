@@ -5,6 +5,8 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
 const StepTwo = ({ onBack }) => {
+    const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -24,13 +26,7 @@ const StepTwo = ({ onBack }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const payload = {
-      ...formData,
-      phone: `${formData.countryCode}${formData.phone}`,
-    };
-
-    console.log("Form Submitted:", payload);
+    router.push("/business-owner/dashboard");
   };
 
   return (
