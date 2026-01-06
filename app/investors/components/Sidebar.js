@@ -11,9 +11,9 @@ import {
 import { usePathname } from "next/navigation";
 
 const MenuItems = [
-  { name: "Overview", icon: Home, href: "/business-owner/overview" },
-  { name: "Businesses Info", icon: Building, href: "/business-owner/business_info" },
-  { name: "All Reports", icon: BarChart, href: "/business-owner/allreports" },
+  { name: "Overview", icon: Home, href: "/investors/overview" },
+  { name: "All Businesses", icon: Building, href: "/investors/all_businesses" },
+  { name: "Business Reports", icon: BarChart, href: "/investors/business_reports" },
   // { name: "Users", icon: Users, href: "/admin/user" },
 ];
 const MenuItemsbuttom = [

@@ -1,52 +1,37 @@
 "use client";
-
-import Sidebar from "../components/Sidebar";
 import { Users, User, Pencil, X, Eye, BadgeDollarSign, ScrollText, BadgePercent } from "lucide-react";
 import { useState } from "react";
 import { Listbox } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
-const businesses = [
-  "Nairobi Fresh Mart",
-  "ABC Store",
-  "Green Valley Foods",
-  "Urban Retail",
+import InvestorLayout from "../components/InvestorLayout";
+
+
+
+const details = [
+    {
+        bname: "Kantor Imigrasi Kelas I Denpasar",
+        owner: "Vishal Singh",
+        category: "Retail",
+        place: "KAB. ",
+    },
+    {
+        bname: "Nairobi Fresh Mart",
+        owner: "John Don",
+        category: "Retail",
+        place: "Nairobi",
+    },
+
 ];
-export default function AdminReport({ onMenuClick }) {
-  const [open, setOpen] = useState(false);
-  const [openmodel, setOpenModel] = useState(false);
-  const [selectedBusiness, setSelectedBusiness] =
-    useState("Nairobi Fresh Mart");
+export default function BusinessReport() {
 
-
-    const isMobile = useIsMobile();
-
-  // const clearFilter = () => {
-  //   setSelectedBusiness("");
-  // };
-
-  return (
-    <>
-      <div className="flex min-h-screen bg-white">
-        <Sidebar open={open} setOpen={setOpen} />
-
-        <main className="flex-1 md:ml-64 p-6">
-
-          <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-
-            <div className="xl:col-span-4 space-y-6">
-
-
-
-
-
-
-
-
-
-
-
-              <div className="flex justify-between items-center">
+        const isMobile = useIsMobile();
+    
+    return (
+        <InvestorLayout title="Business Reports" subtitle="8 Reports from 2 Businesses">
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
+                <div className="xl:col-span-4 space-y-6">
+                   <div className="flex justify-between items-center">
                 <div className="flex gap-3">
 
                   <button onClick={() => setOpen(true)} className="md:hidden p-2 rounded-md">☰</button>
@@ -310,85 +295,12 @@ export default function AdminReport({ onMenuClick }) {
                   </tbody>
                 </table>
               </div>
-              {/* </div> */}
-            </div>
-          </div>
-        </main>
-      </div>
 
-      {/* Modal */}
-      {openmodel && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-lg rounded-lg bg-white shadow-lg pb-5">
-            {/* Header */}
-            <div className="mb-4 flex items-center rounded-t-lg justify-between p-4 primaryColor">
-              <h2 className="text-lg font-semibold text-white">Daily Report</h2>
-              <button onClick={() => setOpenModel(false)}>
-                <X className="h-5 w-5" color="#ffffffff" />
-              </button>
-            </div>
-            <h5 className="text-base headingColor px-6">Nairobi Fresh Mart</h5>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">Sales</h5>
-                  <h3 className="text-lg font-semibold headingColor">
-                    $1199.91
-                  </h3>
-                </div>
-                <div>
-                  <BadgeDollarSign className="w-10 h-10 text-blue-400 opacity-60" />
+
+
                 </div>
 
-              </div>
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">Expenses</h5>
-                  <h3 className="text-lg font-semibold headingColor">
-                    $1000
-                  </h3>
-                </div>
-                <div>
-                  <ScrollText className="w-10 h-10 text-blue-400 opacity-60" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">Customers</h5>
-                  <h3 className="text-lg font-semibold headingColor">25</h3>
-                </div>
-                <div>
-                  <User className="w-10 h-10 text-blue-400 opacity-60" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">
-                    Net Profit/Loss{" "}
-                  </h5>
-                  <h3 className="text-lg font-semibold headingColor">
-                    $-800.09
-                  </h3>
-                </div>
-                <div>
-                  <BadgePercent className="w-10 h-10 text-blue-400 opacity-60" />
-                </div>
-              </div>
             </div>
-            <div className="flex gap-4 p-6">
-              <button className="w-full p-4 bg-blue-50 textprimaryColor font-semibold rounded-md">
-                View Photo
-              </button>
-              <button className="w-full p-4 bg-blue-50 textprimaryColor font-semibold rounded-md">
-                View Video
-              </button>
-            </div>
-            <div className="px-6 pt-2 border-t border-gray-300">
-              <p className="headingColor text-xs font-semibold">Submitted on 11 December 2025</p>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
+        </InvestorLayout>
+    );
 }

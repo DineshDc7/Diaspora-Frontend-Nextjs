@@ -5,7 +5,7 @@ export default function DetailsOverview() {
         <>
             <div className="shadow-lg rounded-lg bg-white p-4 pb-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-6 gap-5">
-                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2] relative">
                         <div className="flex justify-between items-center gap-2">
                             <div>
                                 <h5 className="subHeadingColor text-base">Following</h5>
@@ -17,7 +17,7 @@ export default function DetailsOverview() {
                         </div>
 
                     </div>
-                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2] relative">
                         <div className="flex justify-between items-center gap-2">
                             <div>
                                 <h5 className="subHeadingColor text-base">Total Reports</h5>
@@ -29,7 +29,7 @@ export default function DetailsOverview() {
                         </div>
 
                     </div>
-                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2] relative">
                         <div className="flex justify-between items-center gap-2">
                             <div>
                                 <h5 className="subHeadingColor text-base">Total Profit/Loss</h5>
@@ -41,11 +41,11 @@ export default function DetailsOverview() {
                         </div>
 
                     </div>
-                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+                    <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2] relative">
                         <div className="flex justify-between items-center gap-2">
                             <div>
                                 <h5 className="subHeadingColor text-base">All Businesses</h5>
-                                <h2 className="headingColor text-3xl font-semibold py-3">120</h2>
+                                <h2 className="headingColor text-3xl font-semibold py-3">5</h2>
                             </div>
                             <div>
                                 <BriefcaseBusiness className="w-15 h-15" color="#cfdced" />
