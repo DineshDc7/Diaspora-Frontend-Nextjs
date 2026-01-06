@@ -32,6 +32,17 @@ export default function AllBusiness() {
                             </p>
                         </div>
 
+                        <div className="grid grid-cols-2 gap-5">
+                            <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2]">
+                                <h5 className="subHeadingColor text-base">Total Business</h5>
+                                <h2 className="headingColor text-3xl font-semibold py-3">4</h2>
+                            </div>
+                            <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2]">
+                                <h5 className="subHeadingColor text-base">Following Business</h5>
+                                <h2 className="headingColor text-3xl font-semibold py-3">4</h2>
+                            </div>
+                        </div>
+
                         {/* Table */}
                         <div className="mt-4 overflow-x-auto">
                             <table className="w-full min-w-[800px] border-collapse">
