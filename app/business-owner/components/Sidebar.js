@@ -83,7 +83,7 @@ export default function Sidebar({ open, setOpen }){
           return (
             <button
               key={item.name}
-              className="w-full text-white text-left px-4  hover:text-gray-800 font-medium"
+              className="w-full text-white text-left px-4  hover:text-gray-700 font-medium"
             >
               <div className="flex items-center gap-3">
                 <Icon size={16} />
