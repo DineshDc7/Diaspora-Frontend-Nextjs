@@ -26,7 +26,7 @@ const StepTwo = ({ onBack }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.push("/business-owner/dashboard");
+    router.push("/business-owner/overview");
   };
 
   return (

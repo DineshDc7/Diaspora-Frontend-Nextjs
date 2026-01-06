@@ -34,10 +34,7 @@ export default function Topbar({ onMenuClick }) {
             <button onClick={() => setOpenModal(true)} className="bg-green-700 text-white px-2 text-sm py-2 rounded-md">+ New Report</button>
           )}
         </div>
-
-
       </div>
-
 
       {/* Modal */}
       {openModal && (

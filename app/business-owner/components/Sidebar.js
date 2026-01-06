@@ -8,6 +8,8 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+
 const MenuItems = [
   { name: "Overview", icon: Home, href: "/business-owner/overview" },
   { name: "Businesses Info", icon: Building, href: "/business-owner/business_info" },
@@ -20,6 +22,8 @@ const MenuItemsbuttom = [
 ];
 
 export default function Sidebar({ open, setOpen }){
+  const pathname = usePathname();
+
   return (
 
     <>
@@ -61,10 +65,16 @@ export default function Sidebar({ open, setOpen }){
        <nav className="space-y-2 py-6">
         {MenuItems.map((item) => {
           const Icon = item.icon;
+          const isActive = pathname === item.href;
           return (
             <a 
               key={item.name} href={item.href}
-              className="w-full text-white text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium"
+              className={`w-full text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium
+                ${ isActive
+              ? "text-gray-400"
+              : "text-white "
+          }
+                `}
             >
               <div className="flex items-center gap-3">
                 <Icon size={16} />
@@ -81,7 +91,7 @@ export default function Sidebar({ open, setOpen }){
         {MenuItemsbuttom.map((item) => {
           const Icon = item.icon;
           return (
-            <button
+            <a href="/"
               key={item.name}
               className="w-full text-white text-left px-4  hover:text-gray-700 font-medium"
             >
@@ -89,7 +99,7 @@ export default function Sidebar({ open, setOpen }){
                 <Icon size={16} />
                 <span>{item.name}</span>
               </div>
-            </button>
+            </a>
           );
         })}
       </nav>
@@ -137,10 +147,15 @@ export default function Sidebar({ open, setOpen }){
        <nav className="space-y-2 py-6">
         {MenuItems.map((item) => {
           const Icon = item.icon;
+          const isActive = pathname === item.href;
           return (
             <a 
               key={item.name} href={item.href}
-              className="w-full text-white text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium"
+              className={`w-full text-white text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium 
+                ${ isActive
+              ? "text-gray-900"
+              : "text-white"
+          }`}
             >
               <div className="flex items-center gap-3">
                 <Icon size={16} />
@@ -151,13 +166,12 @@ export default function Sidebar({ open, setOpen }){
         })}
       </nav>
 
-
       <div style={{position:"absolute", bottom:"5%"}}>
         <nav className="space-y-2 py-6">
         {MenuItemsbuttom.map((item) => {
           const Icon = item.icon;
           return (
-            <button
+            <a href="/"
               key={item.name}
               className="w-full text-white text-left px-4  hover:text-gray-800 font-medium"
             >
@@ -165,7 +179,7 @@ export default function Sidebar({ open, setOpen }){
                 <Icon size={16} />
                 <span>{item.name}</span>
               </div>
-            </button>
+            </a>
           );
         })}
       </nav>

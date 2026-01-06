@@ -14,7 +14,7 @@ const Reports = () => {
           </div>
           <div className="flex gap-5 items-center">
             <div>
-              <a className="textColor" href="#">
+              <a className="textColor" href="/admin/allreports">
                 View all
               </a>
             </div>

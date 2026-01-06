@@ -14,7 +14,7 @@ export default function BusinessTable() {
           </div>
           <div className="flex gap-5 items-center">
             <div>
-              <a className="textColor" href="#">
+              <a className="textColor" href="/admin/business">
                 View all
               </a>
             </div>

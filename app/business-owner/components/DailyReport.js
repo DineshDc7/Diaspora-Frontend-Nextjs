@@ -39,14 +39,14 @@ const DailyReport = () => {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
           <h2 className="headingColor text-lg font-semibold">
-            Recent Daily Reports
+            Recent Reports
           </h2>
           <p className="textColor text-sm">
             Click on a report to view details
           </p>
         </div>
 
-        <a href="#" className="textColor text-sm font-medium">
+        <a href="/business-owner/allreports" className="textColor text-sm font-medium">
           View all
         </a>
       </div>
