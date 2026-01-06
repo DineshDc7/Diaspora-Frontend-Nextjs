@@ -36,7 +36,7 @@ const DailyReport = () => {
   return (
     <div className="shadow-lg rounded-lg bg-white p-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+      <div className="flex justify-between items-center gap-3">
         <div>
           <h2 className="headingColor text-lg font-semibold">
             Recent Reports
