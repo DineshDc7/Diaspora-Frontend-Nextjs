@@ -5,6 +5,14 @@ import Topbar from "../components/Topbar";
 import { Users, User, Pencil, X, ChevronDown, Building2, ScrollText, BadgeDollarSign } from "lucide-react";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 const tabs = [
   { id: "allusers", label: "All Users" },
   { id: "admin", label: "Admin" },
@@ -650,20 +658,19 @@ export default function AdminUser() {
                 </label>
 
                 <div className="relative w-full">
-                  <select
-                    name="role"
-                    className="w-full appearance-none p-3 pr-10  rounded-lg border border-gray-300 px-4 py-2 text-sm
-                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option>User</option>
-                    <option>Business Owner</option>
-                    <option>Investor</option>
-                  </select>
+                  <Select>
+                    <SelectTrigger
+                      className="w-full p-3 rounded-lg border border-gray-300 px-4 py-2 text-sm
+                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <SelectValue placeholder="Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="user">User</SelectItem>
+                      <SelectItem value="owner">Business Owner</SelectItem>
+                      <SelectItem value="investor">Investor</SelectItem>
 
-                  {/* Dropdown Arrow */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -675,7 +682,7 @@ export default function AdminUser() {
                 </label>
                 <input
                   type="tel"
-                  placeholder="999999999"
+                  placeholder="9999999999"
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -763,7 +770,7 @@ export default function AdminUser() {
                 </label>
 
                 <div className="relative w-full">
-                  <select
+                  {/* <select
                     name="role"
                     className="w-full appearance-none p-3 pr-10  rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -771,12 +778,22 @@ export default function AdminUser() {
                     <option>User</option>
                     <option>Business Owner</option>
                     <option>Investor</option>
-                  </select>
+                  </select> */}
 
-                  {/* Dropdown Arrow */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
+                  <Select>
+                    <SelectTrigger
+                      className="w-full p-3 rounded-lg border border-gray-300 px-4 py-2 text-sm
+                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <SelectValue placeholder="Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="user">User</SelectItem>
+                      <SelectItem value="owner">Business Owner</SelectItem>
+                      <SelectItem value="investor">Investor</SelectItem>
+
+                    </SelectContent>
+                  </Select>
+
                 </div>
               </div>
 
@@ -788,7 +805,7 @@ export default function AdminUser() {
                 </label>
                 <input
                   type="tel"
-                  placeholder="999999999"
+                  placeholder="9999999999"
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />

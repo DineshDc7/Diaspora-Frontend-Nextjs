@@ -174,7 +174,7 @@ const StepTwo = ({ onBack }) => {
                   </button> */}
                 </div>
 
-                <div className="flex justify-between py-6 gap-12">
+                <div className="flex justify-between py-6 gap-5 md:gap-12">
                   <div>
                     <p className="text-sm textColor">
                       We use your details only to secure and personalize your
