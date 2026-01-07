@@ -37,7 +37,7 @@ const onContinue = () => {
             <div className="w-full bg-white shadow-xl rounded-xl md:p-8 p-4">
               
               <div className="md:flex items-center">
-                <p className="px-3 py-1 text-sm subHeadingColor rounded-full secondaryColor">
+                <p className="px-3 py-1 text-sm subHeadingColor w-fit rounded-full secondaryColor">
                   Role-aware onboarding
                 </p>
                 <p className="px-3 py-1 text-sm textColor">

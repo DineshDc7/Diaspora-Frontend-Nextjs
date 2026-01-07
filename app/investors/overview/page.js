@@ -10,8 +10,10 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
         
         <div className="xl:col-span-4 space-y-6">
+          <div className="shadow-lg rounded-lg bg-white p-6">
             <DetailsOverview/>
-          <AllBusinesses/>
+            <AllBusinesses/>
+          </div>
 
         </div>
 

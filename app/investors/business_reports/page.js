@@ -124,16 +124,16 @@ export default function BusinessReport() {
                     <th className="text-start p-4 border-b border-gray-100 w-[10%]">
                       <h5 className="subHeadingColor text-base">Date</h5>
                     </th>
-                    <th className="text-start p-4 border-b border-gray-100 w-[20%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[17%]">
                       <h5 className="subHeadingColor text-base">Sales</h5>
                     </th>
-                    <th className="text-start p-4 border-b border-gray-100 w-[10%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[13%]">
                       <h5 className="subHeadingColor text-base">Expenses</h5>
                     </th>
-                    <th className="text-start p-4 border-b border-gray-100 w-[15%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[15%]">
                       <h5 className="subHeadingColor text-base">Customers</h5>
                     </th>
-                    <th className="text-start p-4 border-b border-gray-100 w-[15%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[15%]">
                       <h5 className="subHeadingColor text-base">Profit/Loss</h5>
                     </th>
                     <th className="text-start p-4 border-b border-gray-100 w-[10%]">
@@ -153,20 +153,20 @@ export default function BusinessReport() {
                         12/12/2025
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-600 text-sm font-semibold">
                         $1,199.91
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-red-600 text-sm font-semibold">
                         $2000
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">23</p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-700 text-sm font-semibold">
                         $500
                       </p>
@@ -191,20 +191,20 @@ export default function BusinessReport() {
                         12/12/2025
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-600 text-sm font-semibold">
                         $1,199.91
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-red-600 text-sm font-semibold">
                         $2000
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">23</p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-700 text-sm font-semibold">
                         $500
                       </p>
@@ -229,20 +229,20 @@ export default function BusinessReport() {
                         12/12/2025
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-600 text-sm font-semibold">
                         $1,199.91
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-red-600 text-sm font-semibold">
                         $2000
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">23</p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-700 text-sm font-semibold">
                         $500
                       </p>
@@ -267,20 +267,20 @@ export default function BusinessReport() {
                         12/12/2025
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-600 text-sm font-semibold">
                         $1,199.91
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-red-600 text-sm font-semibold">
                         $2000
                       </p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">23</p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="text-green-700 text-sm font-semibold">
                         $500
                       </p>

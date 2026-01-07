@@ -24,7 +24,7 @@ export default function Header() {
     <>
       {/* Header */}
       <header className="shadow-sm bg-white relative z-50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="container mx-auto px-6 md:px-0 py-4 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8">

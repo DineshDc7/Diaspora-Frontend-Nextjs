@@ -3,7 +3,7 @@ import { ScrollText, UserRoundPlus, BriefcaseBusiness, Percent } from "lucide-re
 export default function DetailsOverview() {
     return (
         <>
-            <div className="shadow-lg rounded-lg bg-white p-4 pb-10">
+            <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-6 gap-5">
                     <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2] relative">
                         <div className="flex justify-between items-center gap-2">

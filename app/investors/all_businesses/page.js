@@ -32,7 +32,7 @@ export default function AllBusiness() {
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-5">
+                        {/* <div className="grid grid-cols-2 gap-5">
                             <div className="p-4 bg-[#f5faff] rounded-lg shadow-[0px_10px_15px_#e4e4e4c2]">
                                 <h5 className="subHeadingColor text-base">Total Business</h5>
                                 <h2 className="headingColor text-3xl font-semibold py-3">4</h2>
@@ -41,13 +41,13 @@ export default function AllBusiness() {
                                 <h5 className="subHeadingColor text-base">Following Business</h5>
                                 <h2 className="headingColor text-3xl font-semibold py-3">4</h2>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Table */}
                         <div className="mt-4 overflow-x-auto">
                             <table className="w-full min-w-[800px] border-collapse">
                                 <thead>
-                                    <tr className="secondaryColor text-left text-sm textColor">
+                                    <tr className="secondaryColor text-left subHeadingColor text-base">
                                         <th className="py-3 px-2 w-[30%]">Business Name</th>
                                         <th className="py-3 px-2 w-[17%]">Owner Name</th>
                                         <th className="py-3 px-2 w-[17%]">Category</th>
@@ -62,7 +62,7 @@ export default function AllBusiness() {
                                             key={item.bname}
                                             className="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50"
                                         >
-                                            <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
+                                            <td className="py-3 px-2 text-sm font-semibold headingColor whitespace-nowrap">
                                                 {item.bname}
                                             </td>
                                             <td className="py-3 px-2">
