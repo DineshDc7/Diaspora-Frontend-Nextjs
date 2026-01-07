@@ -4,6 +4,15 @@ import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+
 const StepTwo = ({ onBack }) => {
   const router = useRouter();
 
@@ -84,24 +93,25 @@ const StepTwo = ({ onBack }) => {
                     Contact Number
                   </label>
                   <div className="flex gap-2">
-                    <div className="relative">
-                      <select
-                        name="countryCode"
-                        value={formData.countryCode}
-                        onChange={handleChange}
-                        className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
-                      >
-                        <option value="+91">+91 (India)</option>
-                        <option value="+1">+1 (USA)</option>
-                        <option value="+44">+44 (UK)</option>
-                        <option value="+234">+234 (Nigeria)</option>
-                      </select>
-
-                      {/* Custom dropdown arrow */}
-                      <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                        <ChevronDown className="w-4 h-4" />
+                    <div className="relative w-[100px]">
+                        <Select
+                          value={formData.countryCode}
+                          onValueChange={(value) =>
+                            setFormData((prev) => ({ ...prev, countryCode: value }))
+                          }
+                        >
+                          <SelectTrigger
+                            className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm">
+                            <SelectValue placeholder="+91 (IN)" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="+91">+91 (IN)</SelectItem>
+                            <SelectItem value="+1">+1 (USA)</SelectItem>
+                            <SelectItem value="+44">+44 (UK)</SelectItem>
+                            <SelectItem value="+234">+234 (NI)</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
-                    </div>
 
                     <input
                       type="tel"

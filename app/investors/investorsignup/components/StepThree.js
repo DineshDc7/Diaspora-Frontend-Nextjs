@@ -18,7 +18,7 @@ export default function StepThree({ onBack, onContinue }) {
     location: "",
     sector: "",
     monthlySales: "",
-    reportingFrequency: "Daily updates",
+    reportingFrequency: "",
     contact: "",
   });
 
@@ -96,23 +96,25 @@ export default function StepThree({ onBack, onContinue }) {
                 </label>
 
                 <div className="relative w-full">
-                  <select
-                    name="sector"
+                  <Select
                     value={formData.sector}
-                    onChange={handleChange}
-                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, sector: value }))
+                    }
                   >
-                    <option value="">Select sector</option>
-                    <option value="Retail">Retail</option>
-                    <option value="Agriculture">Agriculture</option>
-                    <option value="Logistics">Logistics</option>
-                    <option value="Manufacturing">Manufacturing</option>
-                  </select>
+                    <SelectTrigger
+                      className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
+                    >
+                      <SelectValue placeholder="Select sector" />
+                    </SelectTrigger>
 
-                  {/* Dropdown Arrow */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
+                    <SelectContent>
+                      <SelectItem value="Retail">Retail</SelectItem>
+                      <SelectItem value="Agriculture">Agriculture</SelectItem>
+                      <SelectItem value="Logistics">Logistics</SelectItem>
+                      <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
@@ -139,21 +141,24 @@ export default function StepThree({ onBack, onContinue }) {
                 </label>
 
                 <div className="relative w-full">
-                  <select
-                    name="sector"
+                  <Select
                     value={formData.reportingFrequency}
-                    onChange={handleChange}
-                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, reportingFrequency: value }))
+                    }
                   >
-                    <option>Daily updates</option>
-                    <option>Weekly updates</option>
-                    <option>Monthly updates</option>
-                  </select>
+                    <SelectTrigger
+                      className="w-full h-12 px-3 pr-3 border border-gray-300 rounded-md bg-white text-sm"
+                    >
+                      <SelectValue placeholder="Daily updates" />
+                    </SelectTrigger>
 
-                  {/* Dropdown Arrow */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
+                    <SelectContent>
+                      <SelectItem value="dupdates">Daily updates</SelectItem>
+                      <SelectItem value="wupdates">Weekly updates</SelectItem>
+                      <SelectItem value="mupdates">Monthly updates</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
