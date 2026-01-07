@@ -78,7 +78,7 @@ export default function AllBusiness() {
                                             <td className="py-3 px-2 text-center">
                                                 <div className="flex gap-3 items-center">
                                                     <button className="primaryColor text-white font-semibold text-sm rounded-md px-3 py-1">Follow</button>
-                                                    <button className="bg-red-600 text-white font-semibold text-sm rounded-md px-3 py-1">Unfollow</button>
+                                                    {/* <button className="bg-red-600 text-white font-semibold text-sm rounded-md px-3 py-1">Unfollow</button> */}
                                                 </div>
                                             </td>
                                         </tr>

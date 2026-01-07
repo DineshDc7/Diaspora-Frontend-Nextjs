@@ -2,7 +2,13 @@
 import React, { useState } from "react";
 import { User, Menu, X, Upload } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Topbar({ onMenuClick }) {
   const isMobile = useIsMobile();
@@ -42,7 +48,7 @@ export default function Topbar({ onMenuClick }) {
           <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg my-auto">
             {/* Header */}
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl textprimaryColor font-semibold">Submit Daily Report</h2>
+              <h2 className="text-xl textprimaryColor font-semibold">Submit Report</h2>
               <button onClick={() => setOpenModal(false)}>
                 <X className="h-5 w-5" color="#797979" />
               </button>
@@ -83,6 +89,23 @@ export default function Topbar({ onMenuClick }) {
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      outline-none"
                 />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium subHeadingColor">
+                  Report Type
+                </label>
+                <Select>
+                    <SelectTrigger
+                      className="w-full p-3 rounded-lg border border-gray-300 px-4 py-2 text-sm
+                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <SelectValue placeholder="Report Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="daily">Daily</SelectItem>
+                      <SelectItem value="weekly">Weekly</SelectItem>
+
+                    </SelectContent>
+                  </Select>
               </div>
 
               <div>
@@ -128,7 +151,7 @@ export default function Topbar({ onMenuClick }) {
               {/* Video Upload */}
               <div>
                 <label className="mb-2 block text-sm font-medium subHeadingColor">
-                  Video (Optional)
+                  Video (Optional) (Max 50MB)
                 </label>
 
                 <label

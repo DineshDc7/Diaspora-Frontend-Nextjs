@@ -12,11 +12,29 @@ const businesses = [
   "Green Valley Foods",
   "Urban Retail",
 ];
+const ITEMS_PER_PAGE = 5;
+const data = [
+  { business: "Nairobi Fresh Mart", date: "12/12/2025", sales: "$1,199.91", expenses: "$2000", customers: 23, profit: "$500" },
+  { business: "Nairobi Fresh Mart", date: "12/12/2025", sales: "$1,199.91", expenses: "$2000", customers: 23, profit: "$500" },
+  { business: "Nairobi Fresh Mart", date: "12/12/2025", sales: "$1,199.91", expenses: "$2000", customers: 23, profit: "$500" },
+  { business: "Nairobi Fresh Mart", date: "12/12/2025", sales: "$1,199.91", expenses: "$2000", customers: 23, profit: "$500" },
+  { business: "Nairobi Fresh Mart", date: "12/12/2025", sales: "$1,199.91", expenses: "$2000", customers: 23, profit: "$500" },
+  { business: "Nairobi Fresh Mart", date: "12/12/2025", sales: "$1,199.91", expenses: "$2000", customers: 23, profit: "$500" },
+];
 export default function AdminReport({ onMenuClick }) {
   const [open, setOpen] = useState(false);
   const [openmodel, setOpenModel] = useState(false);
   const [selectedBusiness, setSelectedBusiness] =
     useState("Nairobi Fresh Mart");
+
+
+
+const [currentPage, setCurrentPage] = useState(1);
+
+const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+
+const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+const paginatedData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
 
     const isMobile = useIsMobile();
@@ -155,161 +173,80 @@ export default function AdminReport({ onMenuClick }) {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="p-4">
-                        <h4 className="headingColor font-semibold text-sm">
-                          Nairobi Fresh Mart
-                        </h4>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">
-                          12/12/2025
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-600 text-sm font-semibold">
-                          $1,199.91
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-red-600 text-sm font-semibold">
-                          $2000
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">23</p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-700 text-sm font-semibold">
-                          $500
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <button
-                          onClick={() => setOpenModel(true)}
-                          className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                        >
-                          <Eye className="w-5 h-5" /> View
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-4">
-                        <h4 className="headingColor font-semibold text-sm">
-                          Nairobi Fresh Mart
-                        </h4>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">
-                          12/12/2025
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-600 text-sm font-semibold">
-                          $1,199.91
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-red-600 text-sm font-semibold">
-                          $2000
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">23</p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-700 text-sm font-semibold">
-                          $500
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <button
-                          onClick={() => setOpenModel(true)}
-                          className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                        >
-                          <Eye className="w-5 h-5" /> View
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-4">
-                        <h4 className="headingColor font-semibold text-sm">
-                          Nairobi Fresh Mart
-                        </h4>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">
-                          12/12/2025
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-600 text-sm font-semibold">
-                          $1,199.91
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-red-600 text-sm font-semibold">
-                          $2000
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">23</p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-700 text-sm font-semibold">
-                          $500
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <button
-                          onClick={() => setOpenModel(true)}
-                          className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                        >
-                          <Eye className="w-5 h-5" /> View
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-4">
-                        <h4 className="headingColor font-semibold text-sm">
-                          Nairobi Fresh Mart
-                        </h4>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">
-                          12/12/2025
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-600 text-sm font-semibold">
-                          $1,199.91
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-red-600 text-sm font-semibold">
-                          $2000
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="textColor text-sm font-semibold">23</p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-green-700 text-sm font-semibold">
-                          $500
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <button
-                          onClick={() => setOpenModel(true)}
-                          className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                        >
-                          <Eye className="w-5 h-5" /> View
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
+  {paginatedData.map((item, index) => (
+    <tr key={index} className="border-b last:border-b-0">
+      <td className="p-4">
+        <h4 className="headingColor font-semibold text-sm">
+          {item.business}
+        </h4>
+      </td>
+      <td className="p-4 text-sm font-semibold textColor">
+        {item.date}
+      </td>
+      <td className="p-4 text-green-600 text-sm font-semibold">
+        {item.sales}
+      </td>
+      <td className="p-4 text-red-600 text-sm font-semibold">
+        {item.expenses}
+      </td>
+      <td className="p-4 text-sm font-semibold textColor">
+        {item.customers}
+      </td>
+      <td className="p-4 text-green-700 text-sm font-semibold">
+        {item.profit}
+      </td>
+      <td className="p-4">
+        <button
+          onClick={() => setOpenModel(true)}
+          className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+        >
+          <Eye className="w-5 h-5" /> View
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
                 </table>
               </div>
+              <div className="flex justify-between items-center mt-4">
+  <p className="text-sm text-gray-500">
+    Page {currentPage} of {totalPages}
+  </p>
+
+  <div className="flex gap-2">
+    <button
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage((p) => p - 1)}
+      className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+    >
+      Prev
+    </button>
+
+    {[...Array(totalPages)].map((_, i) => (
+      <button
+        key={i}
+        onClick={() => setCurrentPage(i + 1)}
+        className={`px-3 py-1 text-sm border rounded-md ${
+          currentPage === i + 1
+            ? "bg-gray-900 text-white"
+            : "bg-white"
+        }`}
+      >
+        {i + 1}
+      </button>
+    ))}
+
+    <button
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage((p) => p + 1)}
+      className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
               {/* </div> */}
             </div>
           </div>
