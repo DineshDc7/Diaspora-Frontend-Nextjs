@@ -11,10 +11,10 @@ export default function AllBusinesses() {
                     <p className="subHeadingColor">Nairobi</p>
 
                     <div className="py-4 grid grid-cols-1 md:grid-cols-2">
-                        <p className="mb-2 textColor text-sm">Sales : <span className="font-semibold lg:text-base md:text-sm text-sm text-green-600">$55,433</span></p>
-                        <p className="mb-2 textColor text-sm">Expenses : <span className="font-semibold lg:text-base md:text-sm text-sm text-red-600">$355,433</span></p>
-                        <p className="mb-2 textColor text-sm">Profit : <span className="font-semibold lg:text-base md:text-sm text-sm text-orange-400">+ $111,433</span></p>
-                        <p className="mb-2 textColor text-sm">Reports : <span className="font-semibold lg:text-base md:text-sm text-sm">8</span></p>
+                        <p className="mb-2 textColor text-sm">Sales : <span className="font-semibold md:text-sm text-sm text-green-600">$55,433</span></p>
+                        <p className="mb-2 textColor text-sm">Expenses : <span className="font-semibold md:text-sm text-sm text-red-600">$355,433</span></p>
+                        <p className="mb-2 textColor text-sm">Profit : <span className="font-semibold md:text-sm text-sm text-orange-400">+ $111,433</span></p>
+                        <p className="mb-2 textColor text-sm">Reports : <span className="font-semibold md:text-sm text-sm">8</span></p>
                     </div>
                 </div>
                 <div className="border border-blue-100 p-4 rounded-md bg-[#f5faff] shadow-sm">
@@ -23,10 +23,10 @@ export default function AllBusinesses() {
                     <p className="subHeadingColor">Nairobi</p>
 
                     <div className="py-4 grid grid-cols-1 md:grid-cols-2">
-                        <p className="mb-2 textColor text-sm">Sales : <span className="font-semibold lg:text-base md:text-sm text-sm text-green-600">$55,433</span></p>
-                        <p className="mb-2 textColor text-sm">Expenses : <span className="font-semibold lg:text-base md:text-sm text-sm text-red-600">$355,433</span></p>
-                        <p className="mb-2 textColor text-sm">Profit : <span className="font-semibold lg:text-base md:text-sm text-sm text-orange-400">+ $111,433</span></p>
-                        <p className="mb-2 textColor text-sm">Reports : <span className="font-semibold lg:text-base md:text-sm text-sm">8</span></p>
+                        <p className="mb-2 textColor text-sm">Sales : <span className="font-semibold md:text-sm text-sm text-green-600">$55,433</span></p>
+                        <p className="mb-2 textColor text-sm">Expenses : <span className="font-semibold md:text-sm text-sm text-red-600">$355,433</span></p>
+                        <p className="mb-2 textColor text-sm">Profit : <span className="font-semibold md:text-sm text-sm text-orange-400">+ $111,433</span></p>
+                        <p className="mb-2 textColor text-sm">Reports : <span className="font-semibold md:text-sm text-sm">8</span></p>
                     </div>
                 </div>
                 <div className="border border-blue-100 p-4 rounded-md bg-[#f5faff] shadow-sm">
@@ -35,10 +35,10 @@ export default function AllBusinesses() {
                     <p className="subHeadingColor">Nairobi</p>
 
                     <div className="py-4 grid grid-cols-1 md:grid-cols-2">
-                        <p className="mb-2 textColor text-sm">Sales : <span className="font-semibold lg:text-base md:text-sm text-sm text-green-600">$55,433</span></p>
-                        <p className="mb-2 textColor text-sm">Expenses : <span className="font-semibold lg:text-base md:text-sm text-sm text-red-600">$355,433</span></p>
-                        <p className="mb-2 textColor text-sm">Profit : <span className="font-semibold lg:text-base md:text-sm text-sm text-orange-400">+ $111,433</span></p>
-                        <p className="mb-2 textColor text-sm">Reports : <span className="font-semibold lg:text-base md:text-sm text-sm">8</span></p>
+                        <p className="mb-2 textColor text-sm">Sales : <span className="font-semibold md:text-sm text-sm text-green-600">$55,433</span></p>
+                        <p className="mb-2 textColor text-sm">Expenses : <span className="font-semibold md:text-sm text-sm text-red-600">$355,433</span></p>
+                        <p className="mb-2 textColor text-sm">Profit : <span className="font-semibold md:text-sm text-sm text-orange-400">+ $111,433</span></p>
+                        <p className="mb-2 textColor text-sm">Reports : <span className="font-semibold md:text-sm text-sm">8</span></p>
                     </div>
                 </div>
             </div>
