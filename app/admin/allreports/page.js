@@ -146,7 +146,7 @@ export default function AdminReport({ onMenuClick }) {
                     Filter by Business:
                   </h5>
                   <div className="flex items-center gap-4">
-                    <div className="w-[250px]">
+                    <div className="w-[60dvw] md:w-[250px]">
                       <Listbox
                         value={selectedBusiness}
                         onChange={setSelectedBusiness}
@@ -213,23 +213,47 @@ export default function AdminReport({ onMenuClick }) {
                 </div>
                 <div className="flex gap-4 items-end">
                   <div>
-                    <label className="text-sm font-semibold text-gray-700">From:</label>
-                    <input
-                      type="date"
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      className="block border mt-2 border-gray-300 rounded-md md:px-3 py-2 px-1 text-xs"
-                    />
+                    <label className="text-sm font-semibold text-gray-700">
+                      From:
+                    </label>
+
+                    <div className="relative">
+                      {!startDate && (
+                        <span className="pointer-events-none absolute left-3 top-2.5 text-xs text-gray-400">
+                          From
+                        </span>
+                      )}
+
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className={`block w-full border border-gray-300 rounded-md px-3 py-2 text-xs
+    ${!startDate ? "text-transparent" : "text-gray-900"}
+  `}
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-gray-700">To:</label>
-                    <input
-                      type="date"
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      className="block border border-gray-300 mt-2 rounded-md md:px-3 py-2 px-1 text-xs"
-                    />
+                    <label className="text-sm font-semibold text-gray-700">
+                      To:
+                    </label>
+                    <div className="relative">
+                      {!endDate && (
+                        <span className="pointer-events-none disable absolute left-3 top-2.5 text-xs text-gray-400">
+                          To
+                        </span>
+                      )}
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className={`block w-full border border-gray-300 rounded-md px-3 py-2 text-xs
+    ${!endDate ? "text-transparent" : "text-gray-900"}
+  `}
+                      />
+                    </div>
                   </div>
 
                   <button
@@ -245,70 +269,150 @@ export default function AdminReport({ onMenuClick }) {
               </div>
 
               {/* <div className="bg-neutral-50 p-4 mt-3"> */}
+              {!isMobile && (
+                <div className="py-5 overflow-x-auto">
+                  <table className="min-w-[900px] w-full table-fixed p-2 border border-[#f1f3f7]">
+                    <thead>
+                      <tr>
+                        <th className="text-start p-4 border-b border-gray-100 w-[20%]">
+                          <h5 className="subHeadingColor text-base">
+                            Business
+                          </h5>
+                        </th>
+                        <th className="text-center p-4 border-b border-gray-100 w-[10%]">
+                          <h5 className="subHeadingColor text-base">Date</h5>
+                        </th>
+                        <th className="text-center p-4 border-b border-gray-100 w-[15%]">
+                          <h5 className="subHeadingColor text-base">Sales</h5>
+                        </th>
+                        <th className="text-center p-4 border-b border-gray-100 w-[15%]">
+                          <h5 className="subHeadingColor text-base">
+                            Expenses
+                          </h5>
+                        </th>
+                        <th className="text-center p-4 border-b border-gray-100 w-[14%]">
+                          <h5 className="subHeadingColor text-base">
+                            Customers
+                          </h5>
+                        </th>
+                        <th className="text-center p-4 border-b border-gray-100 w-[14%]">
+                          <h5 className="subHeadingColor text-base">Profit</h5>
+                        </th>
+                        <th className="text-start p-4 border-b border-gray-100 w-[12%]">
+                          <h5 className="subHeadingColor text-base">Actions</h5>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.map((item, index) => (
+                        <tr key={index} className="border-b last:border-b-0">
+                          <td className="p-4">
+                            <h4 className="headingColor font-semibold text-sm">
+                              {item.business}
+                            </h4>
+                          </td>
+                          <td className="p-4 text-sm font-semibold textColor">
+                            {item.date}
+                          </td>
+                          <td className="p-4 text-center text-green-600 text-sm font-semibold">
+                            {item.sales}
+                          </td>
+                          <td className="p-4 text-center text-red-600 text-sm font-semibold">
+                            {item.expenses}
+                          </td>
+                          <td className="p-4 text-center text-sm font-semibold textColor">
+                            {item.customers}
+                          </td>
+                          <td className="p-4 text-center text-green-700 text-sm font-semibold">
+                            {item.profit}
+                          </td>
+                          <td className="p-4 text-center">
+                            <button
+                              onClick={() => setOpenModel(true)}
+                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                            >
+                              <Eye className="w-5 h-5" /> View
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
 
-              <div className="py-5 overflow-x-auto">
-                <table className="min-w-[900px] w-full table-fixed p-2 border border-[#f1f3f7]">
-                  <thead>
-                    <tr>
-                      <th className="text-start p-4 border-b border-gray-100 w-[20%]">
-                        <h5 className="subHeadingColor text-base">Business</h5>
-                      </th>
-                      <th className="text-center p-4 border-b border-gray-100 w-[10%]">
-                        <h5 className="subHeadingColor text-base">Date</h5>
-                      </th>
-                      <th className="text-center p-4 border-b border-gray-100 w-[15%]">
-                        <h5 className="subHeadingColor text-base">Sales</h5>
-                      </th>
-                      <th className="text-center p-4 border-b border-gray-100 w-[15%]">
-                        <h5 className="subHeadingColor text-base">Expenses</h5>
-                      </th>
-                      <th className="text-center p-4 border-b border-gray-100 w-[14%]">
-                        <h5 className="subHeadingColor text-base">Customers</h5>
-                      </th>
-                      <th className="text-center p-4 border-b border-gray-100 w-[14%]">
-                        <h5 className="subHeadingColor text-base">Profit</h5>
-                      </th>
-                      <th className="text-start p-4 border-b border-gray-100 w-[12%]">
-                        <h5 className="subHeadingColor text-base">Actions</h5>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedData.map((item, index) => (
-                      <tr key={index} className="border-b last:border-b-0">
-                        <td className="p-4">
+              {/* Mobile Cards */}
+              {isMobile && (
+                <div className="space-y-4">
+                  {paginatedData.map((item, index) => (
+                    <div
+                      key={index}
+                      className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
                           <h4 className="headingColor font-semibold text-sm">
                             {item.business}
                           </h4>
-                        </td>
-                        <td className="p-4 text-sm font-semibold textColor">
-                          {item.date}
-                        </td>
-                        <td className="p-4 text-center text-green-600 text-sm font-semibold">
-                          {item.sales}
-                        </td>
-                        <td className="p-4 text-center text-red-600 text-sm font-semibold">
-                          {item.expenses}
-                        </td>
-                        <td className="p-4 text-center text-sm font-semibold textColor">
-                          {item.customers}
-                        </td>
-                        <td className="p-4 text-center text-green-700 text-sm font-semibold">
-                          {item.profit}
-                        </td>
-                        <td className="p-4 text-center">
-                          <button
-                            onClick={() => setOpenModel(true)}
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                          >
-                            <Eye className="w-5 h-5" /> View
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Date: {item.date}
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => setOpenModel(true)}
+                          className="textprimaryColor text-sm font-semibold flex items-center gap-1"
+                        >
+                          <Eye className="w-4 h-4" /> View
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 mt-4 text-sm">
+                        <div>
+                          <p className="text-gray-500 text-sm">
+                            Sales:
+                            <span className="font-semibold text-xs text-green-600">
+                              {" "}
+                              {item.sales}
+                            </span>
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-gray-500 text-sm">
+                            Expenses:
+                            <span className="font-semibold text-xs text-red-600">
+                              {" "}
+                              {item.expenses}
+                            </span>
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-gray-500 text-sm">
+                            Customers:
+                            <span className="font-semibold text-xs ">
+                              {" "}
+                              {item.customers}
+                            </span>
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-gray-500 text-sm">
+                            Profit:
+                            <span className="font-semibold text-xs text-green-700">
+                              {" "}
+                              {item.profit}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="flex justify-between items-center mt-4">
                 <p className="text-sm text-gray-500">
                   Page {currentPage} of {totalPages}
