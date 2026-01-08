@@ -262,7 +262,7 @@ export default function AdminReport({ onMenuClick }) {
 
                     <div className="relative">
                       {!startDate && (
-                        <span className="pointer-events-none w-full absolute left-3 top-2.5 text-xs text-gray-400">
+                        <span className="pointer-events-none w-[30dvw] md:w-full absolute left-3 top-2.5 text-xs text-gray-400">
                           From
                         </span>
                       )}
@@ -284,7 +284,7 @@ export default function AdminReport({ onMenuClick }) {
                     </label>
                     <div className="relative">
                       {!endDate && (
-                        <span className="pointer-events-none w-full absolute left-3 top-2.5 text-xs text-gray-400">
+                        <span className="pointer-events-none w-[30dvw] md:w-full absolute left-3 top-2.5 text-xs text-gray-400">
                           To
                         </span>
                       )}
