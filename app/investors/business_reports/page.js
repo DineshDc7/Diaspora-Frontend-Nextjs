@@ -121,22 +121,22 @@ export default function BusinessReport() {
                     <th className="text-start p-4 border-b border-gray-100 w-[20%]">
                       <h5 className="subHeadingColor text-base">Business</h5>
                     </th>
-                    <th className="text-start p-4 border-b border-gray-100 w-[10%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[11%]">
                       <h5 className="subHeadingColor text-base">Date</h5>
                     </th>
-                    <th className="text-center p-4 border-b border-gray-100 w-[17%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[16%]">
                       <h5 className="subHeadingColor text-base">Sales</h5>
                     </th>
                     <th className="text-center p-4 border-b border-gray-100 w-[13%]">
                       <h5 className="subHeadingColor text-base">Expenses</h5>
                     </th>
-                    <th className="text-center p-4 border-b border-gray-100 w-[15%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[12%]">
                       <h5 className="subHeadingColor text-base">Customers</h5>
                     </th>
                     <th className="text-center p-4 border-b border-gray-100 w-[15%]">
                       <h5 className="subHeadingColor text-base">Profit/Loss</h5>
                     </th>
-                    <th className="text-start p-4 border-b border-gray-100 w-[10%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[13%]">
                       <h5 className="subHeadingColor text-base">Actions</h5>
                     </th>
                   </tr>
@@ -148,7 +148,7 @@ export default function BusinessReport() {
                         Nairobi Fresh Mart
                       </h4>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">
                         12/12/2025
                       </p>
@@ -174,7 +174,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
                       >
                         <Eye className="w-5 h-5" /> View
                       </button>
@@ -186,7 +186,7 @@ export default function BusinessReport() {
                         Nairobi Fresh Mart
                       </h4>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">
                         12/12/2025
                       </p>
@@ -212,7 +212,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
                       >
                         <Eye className="w-5 h-5" /> View
                       </button>
@@ -224,7 +224,7 @@ export default function BusinessReport() {
                         Nairobi Fresh Mart
                       </h4>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">
                         12/12/2025
                       </p>
@@ -250,7 +250,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
                       >
                         <Eye className="w-5 h-5" /> View
                       </button>
@@ -262,7 +262,7 @@ export default function BusinessReport() {
                         Nairobi Fresh Mart
                       </h4>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 text-center">
                       <p className="textColor text-sm font-semibold">
                         12/12/2025
                       </p>
@@ -288,7 +288,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
                       >
                         <Eye className="w-5 h-5" /> View
                       </button>

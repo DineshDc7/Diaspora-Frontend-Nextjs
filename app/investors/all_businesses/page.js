@@ -49,9 +49,9 @@ export default function AllBusiness() {
                                 <thead>
                                     <tr className="secondaryColor text-left subHeadingColor text-base">
                                         <th className="py-3 px-2 w-[30%]">Business Name</th>
-                                        <th className="py-3 px-2 w-[17%]">Owner Name</th>
-                                        <th className="py-3 px-2 w-[17%]">Category</th>
-                                        <th className="py-3 px-2 w-[18%]">Place</th>
+                                        <th className="py-3 px-2 w-[17%] text-center">Owner Name</th>
+                                        <th className="py-3 px-2 w-[17%] text-center">Category</th>
+                                        <th className="py-3 px-2 w-[18%] text-center">Place</th>
                                         <th className="py-3 px-2 w-[18%] text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -65,21 +65,18 @@ export default function AllBusiness() {
                                             <td className="py-3 px-2 text-sm font-semibold headingColor whitespace-nowrap">
                                                 {item.bname}
                                             </td>
-                                            <td className="py-3 px-2">
+                                            <td className="py-3 px-2 text-center">
                                                 {item.owner}
                                             </td>
-                                            <td className="py-3 px-2">
+                                            <td className="py-3 px-2 text-center">
                                                 {item.category}
                                             </td>
-                                            <td className="py-3 px-2">
+                                            <td className="py-3 px-2 text-center">
                                                 {item.place}
                                             </td>
 
                                             <td className="py-3 px-2 text-center">
-                                                <div className="flex gap-3 items-center">
-                                                    <button className="primaryColor text-white font-semibold text-sm rounded-md px-3 py-1">Follow</button>
-                                                    {/* <button className="bg-red-600 text-white font-semibold text-sm rounded-md px-3 py-1">Unfollow</button> */}
-                                                </div>
+                                                <button className="primaryColor text-white font-semibold text-sm rounded-md px-3 py-1">Follow</button>
                                             </td>
                                         </tr>
                                     ))}

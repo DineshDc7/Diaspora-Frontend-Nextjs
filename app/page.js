@@ -121,11 +121,11 @@ export default function Home() {
                   Real-time compliance and media-backed logs
                 </p>
                 <p className="textColor text-sm">
-                  Businesses:<br></br>{" "}
+                  Businesses:{" "}
                   <span className="font-bold subHeadingColor">48</span>
                 </p>
                 <p className="textColor text-sm">
-                  On-time reports:<br></br>{" "}
+                  On-time reports:{" "}
                   <span className="font-bold subHeadingColor">92%</span>
                 </p>
               </div>

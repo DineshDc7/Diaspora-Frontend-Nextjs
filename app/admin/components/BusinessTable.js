@@ -32,7 +32,7 @@ export default function BusinessTable() {
           
 
           <div className="overflow-x-auto">
-            <table className="min-w-[900px] md:min-w-auto w-full table-fixed border-collapse">
+            <table className="min-w-[600px] md:min-w-auto w-full table-fixed border-collapse">
               <thead>
                 <tr>
                   <th className="text-start pb-4 border-b border-gray-100 w-[30%]">

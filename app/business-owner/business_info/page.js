@@ -84,7 +84,7 @@ export default function BusinessInfo() {
                                     <tr className="secondaryColor text-center text-sm textColor">
                                         <th className="py-3 px-2 w-[30%] text-start">Business Name</th>
                                         <th className="py-3 px-2 w-[19%]">Owner Name</th>
-                                        <th className="py-3 px-2 w-[17%]">Phone Number</th>
+                                        <th className="py-3 px-2 w-[17%]">Phone</th>
                                         <th className="py-3 px-2 w-[17%]">Category</th>
                                         <th className="py-3 px-2 w-[17%]">City</th>
                                     </tr>
