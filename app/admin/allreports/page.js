@@ -140,7 +140,7 @@ export default function AdminReport({ onMenuClick }) {
                 </div>
               </div>
 
-              <div className="md:flex items-center justify-between">
+              <div className="lg:flex items-center justify-between">
                 <div className="mb-5 md:mb-0">
                   <h5 className="text-sm font-semibold mb-2 text-gray-700">
                     Filter by Business:
