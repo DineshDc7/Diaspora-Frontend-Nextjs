@@ -74,13 +74,13 @@ const isMobile = useIsMobile();
                           </h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[15%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">Owner</h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[12%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">
@@ -88,19 +88,19 @@ const isMobile = useIsMobile();
                           </h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[18%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[18%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">City</h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[12%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">Reports</h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[15%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">Actions</h5>
@@ -117,18 +117,18 @@ const isMobile = useIsMobile();
                             <p className="textColor text-xs">9910566557</p>
                           </div>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Vishal Singh</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                          <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                             Retail
                           </p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Kab Gianyar</p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">0</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
@@ -149,18 +149,18 @@ const isMobile = useIsMobile();
                             <p className="textColor text-xs">9910566557</p>
                           </div>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Vishal Singh</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                          <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                             Retail
                           </p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Kab Gianyar</p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">0</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
@@ -181,18 +181,18 @@ const isMobile = useIsMobile();
                             <p className="textColor text-xs">9910566557</p>
                           </div>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Vishal Singh</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                          <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                             Retail
                           </p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Kab Gianyar</p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">0</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
@@ -213,18 +213,18 @@ const isMobile = useIsMobile();
                             <p className="textColor text-xs">9910566557</p>
                           </div>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Vishal Singh</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                          <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                             Retail
                           </p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">Kab Gianyar</p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
                           <p className="textColor text-sm">0</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">

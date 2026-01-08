@@ -32,22 +32,22 @@ export default function BusinessTable() {
           
 
           <div className="overflow-x-auto">
-            <table className="min-w-[900px] w-full table-fixed border-collapse">
+            <table className="min-w-[900px] md:min-w-auto w-full table-fixed border-collapse">
               <thead>
                 <tr>
                   <th className="text-start pb-4 border-b border-gray-100 w-[30%]">
                     <h5 className="subHeadingColor text-base">Business</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
+                  <th className="text-center pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">Owner</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
+                  <th className="text-center pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Category</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100 w-[15%]">
+                  <th className="text-center pb-4 border-b border-gray-100 w-[15%]">
                     <h5 className="subHeadingColor text-base">City</h5>
                   </th>
-                  <th className="text-start pb-4 border-b border-gray-100 w-[20%]">
+                  <th className="text-center pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Reports</h5>
                   </th>
                  
@@ -64,18 +64,18 @@ export default function BusinessTable() {
                       <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Vishal Singh</p>
                   </td>
-                  <td className="py-4">
-                    <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                  <td className="py-4 text-center">
+                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                       Retail
                     </p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Kab Gianyar</p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">0</p>
                   </td>
                   
@@ -89,18 +89,18 @@ export default function BusinessTable() {
                       <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Vishal Singh</p>
                   </td>
-                  <td className="py-4">
-                    <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                  <td className="py-4 text-center">
+                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                       Retail
                     </p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Kab Gianyar</p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">0</p>
                   </td>
                   
@@ -114,18 +114,18 @@ export default function BusinessTable() {
                       <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Vishal Singh</p>
                   </td>
-                  <td className="py-4">
-                    <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                  <td className="py-4 text-center">
+                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                       Retail
                     </p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Kab Gianyar</p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">0</p>
                   </td>
                   
@@ -139,18 +139,18 @@ export default function BusinessTable() {
                       <p className="textColor text-sm">Kano - Retail</p>
                     </div>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Vishal Singh</p>
                   </td>
-                  <td className="py-4">
-                    <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                  <td className="py-4 text-center">
+                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                       Retail
                     </p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">Kab Gianyar</p>
                   </td>
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <p className="textColor text-sm">0</p>
                   </td>
                   
