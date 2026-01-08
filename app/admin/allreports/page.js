@@ -211,6 +211,49 @@ export default function AdminReport({ onMenuClick }) {
                     </div>
                   </div>
                 </div>
+
+
+                        {!isMobile && (
+                <div className="flex gap-4 items-end">
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">
+                      From:
+                    </label>
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="block border mt-2 border-gray-300 rounded-md md:px-3 py-2 px-1 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">
+                      To:
+                    </label>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="block border border-gray-300 mt-2 rounded-md md:px-3 py-2 px-1 text-xs"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setStartDate("");
+                      setEndDate("");
+                    }}
+                    className="text-sm md:pb-2.5 pb-2 font-semibold text-blue-600 hover:underline"
+                  >
+                    Reset
+                  </button>
+                </div>
+                        )}
+
+
+
+                        {isMobile && (
                 <div className="flex gap-4 items-end">
                   <div>
                     <label className="text-sm font-semibold text-gray-700">
@@ -219,7 +262,7 @@ export default function AdminReport({ onMenuClick }) {
 
                     <div className="relative">
                       {!startDate && (
-                        <span className="pointer-events-none absolute left-3 top-2.5 text-xs text-gray-400">
+                        <span className="pointer-events-none w-full absolute left-3 top-2.5 text-xs text-gray-400">
                           From
                         </span>
                       )}
@@ -229,8 +272,8 @@ export default function AdminReport({ onMenuClick }) {
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                         className={`block w-full border border-gray-300 rounded-md px-3 py-2 text-xs
-    ${!startDate ? "text-transparent" : "text-gray-900"}
-  `}
+                            ${!startDate ? "text-transparent" : "text-gray-900"}
+                          `}
                       />
                     </div>
                   </div>
@@ -241,7 +284,7 @@ export default function AdminReport({ onMenuClick }) {
                     </label>
                     <div className="relative">
                       {!endDate && (
-                        <span className="pointer-events-none disable absolute left-3 top-2.5 text-xs text-gray-400">
+                        <span className="pointer-events-none w-full absolute left-3 top-2.5 text-xs text-gray-400">
                           To
                         </span>
                       )}
@@ -250,8 +293,8 @@ export default function AdminReport({ onMenuClick }) {
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
                         className={`block w-full border border-gray-300 rounded-md px-3 py-2 text-xs
-    ${!endDate ? "text-transparent" : "text-gray-900"}
-  `}
+                        ${!endDate ? "text-transparent" : "text-gray-900"}
+                      `}
                       />
                     </div>
                   </div>
@@ -266,6 +309,12 @@ export default function AdminReport({ onMenuClick }) {
                     Reset
                   </button>
                 </div>
+                        )}
+
+
+
+
+
               </div>
 
               {/* <div className="bg-neutral-50 p-4 mt-3"> */}
