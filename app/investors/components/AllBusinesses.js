@@ -5,7 +5,7 @@ export default function AllBusinesses() {
             <h2 className="headingColor text-lg font-semibold mt-10">Your Businesses</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4 gap-7">
-                <div className="border border-blue-100 p-4 rounded-md bg-[#f5faff] shadow-sm">
+                <div className="border border-blue-100 p-4 r/ounded-md bg-[#f5faff] shadow-sm">
                     <p className="subHeadingColor text-sm font-semibold">Retail</p>
                     <h3 className="headingColor text-lg font-semibold">Nairobi Fresh Mart</h3>
                     <p className="subHeadingColor">Nairobi</p>

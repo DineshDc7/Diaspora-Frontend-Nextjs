@@ -2,6 +2,7 @@
 import React from "react";
 import LoginHeader from "../components/LoginHeader";
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const Page = () => {
   const [form, setForm] = useState({
@@ -17,71 +18,90 @@ const Page = () => {
     e.preventDefault();
     console.log("Login Data:", form);
   };
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
-    <main className="min-h-screen bg-white">
-      <LoginHeader />
-      <section>
-        <div className="container mx-auto px-6 py-16 flex justify-center items-center">
-          <form
-            onSubmit={handleSubmit}
-            className="w-full max-w-md bg-white shadow-xl rounded-xl p-8"
-          >
-            <h2 className="text-2xl font-bold text-center mb-6 text-slate-800">
-              Login
-            </h2>
-
-            {/* Email */}
-            <div className="mb-4">
-              <label className="block text-base font-medium subHeadingColor mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="you@example.com"
-                required
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  placeholder:text-slate-400 textColor"
-              />
-            </div>
-
-            {/* Password */}
-            <div className="mb-6">
-              <label className="block text-base font-medium subHeadingColor mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  placeholder:text-slate-400 textColor"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+      <main className="min-h-screen bg-white">
+        <LoginHeader />
+        <section>
+          <div className="container mx-auto px-6 py-16 flex justify-center items-center">
+            <form
+              onSubmit={handleSubmit}
+              className="w-full max-w-md bg-white shadow-xl rounded-xl p-8"
             >
-              Login
-            </button>
+              <h2 className="text-2xl font-bold text-center mb-6 text-slate-800">
+                Login
+              </h2>
 
-            {/* Footer */}
-            <p className="text-center text-sm text-slate-500 mt-4">
-              Don’t have an account?{" "}
-              <a href="/signup" className="text-blue-600 hover:underline">
-                Sign up
-              </a>
-            </p>
-          </form>
-        </div>
-      </section>
+              {/* Email */}
+              <div className="mb-4">
+                <label className="block text-base font-medium subHeadingColor mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="you@example.com"
+                  required
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  placeholder:text-slate-400 textColor"
+                />
+              </div>
+
+              {/* Password */}
+              <div className="mb-6">
+                <label className="block text-base font-medium subHeadingColor mb-1">
+                  Password
+                </label>
+
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="********"
+                    required
+                    className="w-full px-4 py-2 pr-12 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400 textColor"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute inset-y-0 right-3 flex items-center text-slate-500 hover:text-slate-700"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+              >
+                Login
+              </button>
+
+              {/* Footer */}
+              <p className="text-center text-sm text-slate-500 mt-4">
+                Don’t have an account?{" "}
+                <a href="/signup" className="text-blue-600 hover:underline">
+                  Sign up
+                </a>
+              </p>
+            </form>
+          </div>
+        </section>
       </main>
     </>
   );

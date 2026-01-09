@@ -11,6 +11,13 @@ import {
   ScrollText,
   BadgePercent,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState, useEffect } from "react";
 import { Listbox } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
@@ -75,8 +82,7 @@ const data = [
 export default function AdminReport({ onMenuClick }) {
   const [open, setOpen] = useState(false);
   const [openmodel, setOpenModel] = useState(false);
-  const [selectedBusiness, setSelectedBusiness] =
-    useState("Nairobi Fresh Mart");
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const parseDate = (dateStr) => {
@@ -143,70 +149,37 @@ export default function AdminReport({ onMenuClick }) {
                   <h5 className="text-sm font-semibold mb-2 text-gray-700">
                     Filter by Business:
                   </h5>
+
                   <div className="flex items-center gap-4">
+                    {/* Select */}
                     <div className="w-[60dvw] md:w-[250px]">
-                      <Listbox
-                        value={selectedBusiness}
-                        onChange={setSelectedBusiness}
+                      <Select
+                        value={selectedBusiness ?? ""}
+                        onValueChange={(value) => setSelectedBusiness(value)}
                       >
-                        <div className="relative mt-1">
-                          {/* Button */}
-                          <Listbox.Button className="relative w-full cursor-pointer rounded-md border border-gray-300 outline:none bg-white py-2 pl-3 pr-10 text-left text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <span className="block truncate">
-                              {selectedBusiness || "Select business"}
-                            </span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                              <ChevronDown
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </Listbox.Button>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select business" />
+                        </SelectTrigger>
 
-                          {/* Options */}
-                          <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {businesses.map((business) => (
-                              <Listbox.Option
-                                key={business}
-                                value={business}
-                                className={({ active }) =>
-                                  `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                                    active
-                                      ? "bg-blue-100 text-blue-900"
-                                      : "text-gray-900"
-                                  }`
-                                }
-                              >
-                                {({ selected }) => (
-                                  <>
-                                    <span
-                                      className={`block truncate ${
-                                        selected ? "font-medium" : "font-normal"
-                                      }`}
-                                    >
-                                      {business}
-                                    </span>
+                        <SelectContent>
+                          {businesses.map((business) => (
+                            <SelectItem key={business} value={business}>
+                              {business}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                                    {selected ? (
-                                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                                        {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                                      </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </div>
-                      </Listbox>
-                    </div>
-                    <div>
-                      {selectedBusiness && (
-                        <button className="text-sm font-semibold text-blue-600 hover:underline">
-                          Clear Filter
-                        </button>
-                      )}
-                    </div>
+                    {/* Clear Filter */}
+                    {/* {selectedBusiness && ( */}
+                    <button
+                      onClick={() => setSelectedBusiness(null)}
+                      className="text-sm font-semibold text-blue-600 hover:underline"
+                    >
+                      Clear Filter
+                    </button>
+                    {/* )} */}
                   </div>
                 </div>
 
@@ -350,7 +323,7 @@ export default function AdminReport({ onMenuClick }) {
                               {item.business}
                             </h4>
                           </td>
-                          <td className="p-4 text-sm font-semibold textColor">
+                          <td className="p-4 text-center text-sm font-semibold textColor">
                             {item.date}
                           </td>
                           <td className="p-4 text-center text-green-600 text-sm font-semibold">

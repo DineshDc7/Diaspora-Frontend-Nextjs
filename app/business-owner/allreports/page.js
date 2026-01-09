@@ -62,12 +62,12 @@ export default function AllReports() {
                             <table className="w-full min-w-[640px] border-collapse">
                                 <thead>
                                     <tr className="secondaryColor text-left text-sm textColor">
-                                        <th className="py-3 px-2 w-[28%]">Date</th>
-                                        <th className="py-3 px-2 w-[15%]">Sales</th>
-                                        <th className="py-3 px-2 w-[15%]">Expenses</th>
-                                        <th className="py-3 px-2 w-[15%]">Customers</th>
-                                        <th className="py-3 px-2 w-[15%]">Profit / Loss</th>
-                                        <th className="py-3 px-2 w-[12%]"></th>
+                                        <th className="py-3 px-2 w-[21%]">Date</th>
+                                        <th className="py-3 px-2 w-[16%] text-center">Sales</th>
+                                        <th className="py-3 px-2 w-[16%] text-center">Expenses</th>
+                                        <th className="py-3 px-2 w-[16%] text-center">Customers</th>
+                                        <th className="py-3 px-2 w-[16%] text-center">Profit / Loss</th>
+                                        <th className="py-3 px-2 w-[15%] text-center"></th>
                                     </tr>
                                 </thead>
 
@@ -80,22 +80,22 @@ export default function AllReports() {
                                             <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
                                                 {item.date}
                                             </td>
-                                            <td className="py-3 px-2 font-medium">
+                                            <td className="py-3 px-2 text-center textColor font-medium">
                                                 ${item.sales}
                                             </td>
-                                            <td className="py-3 px-2 text-red-500">
+                                            <td className="py-3 px-2 text-center text-red-500">
                                                 ${item.expenses}
                                             </td>
-                                            <td className="py-3 px-2">
+                                            <td className="py-3 px-2 text-center textColor">
                                                 {item.customer}
                                             </td>
-                                            <td className="py-3 px-2 text-green-600 font-semibold">
+                                            <td className="py-3 px-2 text-center text-green-600 font-semibold">
                                                 {item.pftlos}
                                             </td>
-                                            <td className="py-3 px-2">
+                                            <td className="py-3 px-2 text-center">
                                                 <button
                                                     onClick={() => setOpenModel(true)}
-                                                    className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                                                    className="flex gap-2 items-center mx-auto textprimaryColor text-sm font-semibold"
                                                 >
                                                     <Eye className="w-5 h-5" /> View
                                                 </button>
