@@ -618,13 +618,11 @@ export default function AdminUser() {
                                           setOpenEditmodal(true);
                                           setOpenAction(false);
                                         }}
-                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                      >
+                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded">
                                         <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
                                           <Pencil className="w-3 h-3" /> Edit
                                         </div>
                                       </li>
-
                                       <li
                                         onClick={() => {
                                           setAssignBusiness(true);
@@ -682,9 +680,7 @@ export default function AdminUser() {
                             className="text-center p-2 border-[#f1f3f7] w-[11%]"
                             style={{ verticalAlign: "center" }}
                           >
-                            <h5 className="subHeadingColor text-base">
-                              Joined
-                            </h5>
+                            <h5 className="subHeadingColor text-base">Joined </h5>
                           </th>
                           <th
                             className="text-center p-2 border-[#f1f3f7] w-[8%]"
@@ -730,8 +726,7 @@ export default function AdminUser() {
                           <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                             <Switch
                               id="airplane-mode"
-                              className="
-                                          data-[state=unchecked]:bg-green-500
+                              className="data-[state=unchecked]:bg-green-500
                                           data-[state=checked]:bg-red-500
                                         "
                             />

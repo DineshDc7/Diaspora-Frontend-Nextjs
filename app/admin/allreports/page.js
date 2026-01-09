@@ -2,9 +2,7 @@
 
 import Sidebar from "../components/Sidebar";
 import {
-  Users,
   User,
-  Pencil,
   X,
   Eye,
   BadgeDollarSign,
@@ -19,8 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
-import { Listbox } from "@headlessui/react";
-import { ChevronDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
 const businesses = [
   "Nairobi Fresh Mart",
@@ -79,7 +75,7 @@ const data = [
     profit: "$500",
   },
 ];
-export default function AdminReport({ onMenuClick }) {
+export default function AdminReport() {
   const [open, setOpen] = useState(false);
   const [openmodel, setOpenModel] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
@@ -132,9 +128,7 @@ export default function AdminReport({ onMenuClick }) {
                   <button
                     onClick={() => setOpen(true)}
                     className="md:hidden p-2 rounded-md"
-                  >
-                    ☰
-                  </button>
+                  > ☰ </button>
                   <div>
                     <h1 className="text-2xl font-semibold headingColor">
                       Reports
@@ -153,14 +147,11 @@ export default function AdminReport({ onMenuClick }) {
                   <div className="flex items-center gap-4">
                     {/* Select */}
                     <div className="w-[60dvw] md:w-[250px]">
-                      <Select
-                        value={selectedBusiness ?? ""}
-                        onValueChange={(value) => setSelectedBusiness(value)}
-                      >
+                      <Select value={selectedBusiness ?? ""}
+                        onValueChange={(value) => setSelectedBusiness(value)}>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select business" />
                         </SelectTrigger>
-
                         <SelectContent>
                           {businesses.map((business) => (
                             <SelectItem key={business} value={business}>
@@ -223,18 +214,16 @@ export default function AdminReport({ onMenuClick }) {
 
                 {isMobile && (
                   <div className="flex gap-4 items-end">
-                    <div>
+                  <div>
                       <label className="text-sm font-semibold text-gray-700">
                         From:
                       </label>
-
                       <div className="relative">
                         {!startDate && (
                           <span className="pointer-events-none w-[30dvw] md:w-full absolute left-3 top-2.5 text-xs text-gray-400">
                             From
                           </span>
                         )}
-
                         <input
                           type="date"
                           value={startDate}
@@ -463,7 +452,6 @@ export default function AdminReport({ onMenuClick }) {
                 </div>
               </div>
 
-              {/* </div> */}
             </div>
           </div>
         </main>

@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import {
   Home,
   Building,
@@ -36,11 +36,14 @@ export default function Sidebar({ open, setOpen }){
 
       <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:shadow-none`}>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
-            <a href="/">
-              <h1>DI</h1>
-            </a>
-          </div>
+          <div className="w-10 h-auto ">
+              {/* <a href="/">
+                <h1>DI</h1>
+              </a> */}
+              <Link href="/">
+                <img src="/DI.png" alt="Diaspora Insight" />
+              </Link>
+            </div>
           <div>
             <a href="/">
               <h4 className="font-semibold text-lg text-white">
@@ -112,17 +115,15 @@ export default function Sidebar({ open, setOpen }){
     <aside className={`fixed inset-0 bg-black/40 z-30 md:hidden md:none transition-opacity ${open ? 'block' : 'hidden'}`}
         onClick={() => setOpen && setOpen(false)}>
       {/* Overlay for small screens */}
-      <div
-        
-      />
+      {/* <div/>/ */}
 
       <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:shadow-none`}>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 primaryColor text-white rounded-md flex items-center justify-center">
-            <a href="/">
-              <h1>DI</h1>
-            </a>
-          </div>
+          <div className="w-10 h-auto ">
+              <Link href="/">
+                <img src="/DI.png" alt="Diaspora Insight" />
+              </Link>
+            </div>
           <div>
             <a href="/">
               <h4 className="font-semibold text-lg text-white">

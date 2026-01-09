@@ -50,7 +50,6 @@ export default function BusinessTable() {
                   <th className="text-center pb-4 border-b border-gray-100 w-[20%]">
                     <h5 className="subHeadingColor text-base">Reports</h5>
                   </th>
-                 
                 </tr>
               </thead>
               <tbody>

@@ -5,7 +5,13 @@ import { Listbox } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
 import InvestorLayout from "../components/InvestorLayout";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 
 const details = [
@@ -43,85 +49,50 @@ export default function BusinessReport() {
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
           <div className="xl:col-span-4 space-y-6">
 
-            <div className="flex items-center justify-between gap-4 mt-5 mb-4">
-              <div className={`${!isMobile ? "flex gap-4 items-center" : ""}`}>
-                {/* Label */}
-                <span className="text-sm font-semibold mr-4 text-gray-700">
-                  Filter by Business:
-                </span>
+            <div className="mb-5 md:mb-0">
+                  <h5 className="text-sm font-semibold mb-2 text-gray-700">
+                    Filter by Business:
+                  </h5>
 
-                {/* Select */}
-                <div className="w-[250px]">
-                  <Listbox value={selectedBusiness} onChange={setSelectedBusiness}>
-                    <div className="relative mt-1">
-                      {/* Button */}
-                      <Listbox.Button className="relative w-full cursor-pointer rounded-md border border-gray-300 outline:none bg-white py-2 pl-3 pr-10 text-left text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <span className="block truncate">
-                          {selectedBusiness || "Select business"}
-                        </span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                          <ChevronDown
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Listbox.Button>
-
-                      {/* Options */}
-                      <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        {businesses.map((business) => (
-                          <Listbox.Option
-                            key={business}
-                            value={business}
-                            className={({ active }) =>
-                              `relative cursor-pointer select-none py-2 pl-10 pr-4 ${active ? "bg-blue-100 text-blue-900" : "text-gray-900"
-                              }`
-                            }
-                          >
-                            {({ selected }) => (
-                              <>
-                                <span
-                                  className={`block truncate ${selected ? "font-medium" : "font-normal"
-                                    }`}
-                                >
-                                  {business}
-                                </span>
-
-                                {selected ? (
-                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                                    {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
+                  <div className="flex items-center justify-between gap-4">
+                    {/* Select */}
+                    <div className="w-[60dvw] md:w-[250px]">
+                      <Select value={selectedBusiness ?? ""}
+                        onValueChange={(value) => setSelectedBusiness(value)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select business" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {businesses.map((business) => (
+                            <SelectItem key={business} value={business}>
+                              {business}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
-                  </Listbox>
-                </div>
 
-              </div>
-              {/* Clear Filter */}
-              {selectedBusiness && (
-                <button
-                  // onClick={clearFilter}
-                  className="text-sm font-semibold text-blue-600 hover:underline"
-                >
-                  Clear Filter
-                </button>
-              )}
-            </div>
+                    {/* Clear Filter */}
+                    {/* {selectedBusiness && ( */}
+                    <button
+                      onClick={() => setSelectedBusiness(null)}
+                      className="text-sm font-semibold text-blue-600 hover:underline"
+                    >
+                      Clear Filter
+                    </button>
+                    {/* )} */}
+                  </div>
+                </div>
 
             {/* <div className="bg-neutral-50 p-4 mt-3"> */}
             <div className="py-5 overflow-x-auto">
-              <table className="min-w-[900px] w-full table-fixed p-2 border border-[#f1f3f7]">
+              <table className="min-w-[800px] w-full table-fixed p-2 border border-[#f1f3f7]">
                 <thead>
                   <tr>
-                    <th className="text-start p-4 border-b border-gray-100 w-[20%]">
+                    <th className="text-start p-4 border-b border-gray-100 w-[18%]">
                       <h5 className="subHeadingColor text-base">Business</h5>
                     </th>
-                    <th className="text-center p-4 border-b border-gray-100 w-[11%]">
+                    <th className="text-center p-4 border-b border-gray-100 w-[13%]">
                       <h5 className="subHeadingColor text-base">Date</h5>
                     </th>
                     <th className="text-center p-4 border-b border-gray-100 w-[16%]">
@@ -174,8 +145,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
-                      >
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold">
                         <Eye className="w-5 h-5" /> View
                       </button>
                     </td>
@@ -212,8 +182,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
-                      >
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold">
                         <Eye className="w-5 h-5" /> View
                       </button>
                     </td>
@@ -250,8 +219,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
-                      >
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold">
                         <Eye className="w-5 h-5" /> View
                       </button>
                     </td>
@@ -288,8 +256,7 @@ export default function BusinessReport() {
                     <td className="p-4">
                       <button
                         onClick={() => setOpenModel(true)}
-                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold"
-                      >
+                        className="flex gap-2 mx-auto items-center textprimaryColor text-sm font-semibold">
                         <Eye className="w-5 h-5" /> View
                       </button>
                     </td>
@@ -297,11 +264,7 @@ export default function BusinessReport() {
                 </tbody>
               </table>
             </div>
-
-
-
           </div>
-
         </div>
       </InvestorLayout>
 
@@ -327,7 +290,6 @@ export default function BusinessReport() {
                 <div>
                   <BadgeDollarSign className="w-10 h-10 text-blue-400 opacity-60" />
                 </div>
-
               </div>
               <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
                 <div>

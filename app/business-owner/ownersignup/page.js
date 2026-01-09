@@ -10,7 +10,6 @@ const [step, setStep] = useState(1);
   return (
     <>
       <Header />
-      
       {step === 1 && (
         <StepTwo onBack={() => window.history.back()} />
       )}
