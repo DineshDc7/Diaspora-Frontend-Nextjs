@@ -27,7 +27,6 @@ const details = [
     category: "Retail",
     place: "Nairobi",
   },
-
 ];
 
 const businesses = [
@@ -48,7 +47,6 @@ export default function BusinessReport() {
       <InvestorLayout title="Business Reports" subtitle="8 Reports from 2 Businesses">
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
           <div className="xl:col-span-4 space-y-6">
-
             <div className="mb-5 md:mb-0">
                   <h5 className="text-sm font-semibold mb-2 text-gray-700">
                     Filter by Business:
