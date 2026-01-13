@@ -11,9 +11,9 @@ import {
 import { usePathname } from "next/navigation";
 
 const MenuItems = [
-  { name: "Overview", icon: Home, href: "/investors/overview" },
-  { name: "All Businesses", icon: Building, href: "/investors/all_businesses" },
-  { name: "Business Reports", icon: BarChart, href: "/investors/business_reports" },
+  { name: "Dashbord", icon: Home, href: "/field-officer/dashboard" },
+  { name: "Assign Business", icon: Building, href: "/field-officer/assign_business" },
+  { name: "Reports", icon: BarChart, href: "/field-officer/reports" },
   // { name: "Users", icon: Users, href: "/admin/user" },
 ];
 const MenuItemsbuttom = [
@@ -115,7 +115,9 @@ export default function Sidebar({ open, setOpen }){
     <aside className={`fixed inset-0 bg-black/40 z-30 md:hidden md:none transition-opacity ${open ? 'block' : 'hidden'}`}
         onClick={() => setOpen && setOpen(false)}>
       {/* Overlay for small screens */}
-      {/* <div/>/ */}
+      <div
+        
+      />
 
       <div className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:shadow-none`}>
         <div className="flex items-center gap-2">

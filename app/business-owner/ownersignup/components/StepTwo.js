@@ -4,7 +4,17 @@ import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 const StepTwo = ({ onBack }) => {
+    const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -24,13 +34,7 @@ const StepTwo = ({ onBack }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const payload = {
-      ...formData,
-      phone: `${formData.countryCode}${formData.phone}`,
-    };
-
-    console.log("Form Submitted:", payload);
+    router.push("/business-owner/overview");
   };
 
   return (
@@ -88,23 +92,24 @@ const StepTwo = ({ onBack }) => {
                     Contact Number
                   </label>
                   <div className="flex gap-2">
-                    <div className="relative">
-                      <select
-                        name="countryCode"
+                    <div className="relative w-[100px]">
+                      <Select
                         value={formData.countryCode}
-                        onChange={handleChange}
-                        className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                        onValueChange={(value) =>
+                          setFormData((prev) => ({ ...prev, countryCode: value }))
+                        }
                       >
-                        <option value="+91">+91 (India)</option>
-                        <option value="+1">+1 (USA)</option>
-                        <option value="+44">+44 (UK)</option>
-                        <option value="+234">+234 (Nigeria)</option>
-                      </select>
-
-                      {/* Custom dropdown arrow */}
-                      <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                        <ChevronDown className="w-4 h-4" />
-                      </div>
+                        <SelectTrigger
+                          className="w-full h-12 px-3 pr-3 border border-gray-300 rounded-md bg-white text-sm flex items-center justify-between">
+                          <SelectValue placeholder="+91 (IN)" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="+91">+91 (IN)</SelectItem>
+                          <SelectItem value="+1">+1 (USA)</SelectItem>
+                          <SelectItem value="+44">+44 (UK)</SelectItem>
+                          <SelectItem value="+234">+234 (NI)</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <input
@@ -168,7 +173,7 @@ const StepTwo = ({ onBack }) => {
                   </button> */}
                 </div>
 
-                <div className="flex justify-between py-6 gap-12">
+                <div className="flex justify-between py-6 gap-5 md:gap-12">
                   <div>
                     <p className="text-sm textColor">
                       We use your details only to secure and personalize your

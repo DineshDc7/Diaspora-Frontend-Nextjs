@@ -2,9 +2,7 @@
 
 import AdminLayout from "../components/AdminLayout";
 import KPIGrid from "../components/KPIGrid";
-import AlertsPanel from "../components/AlertsPanel";
 import BusinessTable from "../components/BusinessTable";
-import Compliance from "../components/Compliance";
 import Reports from "../components/Reports";
 
 export default function DashboardPage() {
@@ -16,10 +14,8 @@ export default function DashboardPage() {
           <KPIGrid />
           <BusinessTable />
           <Reports />
-          {/* <Compliance /> */}
         </div>
 
-        {/* <AlertsPanel /> */}
       </div>
     </AdminLayout>
   );

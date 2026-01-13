@@ -9,7 +9,42 @@ import { useIsMobile } from "../../hooks/use-mobile";
 export default function AdminBusiness() {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-const isMobile = useIsMobile();
+  const isMobile = useIsMobile();
+
+  const listitems =[
+    {
+      name : "Kantor imigrasi kelas i denpasar",
+     number : "9910566557",
+     ownername : "Vishal Singh",
+     category : "Retail",
+     city : "Kab Gianyar",
+     report : "23",
+    },
+    {
+      name : "Kantor imigrasi kelas i denpasar",
+     number : "9910566557",
+     ownername : "Vishal Singh",
+     category : "Retail",
+     city : "Kab Gianyar",
+     report : "23",
+    },
+    {
+    name : "Kantor imigrasi kelas i denpasar",
+     number : "9910566557",
+     ownername : "Vishal Singh",
+     category : "Retail",
+     city : "Kab Gianyar",
+     report : "23",
+    },
+    {
+      name : "Kantor imigrasi kelas i denpasar",
+     number : "9910566557",
+     ownername : "Vishal Singh",
+     category : "Retail",
+     city : "Kab Gianyar",
+     report : "23",
+    },
+  ]
   return (
     <>
       <div className="flex min-h-screen bg-white">
@@ -33,12 +68,21 @@ const isMobile = useIsMobile();
                   </div>
                 </div>
                 <div>
-                  <button
+                  {!isMobile ? (
+                    <button
                     onClick={() => setOpenModal(true)}
                     className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
                   >
                     <Building2 className="w-5 h-5" /> Add Business
                   </button>
+                ):(
+                  <button
+                    onClick={() => setOpenModal(true)}
+                    className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
+                  >
+                    <Building2 className="w-5 h-5" />
+                  </button>
+                )}
                 </div>
               </div>
 
@@ -65,13 +109,13 @@ const isMobile = useIsMobile();
                           </h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[15%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">Owner</h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[12%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">
@@ -79,19 +123,19 @@ const isMobile = useIsMobile();
                           </h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[18%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[18%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">City</h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[12%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[12%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">Reports</h5>
                         </th>
                         <th
-                          className="text-start p-2 border-[#f1f3f7] w-[15%]"
+                          className="text-center p-2 border-[#f1f3f7] w-[15%]"
                           style={{ verticalAlign: "center" }}
                         >
                           <h5 className="subHeadingColor text-base">Actions</h5>
@@ -99,28 +143,29 @@ const isMobile = useIsMobile();
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      {listitems.map((item, index) => (
+                      <tr key={index}>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <div>
                             <h4 className="headingColor font-semibold text-sm">
-                              Kantor imigrasi kelas i denpasar
+                              {item.name}
                             </h4>
-                            <p className="textColor text-xs">9910566557</p>
+                            <p className="textColor text-xs">{item.number}</p>
                           </div>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Vishal Singh</p>
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
+                          <p className="textColor text-sm">{item.ownername}</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                            Retail
+                          <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                             {item.category}
                           </p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Kab Gianyar</p>
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
+                          <p className="textColor text-sm">{item.city}</p>
                         </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">0</p>
+                        <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
+                          <p className="textColor text-sm">{item.report}</p>
                         </td>
                         <td className="p-2 py-4 border-b border-[#f1f3f7]">
                           <a
@@ -131,102 +176,7 @@ const isMobile = useIsMobile();
                           </a>
                         </td>
                       </tr>
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="headingColor font-semibold text-sm">
-                              Kantor imigrasi kelas i denpasar
-                            </h4>
-                            <p className="textColor text-xs">9910566557</p>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Vishal Singh</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                            Retail
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Kab Gianyar</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">0</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <a
-                            href="/admin/allreports"
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                          >
-                            <Eye className="w-5 h-5" /> View Reports
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="headingColor font-semibold text-sm">
-                              Kantor imigrasi kelas i denpasar
-                            </h4>
-                            <p className="textColor text-xs">9910566557</p>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Vishal Singh</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                            Retail
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Kab Gianyar</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">0</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <a
-                            href="/admin/allreports"
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                          >
-                            <Eye className="w-5 h-5" /> View Reports
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <div>
-                            <h4 className="headingColor font-semibold text-sm">
-                              Kantor imigrasi kelas i denpasar
-                            </h4>
-                            <p className="textColor text-xs">9910566557</p>
-                          </div>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Vishal Singh</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                            Retail
-                          </p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">Kab Gianyar</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <p className="textColor text-sm">0</p>
-                        </td>
-                        <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                          <a
-                            href="/admin/allreports"
-                            className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                          >
-                            <Eye className="w-5 h-5" /> View Reports
-                          </a>
-                        </td>
-                      </tr>
+                      )) }
                     </tbody>
                   </table>
                 </div>

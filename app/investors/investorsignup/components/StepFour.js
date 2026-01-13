@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 export default function StepFour({ onBack, onContinue }) {
   const router = useRouter();
   const handleFileChange = (e) => {
@@ -31,6 +37,10 @@ export default function StepFour({ onBack, onContinue }) {
     console.log("Business submitted:", formData);
     router.push("/admin/investorSignup/step-2");
   };
+  const handlefinishbutton = () =>
+  {
+    router.push("/investors/overview");
+  }
 
   return (
     <section className="min-h-screen md:py-10 ">
@@ -96,23 +106,26 @@ export default function StepFour({ onBack, onContinue }) {
                 </label>
 
                 <div className="relative w-full">
-                  <select
-                    name="highlights"
-                    value={formData.sector}
-                    onChange={handleChange}
-                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
-                  >
-                    <option value="">Select Weekly highlights</option>
-                    <option>Retail</option>
-                    <option>Agriculture</option>
-                    <option>Logistics</option>
-                    <option>Manufacturing</option>
-                  </select>
 
-                  {/* Dropdown Arrow */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
+                  <Select
+                    value={formData.sector}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, sector: value }))
+                    }
+                  >
+                    <SelectTrigger
+                    className="w-full p-3 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                    >
+                      <SelectValue placeholder="Select Weekly highlights" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="Retail">Retail</SelectItem>
+                      <SelectItem value="Agriculture">Agriculture</SelectItem>
+                      <SelectItem value="Logistics">Logistics</SelectItem>
+                      <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
@@ -125,23 +138,26 @@ export default function StepFour({ onBack, onContinue }) {
                 </label>
 
                 <div className="relative w-full">
-                  <select
-                    name="preferred"
-                    value={formData.monthlySales}
-                    onChange={handleChange}
-                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
-                  >
-                    <option value="">Select Weekly highlights</option>
-                    <option>Retail</option>
-                    <option>Agriculture</option>
-                    <option>Logistics</option>
-                    <option>Manufacturing</option>
-                  </select>
 
-                  {/* Dropdown Arrow */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
+                  <Select
+                    value={formData.monthlySales}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, monthlySales: value }))
+                    }
+                  >
+                    <SelectTrigger
+                    className="w-full p-3 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                    >
+                      <SelectValue placeholder="Select Preferred channel" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="rt">Retail</SelectItem>
+                      <SelectItem value="rta">Agriculture</SelectItem>
+                      <SelectItem value="rtl">Logistics</SelectItem>
+                      <SelectItem value="rtm">Manufacturing</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -152,22 +168,26 @@ export default function StepFour({ onBack, onContinue }) {
 
 
                 <div className="relative w-full">
-                  <select
-                    name="timezone"
-                    value={formData.timezone}
-                    onChange={handleChange}
-                    className="w-full appearance-none p-3 pr-10 border border-gray-300 rounded-md outline-none bg-white text-sm"
-                  >
-                    <option>Time zone</option>
-                  <option>Daily updates</option>
-                  <option>Weekly updates</option>
-                  <option>Monthly updates</option>
-                  </select>
 
-                  {/* Dropdown Arrow */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
+
+                  <Select
+                    value={formData.timezone}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, timezone: value }))
+                    }
+                  >
+                    <SelectTrigger
+                    className="w-full p-3 border border-gray-300 rounded-md outline-none bg-white text-sm"
+                    >
+                      <SelectValue placeholder="Time zone" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="rtdu">Daily updates</SelectItem>
+                      <SelectItem value="rtawu">Weekly updates</SelectItem>
+                      <SelectItem value="rtlmu">Monthly updates</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
 
@@ -334,7 +354,7 @@ export default function StepFour({ onBack, onContinue }) {
             <button className="w-fit px-4 py-2 rounded-md secondaryColor textColor text-sm font-semibold">
               Skip for Now
             </button>
-            <button
+            <button onClick={handlefinishbutton}
               className="w-fit px-4 py-2 rounded-md primaryColor text-white text-sm font-semibold"
             >
               Finish Setup

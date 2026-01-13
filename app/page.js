@@ -11,7 +11,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="px-6 py-10">
-        <div className="container mx-auto md:px-16">
+        <div className="container mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12 gap-5 items-center">
             {/* Left Content */}
             <div>
@@ -19,7 +19,7 @@ export default function Home() {
                 <span className="px-3 py-1 text-xs subHeadingColor rounded-full secondaryColor">
                   Built for Diaspora investors & Nigerian Business Owners
                 </span>
-                <span className="px-3 py-1 text-xs bg-green-700 text-white rounded-full">
+                <span className="px-3 py-1 text-xs bg-green-700 text-white rounded-full text-center">
                   High-trust reporting
                 </span>
               </div>
@@ -121,11 +121,11 @@ export default function Home() {
                   Real-time compliance and media-backed logs
                 </p>
                 <p className="textColor text-sm">
-                  Businesses:<br></br>{" "}
+                  Businesses:{" "}
                   <span className="font-bold subHeadingColor">48</span>
                 </p>
                 <p className="textColor text-sm">
-                  On-time reports:<br></br>{" "}
+                  On-time reports:{" "}
                   <span className="font-bold subHeadingColor">92%</span>
                 </p>
               </div>
