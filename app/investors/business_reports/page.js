@@ -1,8 +1,6 @@
 "use client";
 import { Users, User, Pencil, X, Eye, BadgeDollarSign, ScrollText, BadgePercent } from "lucide-react";
 import { useState } from "react";
-import { Listbox } from "@headlessui/react";
-import { ChevronDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
 import InvestorLayout from "../components/InvestorLayout";
 import {
@@ -29,7 +27,7 @@ const details = [
   },
 ];
 
-const businesses = [
+ const businesses = [
   "Nairobi Fresh Mart",
   "ABC Store",
   "Green Valley Foods",
