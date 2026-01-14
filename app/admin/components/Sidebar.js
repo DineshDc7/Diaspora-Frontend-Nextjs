@@ -9,7 +9,7 @@ const MenuItems = [
   { name: "Dashboard", icon: Home, href: "/admin/dashboard" },
   { name: "Businesses", icon: Building, href: "/admin/business" },
   { name: "Reports", icon: BarChart, href: "/admin/allreports" },
-  { name: "Users", icon: Users, href: "/admin/users" },
+  { name: "Users", icon: Users, href: "/admin/user" },
 ];
 const MenuItemsBottom = [{ name: "Logout", icon: LogOut }];
 
