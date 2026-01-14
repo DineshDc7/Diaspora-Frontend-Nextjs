@@ -96,22 +96,22 @@ export default function DashboardPage() {
 
             {/* Table */}
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[640px] border-collapse">
+              <table className="w-full min-w-[640px] border-collapse border border-neutral-100">
                 <thead>
                   <tr className="secondaryColor">
-                    <th className="text-start p-2 border-[#f1f3f7] w-[25%]">
+                    <th className="text-start p-4 border-[#f1f3f7] w-[25%]">
                       <h5 className="subHeadingColor text-base">Business </h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[18%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[18%]">
                       <h5 className="subHeadingColor text-base">Owner</h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[12%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[12%]">
                       <h5 className="subHeadingColor text-base">Category</h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[18%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[18%]">
                       <h5 className="subHeadingColor text-base">City</h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[12%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[12%]">
                       <h5 className="subHeadingColor text-base">Reports</h5>
                     </th>
                     {/* <th className="text-center p-2 border-[#f1f3f7] w-[15%]">
@@ -126,22 +126,22 @@ export default function DashboardPage() {
                       key={item.bname}
                       className="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50"
                     >
-                      <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
+                      <td className="p-4 text-base font-semibold headingColor whitespace-nowrap">
                         {item.bname}
                       </td>
-                      <td className="py-3 px-2 text-center textColor">
+                      <td className="p-4 text-center textColor">
                         {item.owner}
                       </td>
-                      <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                      <td className="p-4 border-b border-[#f1f3f7]">
                         <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
                           {item.category}
                         </p>
                       </td>
-                      <td className="py-3 px-2 text-center textColor">
+                      <td className="p-4 text-center textColor">
                         {item.city}
                       </td>
                       
-                      <td className="py-3 px-2 text-center textColor">
+                      <td className="p-4 text-center textColor">
                         {item.reports}
                       </td>
                       {/* <td className="p-2 py-4 border-b text-center border-[#f1f3f7]">

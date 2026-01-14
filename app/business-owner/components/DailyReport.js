@@ -53,14 +53,14 @@ const DailyReport = () => {
 
       {/* Table */}
       <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse">
+        <table className="w-full min-w-[640px] border-collapse border border-neutral-100">
           <thead>
             <tr className="secondaryColor text-left text-sm textColor">
-              <th className="py-3 px-2 w-[24%]">Date</th>
-              <th className="py-3 px-2 w-[19%] text-center">Sales</th>
-              <th className="py-3 px-2 w-[19%] text-center">Expenses</th>
-              <th className="py-3 px-2 w-[19%] text-center">Customers</th>
-              <th className="py-3 px-2 w-[19%] text-center">Profit / Loss</th>
+              <th className="p-4 w-[24%]">Date</th>
+              <th className="p-4 w-[19%] text-center">Sales</th>
+              <th className="p-4 w-[19%] text-center">Expenses</th>
+              <th className="p-4 w-[19%] text-center">Customers</th>
+              <th className="p-4 w-[19%] text-center">Profit / Loss</th>
             </tr>
           </thead>
 
@@ -70,19 +70,19 @@ const DailyReport = () => {
                 key={item.date}
                 className="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50"
               >
-                <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
+                <td className="p-4 text-base font-semibold headingColor whitespace-nowrap">
                   {item.date}
                 </td>
-                <td className="py-3 px-2 text-center textColor font-medium">
+                <td className="p-4 text-center textColor font-medium">
                   ${item.sales}
                 </td>
-                <td className="py-3 px-2 text-center text-red-500">
+                <td className="p-4 text-center text-red-500">
                   ${item.expenses}
                 </td>
-                <td className="py-3 px-2 text-center textColor">
+                <td className="p-4 text-center textColor">
                   {item.customer}
                 </td>
-                <td className="py-3 px-2 text-center text-green-600 font-semibold">
+                <td className="p-4 text-center text-green-600 font-semibold">
                   {item.pftlos}
                 </td>
               </tr>
