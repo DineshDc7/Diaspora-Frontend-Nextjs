@@ -10,7 +10,7 @@ export function proxy(req) {
   // Public signup routes (should NOT require auth)
   const isAdminSignup = pathname.startsWith("/admin/signup");
   const isInvestorSignup = pathname.startsWith("/investor/investorsignup");
-  const isOwnerSignup = pathname.startsWith("/business-owner/business-owner");
+  const isOwnerSignup = pathname.startsWith("/business-owner/ownersignup");
 
   if (isAdminSignup || isInvestorSignup || isOwnerSignup) {
     return NextResponse.next();
