@@ -14,6 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import apiClient from "../../../lib/apiClient";
+
 const tabs = [
   { id: "allusers", label: "All Users" },
   { id: "admin", label: "Admin" },
@@ -21,41 +23,187 @@ const tabs = [
   { id: "investor", label: "Investor" },
 ];
 
-const users = [
-  {
-    name: "Demo Diaspora User",
-    email: "diaspora@gmail.com",
-    phone: "8978789876",
-    role: "Investor",
-    roleColor: "blue",
-    joined: "11/12/2025",
-  },
-  {
-    name: "Demo Business Owner",
-    email: "diaspora@gmail.com",
-    phone: "8978789876",
-    role: "Owner",
-    roleColor: "green",
-    joined: "11/12/2025",
-  },
-  {
-    name: "Demo Admin",
-    email: "diaspora@gmail.com",
-    phone: "8978789876",
-    role: "Admin",
-    roleColor: "gray",
-    joined: "11/12/2025",
-  },
-];
-
 export default function AdminUser() {
   const [open, setOpen] = useState(false);
   const [openmodal, setOpenmodal] = useState(false);
   const [openActionRow, setOpenActionRow] = useState(null);
-  const [openAction, setOpenAction] = useState(null);
   const [openeditmodal, setOpenEditmodal] = useState(false);
   const [assignBusiness, setAssignBusiness] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0].id);
+  const [searchText, setSearchText] = useState("");
+  const searchDebounceRef = useRef(null);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [users, setUsers] = useState([]);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    countsByRole: { ADMIN: 0, INVESTOR: 0, BUSINESS_OWNER: 0 },
+  });
+  const [addUserForm, setAddUserForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+    mobile: "",
+  });
+  const [addUserLoading, setAddUserLoading] = useState(false);
+  const [addUserError, setAddUserError] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [editUserForm, setEditUserForm] = useState({
+    name: "",
+    email: "",
+    role: "",
+    mobile: "",
+    isActive: true,
+  });
+  const [editUserLoading, setEditUserLoading] = useState(false);
+  const [editUserError, setEditUserError] = useState("");
+  const fetchOverviewNow = async (override = {}) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const tabMap = {
+        allusers: "all",
+        admin: "admins",
+        businessowner: "owners",
+        investor: "investors",
+      };
+
+      const res = await apiClient.get("/api/admin/users/overview", {
+        params: {
+          tab: tabMap[activeTab] || "all",
+          page: 1,
+          limit: 10,
+          ...(searchText.trim() ? { search: searchText.trim() } : {}),
+          ...override,
+        },
+      });
+
+      const data = res?.data?.data;
+
+      setUsers(Array.isArray(data?.users) ? data.users : []);
+      setStats(
+        data?.stats || {
+          totalUsers: 0,
+          countsByRole: { ADMIN: 0, INVESTOR: 0, BUSINESS_OWNER: 0 },
+        }
+      );
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchOverview = async () => {
+      // Debounce search to avoid calling API on every keystroke
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+
+      searchDebounceRef.current = setTimeout(async () => {
+        await fetchOverviewNow();
+      }, 400);
+      return;
+    };
+
+    fetchOverview();
+  }, [activeTab, searchText]);
+  // Helper to normalize phone input to digits only and max 10 chars
+  const normalizeMobile10 = (value) => String(value || "").replace(/\D/g, "").slice(0, 10);
+
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    if (addUserLoading) return;
+
+    setAddUserLoading(true);
+    setAddUserError("");
+
+    // Mobile number validation (10 digits only)
+    const mobileDigits = normalizeMobile10(addUserForm.mobile);
+    if (addUserForm.mobile && mobileDigits.length !== 10) {
+      setAddUserError("Mobile number must be exactly 10 digits");
+      setAddUserLoading(false);
+      return;
+    }
+
+    try {
+      const payload = {
+        name: addUserForm.name,
+        email: addUserForm.email,
+        password: addUserForm.password,
+        role: addUserForm.role,
+        mobile: mobileDigits ? mobileDigits : null,
+      };
+
+      await apiClient.post("/api/admin/users", payload);
+
+      setOpenmodal(false);
+      await fetchOverviewNow();
+    } catch (err) {
+      setAddUserError(err?.response?.data?.message || "Failed to create user");
+    } finally {
+      setAddUserLoading(false);
+    }
+  };
+
+  // Helper to open Edit modal and prefill using API
+  const openEditForUser = async (userId) => {
+    setSelectedUserId(userId);
+    setEditUserError("");
+    setEditUserLoading(true);
+    try {
+      const res = await apiClient.get(`/api/admin/users/${userId}`);
+      const user = res?.data?.data?.user;
+      setEditUserForm({
+        name: user?.name || "",
+        email: user?.email || "",
+        role: user?.role || "",
+        mobile: user?.mobile || "",
+        isActive: user?.isActive ?? true,
+      });
+      setOpenEditmodal(true);
+    } catch (err) {
+      setEditUserError(err?.response?.data?.message || "Failed to load user");
+      setOpenEditmodal(true);
+    } finally {
+      setEditUserLoading(false);
+    }
+  };
+
+  // Submit handler for Edit modal
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    if (!selectedUserId || editUserLoading) return;
+    setEditUserLoading(true);
+    setEditUserError("");
+    // Mobile number validation (10 digits only)
+    const mobileDigits = normalizeMobile10(editUserForm.mobile);
+    if (editUserForm.mobile && mobileDigits.length !== 10) {
+      setEditUserError("Mobile number must be exactly 10 digits");
+      setEditUserLoading(false);
+      return;
+    }
+    try {
+      const payload = {
+        name: editUserForm.name,
+        role: editUserForm.role,
+        mobile: mobileDigits ? mobileDigits : null,
+        isActive: Boolean(editUserForm.isActive),
+      };
+      await apiClient.put(`/api/admin/users/${selectedUserId}`, payload);
+      setOpenEditmodal(false);
+      setSelectedUserId(null);
+      await fetchOverviewNow();
+    } catch (err) {
+      setEditUserError(err?.response?.data?.message || "Failed to update user");
+    } finally {
+      setEditUserLoading(false);
+    }
+  };
 
   return (
     <>
@@ -77,12 +225,18 @@ export default function AdminUser() {
                     <h1 className="text-2xl font-semibold headingColor">
                       Users
                     </h1>
-                    <p className="py-2 text-sm textColor">3 registered users</p>
+                    <p className="py-2 text-sm textColor">
+                      {loading ? "Loading..." : `${stats.totalUsers} registered users`}
+                    </p>
                   </div>
                 </div>
                 <div>
                   <button
-                    onClick={() => setOpenmodal(true)}
+                    onClick={() => {
+                      setAddUserError("");
+                      setAddUserForm({ name: "", email: "", password: "", role: "", mobile: "" });
+                      setOpenmodal(true);
+                    }}
                     className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
                   >
                     <Users className="w-5 h-5" /> Add User
@@ -100,10 +254,9 @@ export default function AdminUser() {
                   </div>
                   <div>
                     <h2 className="headingColor text-3xl font-semibold py-3">
-                      120
+                      {stats.totalUsers}
                     </h2>
                   </div>
-
                   <div className="absolute right-6 bottom-6">
                     <User className="w-10 h-10" color="#cfdced" />
                   </div>
@@ -114,10 +267,9 @@ export default function AdminUser() {
                   </div>
                   <div>
                     <h2 className="headingColor text-3xl font-semibold py-3">
-                      10
+                      {stats.countsByRole.ADMIN}
                     </h2>
                   </div>
-
                   <div className="absolute right-6 bottom-6">
                     <User className="w-10 h-10" color="#cfdced" />
                   </div>
@@ -130,10 +282,9 @@ export default function AdminUser() {
                   </div>
                   <div>
                     <h2 className="headingColor text-3xl font-semibold py-3">
-                      5
+                      {stats.countsByRole.BUSINESS_OWNER}
                     </h2>
                   </div>
-
                   <div className="absolute right-6 bottom-6">
                     <User className="w-10 h-10" color="#cfdced" />
                   </div>
@@ -146,10 +297,9 @@ export default function AdminUser() {
                   </div>
                   <div>
                     <h2 className="headingColor text-3xl font-semibold py-3">
-                      7
+                      {stats.countsByRole.INVESTOR}
                     </h2>
                   </div>
-
                   <div className="absolute right-6 bottom-6">
                     <User className="w-10 h-10" color="#cfdced" />
                   </div>
@@ -202,6 +352,8 @@ export default function AdminUser() {
                   <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
                     placeholder="Search users by name, email, or role"
                     className="w-full rounded-lg border text-sm border-gray-300 py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -211,7 +363,10 @@ export default function AdminUser() {
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                        setSearchText("");
+                      }}
                       className={`px-4 py-2 text-sm font-medium transition font-semibold text-lg
               ${
                 activeTab === tab.id
@@ -223,6 +378,16 @@ export default function AdminUser() {
                     </button>
                   ))}
                 </div>
+
+                {error ? (
+                  <div className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {error}
+                  </div>
+                ) : null}
+
+                {loading ? (
+                  <div className="py-6 text-sm text-gray-500">Loading users...</div>
+                ) : null}
 
                 {activeTab === "allusers" && (
                   <div className="py-5 overflow-x-auto">
@@ -256,7 +421,6 @@ export default function AdminUser() {
                           </th>
                         </tr>
                       </thead>
-
                       <tbody>
                         {users.map((user, index) => (
                           <tr key={index}>
@@ -265,32 +429,30 @@ export default function AdminUser() {
                                 {user.name}
                               </h4>
                             </td>
-
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                               <p className="textColor text-sm">{user.email}</p>
                             </td>
-
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                              <p className="textColor text-sm">{user.phone}</p>
+                              <p className="textColor text-sm">{user.mobile || "-"}</p>
                             </td>
-
                             <td className="p-2 py-4 border-b border-[#f1f3f7]">
                               <p
                                 className={`mx-auto px-3 py-1 text-xs font-semibold rounded-full w-fit
               ${
-                user.roleColor === "blue"
+                user.role === "INVESTOR"
                   ? "text-blue-600 bg-blue-100"
-                  : user.roleColor === "green"
+                  : user.role === "BUSINESS_OWNER"
                   ? "text-green-600 bg-green-100"
                   : "text-gray-600 bg-gray-100"
               }`}
                               >
-                                {user.role}
+                                {user.role === "BUSINESS_OWNER" ? "Owner" : user.role}
                               </p>
                             </td>
-
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                              <p className="textColor text-sm">{user.joined}</p>
+                              <p className="textColor text-sm">
+                                {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}
+                              </p>
                             </td>
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                               <Switch
@@ -301,7 +463,6 @@ export default function AdminUser() {
                                         "
                               />
                             </td>
-
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                               <div className="relative">
                                 <button
@@ -314,7 +475,6 @@ export default function AdminUser() {
                                 >
                                   <Ellipsis className="w-4 h-4" />
                                 </button>
-
                                 {openActionRow === index && (
                                   <>
                                     {/* Backdrop */}
@@ -322,13 +482,12 @@ export default function AdminUser() {
                                       className="fixed inset-0 z-40"
                                       onClick={() => setOpenActionRow(null)}
                                     />
-
                                     {/* Action menu */}
                                     <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
                                       <ul className="p-2 text-sm space-y-1">
                                         <li
                                           onClick={() => {
-                                            setOpenEditmodal(true);
+                                            openEditForUser(user.id);
                                             setOpenActionRow(null);
                                           }}
                                           className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
@@ -337,7 +496,6 @@ export default function AdminUser() {
                                             <Pencil className="w-3 h-3" /> Edit
                                           </div>
                                         </li>
-
                                         <li
                                           onClick={() => {
                                             setAssignBusiness(true);
@@ -417,90 +575,90 @@ export default function AdminUser() {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                            <div>
+                        {users.map((user, index) => (
+                          <tr key={user.id || index}>
+                            <td className="p-2 py-4 border-b border-[#f1f3f7]">
                               <h4 className="subHeadingColor font-semibold text-sm">
-                                Demo Admin
+                                {user.name}
                               </h4>
-                            </div>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">
-                              diaspora@gmail.com
-                            </p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">8978789876</p>
-                          </td>
-                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="text-gray-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 w-fit">
-                              Admin
-                            </p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">11/12/2025</p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <Switch
-                              id="airplane-mode"
-                              className="
-                                          data-[state=unchecked]:bg-green-500
-                                          data-[state=checked]:bg-red-500
-                                        "
-                            />
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <div className="relative">
-                              <button
-                                onClick={() => setOpenAction((prev) => !prev)}
-                                className="flex mx-auto items-center textprimaryColor"
-                              >
-                                <Ellipsis className="w-4 h-4" />
-                              </button>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">{user.email}</p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">{user.mobile || "-"}</p>
+                            </td>
+                            <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="text-gray-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 w-fit">
+                                {user.role === "BUSINESS_OWNER" ? "Owner" : user.role}
+                              </p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">
+                                {user.createdAt
+                                  ? new Date(user.createdAt).toLocaleDateString()
+                                  : "-"}
+                              </p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <Switch
+                                id={`block-admin-${user.id || index}`}
+                                className="data-[state=unchecked]:bg-green-500 data-[state=checked]:bg-red-500"
+                              />
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <div className="relative">
+                                <button
+                                  onClick={() =>
+                                    setOpenActionRow(
+                                      openActionRow === `admin-${index}`
+                                        ? null
+                                        : `admin-${index}`
+                                    )
+                                  }
+                                  className="flex mx-auto items-center textprimaryColor"
+                                >
+                                  <Ellipsis className="w-4 h-4" />
+                                </button>
 
-                              {openAction && (
-                                <>
-                                  {/* Backdrop */}
-                                  <div
-                                    className="fixed inset-0 z-40"
-                                    onClick={() => setOpenAction(false)}
-                                  />
-
-                                  {/* Action Menu */}
-                                  <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
-                                    <ul className="p-2 text-sm space-y-1">
-                                      <li
-                                        onClick={() => {
-                                          setOpenEditmodal(true);
-                                          setOpenAction(false);
-                                        }}
-                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                      >
-                                        <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                          <Pencil className="w-3 h-3" /> Edit
-                                        </div>
-                                      </li>
-
-                                      <li
-                                        onClick={() => {
-                                          setAssignBusiness(true);
-                                          setOpenAction(false);
-                                        }}
-                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                      >
-                                        <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                          <Pencil className="w-3 h-3" /> Assign
-                                          Business
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
+                                {openActionRow === `admin-${index}` && (
+                                  <>
+                                    <div
+                                      className="fixed inset-0 z-40"
+                                      onClick={() => setOpenActionRow(null)}
+                                    />
+                                    <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
+                                      <ul className="p-2 text-sm space-y-1">
+                                        <li
+                                          onClick={() => {
+                                            openEditForUser(user.id);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Pencil className="w-3 h-3" /> Edit
+                                          </div>
+                                        </li>
+                                        <li
+                                          onClick={() => {
+                                            setAssignBusiness(true);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Pencil className="w-3 h-3" /> Assign Business
+                                          </div>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -560,88 +718,90 @@ export default function AdminUser() {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                            <div>
+                        {users.map((user, index) => (
+                          <tr key={user.id || index}>
+                            <td className="p-2 py-4 border-b border-[#f1f3f7]">
                               <h4 className="subHeadingColor font-semibold text-sm">
-                                Demo Business Owner
+                                {user.name}
                               </h4>
-                            </div>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">
-                              diaspora@gmail.com
-                            </p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">8978789876</p>
-                          </td>
-                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="text-green-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-green-100 w-fit">
-                              Owner
-                            </p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">11/12/2025</p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <Switch
-                              id="airplane-mode"
-                              className="
-                                          data-[state=unchecked]:bg-green-500
-                                          data-[state=checked]:bg-red-500
-                                        "
-                            />
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <div className="relative">
-                              <button
-                                onClick={() => setOpenAction((prev) => !prev)}
-                                className="flex mx-auto items-center textprimaryColor"
-                              >
-                                <Ellipsis className="w-4 h-4" />
-                              </button>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">{user.email}</p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">{user.mobile || "-"}</p>
+                            </td>
+                            <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="text-green-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-green-100 w-fit">
+                                {user.role === "BUSINESS_OWNER" ? "Owner" : user.role}
+                              </p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">
+                                {user.createdAt
+                                  ? new Date(user.createdAt).toLocaleDateString()
+                                  : "-"}
+                              </p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <Switch
+                                id={`block-owner-${user.id || index}`}
+                                className="data-[state=unchecked]:bg-green-500 data-[state=checked]:bg-red-500"
+                              />
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <div className="relative">
+                                <button
+                                  onClick={() =>
+                                    setOpenActionRow(
+                                      openActionRow === `owner-${index}`
+                                        ? null
+                                        : `owner-${index}`
+                                    )
+                                  }
+                                  className="flex mx-auto items-center textprimaryColor"
+                                >
+                                  <Ellipsis className="w-4 h-4" />
+                                </button>
 
-                              {openAction && (
-                                <>
-                                  {/* Backdrop */}
-                                  <div
-                                    className="fixed inset-0 z-40"
-                                    onClick={() => setOpenAction(false)}
-                                  />
-
-                                  {/* Action Menu */}
-                                  <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
-                                    <ul className="p-2 text-sm space-y-1">
-                                      <li
-                                        onClick={() => {
-                                          setOpenEditmodal(true);
-                                          setOpenAction(false);
-                                        }}
-                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded">
-                                        <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                          <Pencil className="w-3 h-3" /> Edit
-                                        </div>
-                                      </li>
-                                      <li
-                                        onClick={() => {
-                                          setAssignBusiness(true);
-                                          setOpenAction(false);
-                                        }}
-                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                      >
-                                        <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                          <Pencil className="w-3 h-3" /> Assign
-                                          Business
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
+                                {openActionRow === `owner-${index}` && (
+                                  <>
+                                    <div
+                                      className="fixed inset-0 z-40"
+                                      onClick={() => setOpenActionRow(null)}
+                                    />
+                                    <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
+                                      <ul className="p-2 text-sm space-y-1">
+                                        <li
+                                          onClick={() => {
+                                            openEditForUser(user.id);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Pencil className="w-3 h-3" /> Edit
+                                          </div>
+                                        </li>
+                                        <li
+                                          onClick={() => {
+                                            setAssignBusiness(true);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Pencil className="w-3 h-3" /> Assign Business
+                                          </div>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -699,89 +859,90 @@ export default function AdminUser() {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                            <div>
+                        {users.map((user, index) => (
+                          <tr key={user.id || index}>
+                            <td className="p-2 py-4 border-b border-[#f1f3f7]">
                               <h4 className="subHeadingColor font-semibold text-sm">
-                                Demo Diaspora User
+                                {user.name}
                               </h4>
-                            </div>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">
-                              diaspora@gmail.com
-                            </p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">8978789876</p>
-                          </td>
-                          <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                              Investor
-                            </p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">11/12/2025</p>
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <Switch
-                              id="airplane-mode"
-                              className="data-[state=unchecked]:bg-green-500
-                                          data-[state=checked]:bg-red-500
-                                        "
-                            />
-                          </td>
-                          <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                            <div className="relative">
-                              <button
-                                onClick={() => setOpenAction((prev) => !prev)}
-                                className="flex mx-auto items-center textprimaryColor"
-                              >
-                                <Ellipsis className="w-4 h-4" />
-                              </button>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">{user.email}</p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">{user.mobile || "-"}</p>
+                            </td>
+                            <td className="p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="text-blue-600 mx-auto px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                                {user.role === "BUSINESS_OWNER" ? "Owner" : user.role}
+                              </p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <p className="textColor text-sm">
+                                {user.createdAt
+                                  ? new Date(user.createdAt).toLocaleDateString()
+                                  : "-"}
+                              </p>
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <Switch
+                                id={`block-investor-${user.id || index}`}
+                                className="data-[state=unchecked]:bg-green-500 data-[state=checked]:bg-red-500"
+                              />
+                            </td>
+                            <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
+                              <div className="relative">
+                                <button
+                                  onClick={() =>
+                                    setOpenActionRow(
+                                      openActionRow === `investor-${index}`
+                                        ? null
+                                        : `investor-${index}`
+                                    )
+                                  }
+                                  className="flex mx-auto items-center textprimaryColor"
+                                >
+                                  <Ellipsis className="w-4 h-4" />
+                                </button>
 
-                              {openAction && (
-                                <>
-                                  {/* Backdrop */}
-                                  <div
-                                    className="fixed inset-0 z-40"
-                                    onClick={() => setOpenAction(false)}
-                                  />
-
-                                  {/* Action Menu */}
-                                  <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
-                                    <ul className="p-2 text-sm space-y-1">
-                                      <li
-                                        onClick={() => {
-                                          setOpenEditmodal(true);
-                                          setOpenAction(false);
-                                        }}
-                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                      >
-                                        <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                          <Pencil className="w-3 h-3" /> Edit
-                                        </div>
-                                      </li>
-
-                                      <li
-                                        onClick={() => {
-                                          setAssignBusiness(true);
-                                          setOpenAction(false);
-                                        }}
-                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                      >
-                                        <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                          <Pencil className="w-3 h-3" /> Assign
-                                          Business
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
+                                {openActionRow === `investor-${index}` && (
+                                  <>
+                                    <div
+                                      className="fixed inset-0 z-40"
+                                      onClick={() => setOpenActionRow(null)}
+                                    />
+                                    <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
+                                      <ul className="p-2 text-sm space-y-1">
+                                        <li
+                                          onClick={() => {
+                                            openEditForUser(user.id);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Pencil className="w-3 h-3" /> Edit
+                                          </div>
+                                        </li>
+                                        <li
+                                          onClick={() => {
+                                            setAssignBusiness(true);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Pencil className="w-3 h-3" /> Assign Business
+                                          </div>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -799,13 +960,23 @@ export default function AdminUser() {
             {/* Header */}
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Add New User</h2>
-              <button onClick={() => setOpenmodal(false)}>
+              <button
+                onClick={() => {
+                  setAddUserError("");
+                  setOpenmodal(false);
+                }}
+              >
                 <X className="h-5 w-5" color="#797979" />
               </button>
             </div>
 
             {/* Body */}
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleCreateUser}>
+              {addUserError ? (
+                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {addUserError}
+                </div>
+              ) : null}
               {/* Business Name */}
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -814,6 +985,11 @@ export default function AdminUser() {
                 <input
                   type="text"
                   placeholder="Your Name"
+                  value={addUserForm.name}
+                  onChange={(e) => {
+                    setAddUserError("");
+                    setAddUserForm((p) => ({ ...p, name: e.target.value }));
+                  }}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -827,6 +1003,11 @@ export default function AdminUser() {
                 <input
                   type="email"
                   placeholder="Johndoe@gmail.com"
+                  value={addUserForm.email}
+                  onChange={(e) => {
+                    setAddUserError("");
+                    setAddUserForm((p) => ({ ...p, email: e.target.value }));
+                  }}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -840,6 +1021,11 @@ export default function AdminUser() {
                 <input
                   type="password"
                   placeholder="******"
+                  value={addUserForm.password}
+                  onChange={(e) => {
+                    setAddUserError("");
+                    setAddUserForm((p) => ({ ...p, password: e.target.value }));
+                  }}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -852,7 +1038,13 @@ export default function AdminUser() {
                 </label>
 
                 <div className="relative w-full">
-                  <Select>
+                  <Select
+                    value={addUserForm.role}
+                    onValueChange={(val) => {
+                      setAddUserError("");
+                      setAddUserForm((p) => ({ ...p, role: val }));
+                    }}
+                  >
                     <SelectTrigger
                       className="w-full p-3 rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -860,9 +1052,9 @@ export default function AdminUser() {
                       <SelectValue placeholder="Role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="user">User</SelectItem>
-                      <SelectItem value="owner">Business Owner</SelectItem>
-                      <SelectItem value="investor">Investor</SelectItem>
+                      <SelectItem value="ADMIN">Admin</SelectItem>
+                      <SelectItem value="BUSINESS_OWNER">Business Owner</SelectItem>
+                      <SelectItem value="INVESTOR">Investor</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -876,6 +1068,16 @@ export default function AdminUser() {
                 <input
                   type="tel"
                   placeholder="9999999999"
+                  value={addUserForm.mobile}
+                  onChange={(e) => {
+                    setAddUserError("");
+                    setAddUserForm((p) => ({
+                      ...p,
+                      mobile: normalizeMobile10(e.target.value),
+                    }));
+                  }}
+                  inputMode="numeric"
+                  maxLength={10}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -884,7 +1086,10 @@ export default function AdminUser() {
               {/* Actions */}
               <div className="flex justify-end gap-3 pt-4">
                 <button
-                  onClick={() => setOpenmodal(false)}
+                  onClick={() => {
+                    setAddUserError("");
+                    setOpenmodal(false);
+                  }}
                   type="button"
                   className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 w-full"
                 >
@@ -892,9 +1097,10 @@ export default function AdminUser() {
                 </button>
                 <button
                   type="submit"
-                  className="primaryColor rounded-md px-4 py-2 text-sm font-semibold text-white w-full"
+                  disabled={addUserLoading}
+                  className="primaryColor rounded-md px-4 py-2 text-sm font-semibold text-white w-full disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Create User
+                  {addUserLoading ? "Creating..." : "Create User"}
                 </button>
               </div>
             </form>
@@ -908,13 +1114,28 @@ export default function AdminUser() {
             {/* Header */}
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Edit User Details</h2>
-              <button onClick={() => setOpenEditmodal(false)}>
+              <button
+                onClick={() => {
+                  setEditUserError("");
+                  setSelectedUserId(null);
+                  setOpenEditmodal(false);
+                }}
+              >
                 <X className="h-5 w-5" color="#797979" />
               </button>
             </div>
 
             {/* Body */}
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleUpdateUser}>
+              {editUserError ? (
+                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {editUserError}
+                </div>
+              ) : null}
+
+              {editUserLoading ? (
+                <div className="text-sm text-gray-500">Loading...</div>
+              ) : null}
               {/* Business Name */}
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -923,6 +1144,11 @@ export default function AdminUser() {
                 <input
                   type="text"
                   placeholder="Your Name"
+                  value={editUserForm.name}
+                  onChange={(e) => {
+                    setEditUserError("");
+                    setEditUserForm((p) => ({ ...p, name: e.target.value }));
+                  }}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -936,8 +1162,10 @@ export default function AdminUser() {
                 <input
                   type="email"
                   placeholder="Johndoe@gmail.com"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
-                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={editUserForm.email}
+                  disabled
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm bg-gray-50 text-gray-500
+                     focus:outline-none"
                 />
               </div>
 
@@ -948,9 +1176,10 @@ export default function AdminUser() {
                 </label>
                 <input
                   type="password"
-                  placeholder="******"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
-                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="(not editable here)"
+                  disabled
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm bg-gray-50 text-gray-500
+                     focus:outline-none"
                 />
               </div>
 
@@ -961,17 +1190,13 @@ export default function AdminUser() {
                 </label>
 
                 <div className="relative w-full">
-                  {/* <select
-                    name="role"
-                    className="w-full appearance-none p-3 pr-10  rounded-lg border border-gray-300 px-4 py-2 text-sm
-                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  <Select
+                    value={editUserForm.role}
+                    onValueChange={(val) => {
+                      setEditUserError("");
+                      setEditUserForm((p) => ({ ...p, role: val }));
+                    }}
                   >
-                    <option>User</option>
-                    <option>Business Owner</option>
-                    <option>Investor</option>
-                  </select> */}
-
-                  <Select>
                     <SelectTrigger
                       className="w-full p-3 rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -979,9 +1204,9 @@ export default function AdminUser() {
                       <SelectValue placeholder="Role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="user">User</SelectItem>
-                      <SelectItem value="owner">Business Owner</SelectItem>
-                      <SelectItem value="investor">Investor</SelectItem>
+                      <SelectItem value="ADMIN">Admin</SelectItem>
+                      <SelectItem value="BUSINESS_OWNER">Business Owner</SelectItem>
+                      <SelectItem value="INVESTOR">Investor</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -995,6 +1220,16 @@ export default function AdminUser() {
                 <input
                   type="tel"
                   placeholder="9999999999"
+                  value={editUserForm.mobile}
+                  onChange={(e) => {
+                    setEditUserError("");
+                    setEditUserForm((p) => ({
+                      ...p,
+                      mobile: normalizeMobile10(e.target.value),
+                    }));
+                  }}
+                  inputMode="numeric"
+                  maxLength={10}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -1003,7 +1238,11 @@ export default function AdminUser() {
               {/* Actions */}
               <div className="flex justify-end gap-3 pt-4">
                 <button
-                  onClick={() => setOpenEditmodal(false)}
+                  onClick={() => {
+                    setEditUserError("");
+                    setSelectedUserId(null);
+                    setOpenEditmodal(false);
+                  }}
                   type="button"
                   className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 w-full"
                 >
@@ -1011,9 +1250,10 @@ export default function AdminUser() {
                 </button>
                 <button
                   type="submit"
-                  className="primaryColor rounded-md px-4 py-2 text-sm font-semibold text-white w-full"
+                  disabled={editUserLoading || !selectedUserId}
+                  className="primaryColor rounded-md px-4 py-2 text-sm font-semibold text-white w-full disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Update User
+                  {editUserLoading ? "Updating..." : "Update User"}
                 </button>
               </div>
             </form>

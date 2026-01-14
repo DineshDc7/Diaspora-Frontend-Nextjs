@@ -4,6 +4,7 @@ import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import { authApi } from "../../../../lib/api/auth";
 import {
   Select,
   SelectContent,
@@ -15,6 +16,8 @@ import {
 
 const StepTwo = ({ onBack }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,16 +30,45 @@ const StepTwo = ({ onBack }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError("");
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+
+  try {
+    setLoading(true);
+
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      role: "ADMIN",
+      mobile: formData.phone
+        ? `${formData.countryCode || ""}${formData.phone}`
+        : null,
+    };
+
+    await authApi.register(payload);
+
+    // After successful register, cookies are set by backend and forwarded by Next route
     router.push("/admin/dashboard");
-  };
+  } catch (err) {
+    const msg =
+      err?.response?.data?.message ||
+      (typeof err?.message === "string"
+        ? err.message
+        : "Something went wrong. Please try again.");
+    setError(msg);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -55,6 +87,11 @@ const StepTwo = ({ onBack }) => {
                 </p>
               </div>
               <form className="md:py-6 pt-4" onSubmit={handleSubmit}>
+                {error ? (
+                  <div className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {error}
+                  </div>
+                ) : null}
                 {/* Full Name */}
                 <div className="mb-4">
                   <label className="block text-sm font-semibold mb-2 textColor">
@@ -162,9 +199,10 @@ const StepTwo = ({ onBack }) => {
                 <div className="space-y-3">
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-md primaryColor text-white font-semibold"
+                    disabled={loading}
+                    className="w-full py-3 rounded-md primaryColor text-white font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Create Account
+                    {loading ? "Creating..." : "Create Account"}
                   </button>
                   {/* <button
                     type="submit"
@@ -183,6 +221,7 @@ const StepTwo = ({ onBack }) => {
                   </div>
                   <div>
                     <button
+                      type="button"
                       onClick={onBack}
                       className="text-blue-500 text-sm font-semibold"
                     >

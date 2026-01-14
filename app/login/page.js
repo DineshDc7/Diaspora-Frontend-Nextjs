@@ -1,24 +1,51 @@
 "use client";
-import React from "react";
-import LoginHeader from "../components/LoginHeader";
 import { useState } from "react";
+import LoginHeader from "../components/LoginHeader";
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authApi } from "../../lib/api/auth";
 
 const Page = () => {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
+    setError("");
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", form);
+    if (loading) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const payload = { email: form.email, password: form.password };
+      const res = await authApi.login(payload);
+
+      const user = res?.data?.user;
+      const role = user?.role;
+
+      if (role === "ADMIN") router.push("/admin/dashboard");
+      else if (role === "INVESTOR") router.push("/investors/overview");
+      else if (role === "BUSINESS_OWNER") router.push("/business-owner/overview");
+      else router.push("/");
+    } catch (err) {
+      setError(err?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
-  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
@@ -33,6 +60,12 @@ const Page = () => {
               <h2 className="text-2xl font-bold text-center mb-6 text-slate-800">
                 Login
               </h2>
+
+              {error ? (
+                <div className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {error}
+                </div>
+              ) : null}
 
               {/* Email */}
               <div className="mb-4">
@@ -87,17 +120,18 @@ const Page = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                disabled={loading}
+                className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Login
+                {loading ? "Logging in..." : "Login"}
               </button>
 
               {/* Footer */}
               <p className="text-center text-sm text-slate-500 mt-4">
                 Don’t have an account?{" "}
-                <a href="/signup" className="text-blue-600 hover:underline">
+                <Link href="/signup" className="text-blue-600 hover:underline">
                   Sign up
-                </a>
+                </Link>
               </p>
             </form>
           </div>
