@@ -18,102 +18,220 @@ import {
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
-const businesses = [
-  "Nairobi Fresh Mart",
-  "ABC Store",
-  "Green Valley Foods",
-  "Urban Retail",
-];
-const ITEMS_PER_PAGE = 5;
-const data = [
-  {
-    business: "Nairobi Fresh Mart",
-    date: "12/12/2025",
-    sales: "$1,199.91",
-    expenses: "$2000",
-    customers: 23,
-    profit: "$500",
-  },
-  {
-    business: "Nairobi Fresh Mart",
-    date: "7/12/2025",
-    sales: "$1,199.91",
-    expenses: "$2000",
-    customers: 23,
-    profit: "$500",
-  },
-  {
-    business: "Nairobi Fresh Mart",
-    date: "8/12/2025",
-    sales: "$1,199.91",
-    expenses: "$2000",
-    customers: 23,
-    profit: "$500",
-  },
-  {
-    business: "Nairobi Fresh Mart",
-    date: "6/12/2025",
-    sales: "$1,199.91",
-    expenses: "$2000",
-    customers: 23,
-    profit: "$500",
-  },
-  {
-    business: "Nairobi Fresh Mart",
-    date: "14/12/2025",
-    sales: "$1,199.91",
-    expenses: "$2000",
-    customers: 23,
-    profit: "$500",
-  },
-  {
-    business: "Nairobi Fresh Mart",
-    date: "3/12/2025",
-    sales: "$1,199.91",
-    expenses: "$2000",
-    customers: 23,
-    profit: "$500",
-  },
-];
+import apiClient from "../../../lib/apiClient";
+
 export default function AdminReport() {
   const [open, setOpen] = useState(false);
   const [openmodel, setOpenModel] = useState(false);
-  const [selectedBusiness, setSelectedBusiness] = useState(null);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const parseDate = (dateStr) => {
-    const [day, month, year] = dateStr.split("/");
-    return new Date(`${year}-${month}-${day}`);
-  };
-  const filteredData = data.filter((item) => {
-    if (!startDate && !endDate) return true;
 
-    const itemDate = parseDate(item.date);
-    const from = startDate ? new Date(startDate) : null;
-    const to = endDate ? new Date(endDate) : null;
+  // filters
+  const [selectedBusiness, setSelectedBusiness] = useState(null); // string id
+  const [startDate, setStartDate] = useState(""); // YYYY-MM-DD
+  const [endDate, setEndDate] = useState(""); // YYYY-MM-DD
 
-    if (from && itemDate < from) return false;
-    if (to && itemDate > to) return false;
+  // dropdown options
+  const [businessOptions, setBusinessOptions] = useState([]); // [{id, businessName}]
 
-    return true;
+  // list state
+  const [reports, setReports] = useState([]);
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
   });
-
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedData = filteredData.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE
-  );
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [startDate, endDate]);
+  const LIMIT = 10;
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // details modal state
+  const [selectedReportId, setSelectedReportId] = useState(null);
+  const [reportDetails, setReportDetails] = useState(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [detailsError, setDetailsError] = useState("");
 
   const isMobile = useIsMobile();
 
-  // const clearFilter = () => {
-  //   setSelectedBusiness("");
-  // };
+  // helpers (same style as dashboard)
+  const toObj = (data) => {
+    if (!data) return null;
+    if (typeof data === "string") {
+      try {
+        return JSON.parse(data);
+      } catch {
+        return null;
+      }
+    }
+    return typeof data === "object" ? data : null;
+  };
+
+  const pickNumber = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const getMetric = (obj, keys) => {
+    if (!obj) return 0;
+    for (const k of keys) {
+      if (obj[k] !== undefined) return pickNumber(obj[k]);
+    }
+    return 0;
+  };
+
+  const formatMoney = (v) => {
+    const n = pickNumber(v);
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(n);
+    } catch {
+      return `$${n.toLocaleString()}`;
+    }
+  };
+
+  const formatDate = (iso) => {
+    if (!iso) return "-";
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "-";
+      return d.toLocaleDateString();
+    } catch {
+      return "-";
+    }
+  };
+
+  const computeRowMetrics = (row) => {
+    const obj = toObj(row?.data);
+
+    const sales = getMetric(obj, [
+      "salesToday",
+      "totalSales",
+      "sales",
+      "revenue",
+      "totalRevenue",
+      "grossSales",
+    ]);
+
+    const expenses = getMetric(obj, [
+      "expenses",
+      "totalExpenses",
+      "expense",
+      "cost",
+      "totalCost",
+      "cogs",
+    ]);
+
+    const customers = getMetric(obj, [
+      "customers",
+      "totalCustomers",
+      "customerCount",
+      "customersToday",
+    ]);
+
+    const profit =
+      obj && obj.profit !== undefined ? pickNumber(obj.profit) : sales - expenses;
+
+    return { sales, expenses, customers, profit };
+  };
+
+  // API: Business options
+  const fetchBusinessOptions = async () => {
+    try {
+      // preferred: options endpoint
+      const res = await apiClient.get("/api/admin/businesses/options");
+      const list = res?.data?.data?.businesses;
+      if (Array.isArray(list)) {
+        setBusinessOptions(list);
+        return;
+      }
+
+      // fallback: list endpoint
+      const res2 = await apiClient.get("/api/admin/businesses", {
+        params: { page: 1, limit: 50 },
+      });
+      const rows = res2?.data?.data?.businesses;
+      if (Array.isArray(rows)) {
+        setBusinessOptions(rows.map((b) => ({ id: b.id, businessName: b.businessName })));
+      } else {
+        setBusinessOptions([]);
+      }
+    } catch {
+      setBusinessOptions([]);
+    }
+  };
+
+  // API: Reports list
+  const fetchReports = async (override = {}) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const params = {
+        page: currentPage,
+        limit: LIMIT,
+        ...(selectedBusiness ? { businessId: selectedBusiness } : {}),
+        ...(startDate ? { fromDate: startDate } : {}),
+        ...(endDate ? { toDate: endDate } : {}),
+        ...override,
+      };
+
+      const res = await apiClient.get("/api/admin/reports", { params });
+      const data = res?.data?.data;
+
+      setReports(Array.isArray(data?.reports) ? data.reports : []);
+      setPagination(
+        data?.pagination || { total: 0, page: 1, limit: LIMIT, totalPages: 1 }
+      );
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to load reports");
+      setReports([]);
+      setPagination({ total: 0, page: 1, limit: LIMIT, totalPages: 1 });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // API: Report details
+  const openReportModal = async (reportId) => {
+    setSelectedReportId(reportId);
+    setReportDetails(null);
+    setDetailsError("");
+    setDetailsLoading(true);
+    setOpenModel(true);
+
+    try {
+      const res = await apiClient.get(`/api/admin/reports/${reportId}`);
+      setReportDetails(res?.data?.data?.report || null);
+    } catch (err) {
+      setDetailsError(err?.response?.data?.message || "Failed to load report");
+    } finally {
+      setDetailsLoading(false);
+    }
+  };
+
+  // initial load
+  useEffect(() => {
+    fetchBusinessOptions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedBusiness, startDate, endDate]);
+
+  // load reports whenever page or filters change
+  useEffect(() => {
+    fetchReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, selectedBusiness, startDate, endDate]);
+
+  const totalPages = pagination.totalPages || 1;
 
   return (
     <>
@@ -128,12 +246,18 @@ export default function AdminReport() {
                   <button
                     onClick={() => setOpen(true)}
                     className="md:hidden p-2 rounded-md"
-                  > ☰ </button>
+                  >
+                    ☰
+                  </button>
                   <div>
                     <h1 className="text-2xl font-semibold headingColor">
                       Reports
                     </h1>
-                    <p className="py-2 text-sm textColor">8 total Reports</p>
+                    <p className="py-2 text-sm textColor">
+                      {loading
+                        ? "Loading..."
+                        : `${pagination.total || reports.length} total Reports`}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -145,32 +269,30 @@ export default function AdminReport() {
                   </h5>
 
                   <div className="flex items-center gap-4">
-                    {/* Select */}
                     <div className="w-[60dvw] md:w-[250px]">
-                      <Select value={selectedBusiness ?? ""}
-                        onValueChange={(value) => setSelectedBusiness(value)}>
+                      <Select
+                        value={selectedBusiness ?? ""}
+                        onValueChange={(value) => setSelectedBusiness(value)}
+                      >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select business" />
                         </SelectTrigger>
                         <SelectContent>
-                          {businesses.map((business) => (
-                            <SelectItem key={business} value={business}>
-                              {business}
+                          {businessOptions.map((b) => (
+                            <SelectItem key={b.id} value={String(b.id)}>
+                              {b.businessName}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
 
-                    {/* Clear Filter */}
-                    {/* {selectedBusiness && ( */}
                     <button
                       onClick={() => setSelectedBusiness(null)}
                       className="text-sm font-semibold text-blue-600 hover:underline"
                     >
                       Clear Filter
                     </button>
-                    {/* )} */}
                   </div>
                 </div>
 
@@ -214,7 +336,7 @@ export default function AdminReport() {
 
                 {isMobile && (
                   <div className="flex gap-4 items-end">
-                  <div>
+                    <div>
                       <label className="text-sm font-semibold text-gray-700">
                         From:
                       </label>
@@ -269,16 +391,20 @@ export default function AdminReport() {
                 )}
               </div>
 
-              {/* <div className="bg-neutral-50 p-4 mt-3"> */}
+              {error ? (
+                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {error}
+                </div>
+              ) : null}
+
+              {/* Desktop table */}
               {!isMobile && (
                 <div className="py-5 overflow-x-auto">
                   <table className="min-w-[900px] w-full table-fixed p-2 border border-[#f1f3f7]">
                     <thead>
                       <tr>
                         <th className="text-start p-4 border-b border-gray-100 w-[20%]">
-                          <h5 className="subHeadingColor text-base">
-                            Business
-                          </h5>
+                          <h5 className="subHeadingColor text-base">Business</h5>
                         </th>
                         <th className="text-center p-4 border-b border-gray-100 w-[10%]">
                           <h5 className="subHeadingColor text-base">Date</h5>
@@ -287,14 +413,10 @@ export default function AdminReport() {
                           <h5 className="subHeadingColor text-base">Sales</h5>
                         </th>
                         <th className="text-center p-4 border-b border-gray-100 w-[15%]">
-                          <h5 className="subHeadingColor text-base">
-                            Expenses
-                          </h5>
+                          <h5 className="subHeadingColor text-base">Expenses</h5>
                         </th>
                         <th className="text-center p-4 border-b border-gray-100 w-[14%]">
-                          <h5 className="subHeadingColor text-base">
-                            Customers
-                          </h5>
+                          <h5 className="subHeadingColor text-base">Customers</h5>
                         </th>
                         <th className="text-center p-4 border-b border-gray-100 w-[14%]">
                           <h5 className="subHeadingColor text-base">Profit</h5>
@@ -304,116 +426,138 @@ export default function AdminReport() {
                         </th>
                       </tr>
                     </thead>
+
                     <tbody>
-                      {paginatedData.map((item, index) => (
-                        <tr key={index} className="border-b last:border-b-0">
-                          <td className="p-4">
-                            <h4 className="headingColor font-semibold text-sm">
-                              {item.business}
-                            </h4>
-                          </td>
-                          <td className="p-4 text-center text-sm font-semibold textColor">
-                            {item.date}
-                          </td>
-                          <td className="p-4 text-center text-green-600 text-sm font-semibold">
-                            {item.sales}
-                          </td>
-                          <td className="p-4 text-center text-red-600 text-sm font-semibold">
-                            {item.expenses}
-                          </td>
-                          <td className="p-4 text-center text-sm font-semibold textColor">
-                            {item.customers}
-                          </td>
-                          <td className="p-4 text-center text-green-700 text-sm font-semibold">
-                            {item.profit}
-                          </td>
-                          <td className="p-4 text-center">
-                            <button
-                              onClick={() => setOpenModel(true)}
-                              className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-                            >
-                              <Eye className="w-5 h-5" /> View
-                            </button>
+                      {reports.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="p-6 text-center text-sm text-gray-500">
+                            {loading ? "Loading reports..." : "No reports found."}
                           </td>
                         </tr>
-                      ))}
+                      ) : (
+                        reports.map((item) => {
+                          const { sales, expenses, customers, profit } = computeRowMetrics(item);
+                          return (
+                            <tr key={item.id} className="border-b last:border-b-0">
+                              <td className="p-4">
+                                <h4 className="headingColor font-semibold text-sm">
+                                  {item.business?.businessName ||
+                                    (item.businessId ? `Business #${item.businessId}` : "-")}
+                                </h4>
+                              </td>
+                              <td className="p-4 text-center text-sm font-semibold textColor">
+                                {formatDate(item.createdAt)}
+                              </td>
+                              <td className="p-4 text-center text-green-600 text-sm font-semibold">
+                                {formatMoney(sales)}
+                              </td>
+                              <td className="p-4 text-center text-red-600 text-sm font-semibold">
+                                {formatMoney(expenses)}
+                              </td>
+                              <td className="p-4 text-center text-sm font-semibold textColor">
+                                {customers}
+                              </td>
+                              <td className="p-4 text-center text-green-700 text-sm font-semibold">
+                                {formatMoney(profit)}
+                              </td>
+                              <td className="p-4 text-center">
+                                <button
+                                  onClick={() => openReportModal(item.id)}
+                                  className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                                >
+                                  <Eye className="w-5 h-5" /> View
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>
               )}
 
-              {/* Mobile Cards */}
+              {/* Mobile cards */}
               {isMobile && (
                 <div className="space-y-4">
-                  {paginatedData.map((item, index) => (
-                    <div
-                      key={index}
-                      className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className="headingColor font-semibold text-sm">
-                            {item.business}
-                          </h4>
-                          <p className="text-xs text-gray-500 mt-1">
-                            Date: {item.date}
-                          </p>
-                        </div>
-
-                        <button
-                          onClick={() => setOpenModel(true)}
-                          className="textprimaryColor text-sm font-semibold flex items-center gap-1"
-                        >
-                          <Eye className="w-4 h-4" /> View
-                        </button>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 mt-4 text-sm">
-                        <div>
-                          <p className="text-gray-500 text-sm">
-                            Sales:
-                            <span className="font-semibold text-xs text-green-600">
-                              {" "}
-                              {item.sales}
-                            </span>
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500 text-sm">
-                            Expenses:
-                            <span className="font-semibold text-xs text-red-600">
-                              {" "}
-                              {item.expenses}
-                            </span>
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500 text-sm">
-                            Customers:
-                            <span className="font-semibold text-xs ">
-                              {" "}
-                              {item.customers}
-                            </span>
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500 text-sm">
-                            Profit:
-                            <span className="font-semibold text-xs text-green-700">
-                              {" "}
-                              {item.profit}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
+                  {reports.length === 0 ? (
+                    <div className="rounded-md border border-gray-200 bg-white p-4 text-sm text-gray-500">
+                      {loading ? "Loading reports..." : "No reports found."}
                     </div>
-                  ))}
+                  ) : (
+                    reports.map((item) => {
+                      const { sales, expenses, customers, profit } = computeRowMetrics(item);
+
+                      return (
+                        <div
+                          key={item.id}
+                          className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                        >
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h4 className="headingColor font-semibold text-sm">
+                                {item.business?.businessName ||
+                                  (item.businessId ? `Business #${item.businessId}` : "-")}
+                              </h4>
+                              <p className="text-xs text-gray-500 mt-1">
+                                Date: {formatDate(item.createdAt)}
+                              </p>
+                            </div>
+
+                            <button
+                              onClick={() => openReportModal(item.id)}
+                              className="textprimaryColor text-sm font-semibold flex items-center gap-1"
+                            >
+                              <Eye className="w-4 h-4" /> View
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3 mt-4 text-sm">
+                            <div>
+                              <p className="text-gray-500 text-sm">
+                                Sales:
+                                <span className="font-semibold text-xs text-green-600">
+                                  {" "}
+                                  {formatMoney(sales)}
+                                </span>
+                              </p>
+                            </div>
+
+                            <div>
+                              <p className="text-gray-500 text-sm">
+                                Expenses:
+                                <span className="font-semibold text-xs text-red-600">
+                                  {" "}
+                                  {formatMoney(expenses)}
+                                </span>
+                              </p>
+                            </div>
+
+                            <div>
+                              <p className="text-gray-500 text-sm">
+                                Customers:
+                                <span className="font-semibold text-xs"> {customers}</span>
+                              </p>
+                            </div>
+
+                            <div>
+                              <p className="text-gray-500 text-sm">
+                                Profit:
+                                <span className="font-semibold text-xs text-green-700">
+                                  {" "}
+                                  {formatMoney(profit)}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
               )}
 
+              {/* Pagination */}
               <div className="flex justify-between items-center mt-4">
                 <p className="text-sm text-gray-500">
                   Page {currentPage} of {totalPages}
@@ -422,28 +566,14 @@ export default function AdminReport() {
                 <div className="flex gap-2">
                   <button
                     disabled={currentPage === 1}
-                    onClick={() => setCurrentPage((p) => p - 1)}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
                   >
                     Prev
                   </button>
 
-                  {[...Array(totalPages)].map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setCurrentPage(i + 1)}
-                      className={`px-3 py-1 text-sm border rounded-md ${
-                        currentPage === i + 1
-                          ? "bg-gray-900 text-white"
-                          : "bg-white"
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-
                   <button
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage >= totalPages}
                     onClick={() => setCurrentPage((p) => p + 1)}
                     className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
                   >
@@ -451,7 +581,6 @@ export default function AdminReport() {
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
         </main>
@@ -463,62 +592,120 @@ export default function AdminReport() {
           <div className="w-full max-w-lg rounded-lg bg-white shadow-lg pb-5">
             {/* Header */}
             <div className="mb-4 flex items-center rounded-t-lg justify-between p-4 primaryColor">
-              <h2 className="text-lg font-semibold text-white">Daily Report</h2>
-              <button onClick={() => setOpenModel(false)}>
+              <h2 className="text-lg font-semibold text-white">
+                {reportDetails?.reportType ? `${reportDetails.reportType} Report` : "Report"}
+              </h2>
+              <button
+                onClick={() => {
+                  setOpenModel(false);
+                  setSelectedReportId(null);
+                  setReportDetails(null);
+                  setDetailsError("");
+                }}
+              >
                 <X className="h-5 w-5" color="#ffffffff" />
               </button>
             </div>
-            <h5 className="text-base headingColor px-6">Nairobi Fresh Mart</h5>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">
-                    Sales
-                  </h5>
-                  <h3 className="text-lg font-semibold headingColor">
-                    $1199.91
-                  </h3>
+
+            <div className="px-6">
+              {detailsError ? (
+                <div className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {detailsError}
                 </div>
-                <div>
-                  <BadgeDollarSign className="w-10 h-10 text-blue-400 opacity-60" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">
-                    Expenses
-                  </h5>
-                  <h3 className="text-lg font-semibold headingColor">$1000</h3>
-                </div>
-                <div>
-                  <ScrollText className="w-10 h-10 text-blue-400 opacity-60" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">
-                    Customers
-                  </h5>
-                  <h3 className="text-lg font-semibold headingColor">25</h3>
-                </div>
-                <div>
-                  <User className="w-10 h-10 text-blue-400 opacity-60" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
-                <div>
-                  <h5 className="text-sm font-semibold subHeadingColor">
-                    Net Profit/Loss{" "}
-                  </h5>
-                  <h3 className="text-lg font-semibold headingColor">
-                    $-800.09
-                  </h3>
-                </div>
-                <div>
-                  <BadgePercent className="w-10 h-10 text-blue-400 opacity-60" />
-                </div>
-              </div>
+              ) : null}
+
+              {detailsLoading ? (
+                <div className="mb-3 text-sm text-gray-500">Loading report...</div>
+              ) : null}
             </div>
+
+            <h5 className="text-base headingColor px-6">
+              {reportDetails?.business?.businessName ||
+                (reportDetails?.businessId ? `Business #${reportDetails.businessId}` : "-")}
+            </h5>
+
+            {(() => {
+              const obj = toObj(reportDetails?.data);
+              const sales = getMetric(obj, [
+                "salesToday",
+                "totalSales",
+                "sales",
+                "revenue",
+                "totalRevenue",
+                "grossSales",
+              ]);
+              const expenses = getMetric(obj, [
+                "expenses",
+                "totalExpenses",
+                "expense",
+                "cost",
+                "totalCost",
+                "cogs",
+              ]);
+              const customers = getMetric(obj, [
+                "customers",
+                "totalCustomers",
+                "customerCount",
+                "customersToday",
+              ]);
+              const profit =
+                obj && obj.profit !== undefined ? pickNumber(obj.profit) : sales - expenses;
+
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
+                  <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
+                    <div>
+                      <h5 className="text-sm font-semibold subHeadingColor">Sales</h5>
+                      <h3 className="text-lg font-semibold headingColor">
+                        {formatMoney(sales)}
+                      </h3>
+                    </div>
+                    <div>
+                      <BadgeDollarSign className="w-10 h-10 text-blue-400 opacity-60" />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
+                    <div>
+                      <h5 className="text-sm font-semibold subHeadingColor">Expenses</h5>
+                      <h3 className="text-lg font-semibold headingColor">
+                        {formatMoney(expenses)}
+                      </h3>
+                    </div>
+                    <div>
+                      <ScrollText className="w-10 h-10 text-blue-400 opacity-60" />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
+                    <div>
+                      <h5 className="text-sm font-semibold subHeadingColor">Customers</h5>
+                      <h3 className="text-lg font-semibold headingColor">
+                        {customers}
+                      </h3>
+                    </div>
+                    <div>
+                      <User className="w-10 h-10 text-blue-400 opacity-60" />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center px-4 py-2 border border-blue-200 bg-blue-50 rounded-md">
+                    <div>
+                      <h5 className="text-sm font-semibold subHeadingColor">
+                        Net Profit/Loss
+                      </h5>
+                      <h3 className="text-lg font-semibold headingColor">
+                        {formatMoney(profit)}
+                      </h3>
+                    </div>
+                    <div>
+                      <BadgePercent className="w-10 h-10 text-blue-400 opacity-60" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             <div className="flex gap-4 p-6">
               <button className="w-full p-4 bg-blue-50 textprimaryColor font-semibold rounded-md">
                 View Photo
@@ -527,9 +714,10 @@ export default function AdminReport() {
                 View Video
               </button>
             </div>
+
             <div className="px-6 pt-2 border-t border-gray-300">
               <p className="headingColor text-xs font-semibold">
-                Submitted on 11 December 2025
+                Submitted on {formatDate(reportDetails?.createdAt)}
               </p>
             </div>
           </div>

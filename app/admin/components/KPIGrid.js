@@ -1,6 +1,24 @@
 "use client";
 import { Building2, ScrollText, BadgeDollarSign, User } from "lucide-react";
-export default function KPIGrid() {
+
+const n = (v) => {
+  const x = Number(v);
+  return Number.isFinite(x) ? x : 0;
+};
+
+const formatMoney = (v) => {
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(n(v));
+  } catch {
+    return `$${n(v).toLocaleString()}`;
+  }
+};
+
+export default function KPIGrid({ totals, reportsByType }) {
   return (
     <>
       <div className="shadow-lg rounded-lg bg-white p-4 pb-10">
@@ -24,7 +42,7 @@ export default function KPIGrid() {
               </p>
             </div>
             <div>
-              <h2 className="headingColor text-3xl font-semibold py-3">12</h2>
+              <h2 className="headingColor text-3xl font-semibold py-3">{n(totals?.totalBusinesses)}</h2>
             </div>
 
             <div className="absolute right-6 bottom-6">
@@ -36,7 +54,7 @@ export default function KPIGrid() {
               <h5 className="subHeadingColor text-base">Total Report</h5>
             </div>
             <div>
-              <h2 className="headingColor text-3xl font-semibold py-3">10</h2>
+              <h2 className="headingColor text-3xl font-semibold py-3">{n(totals?.totalReports)}</h2>
             </div>
 
             <div className="absolute right-6 bottom-6">
@@ -45,11 +63,11 @@ export default function KPIGrid() {
           </div>
           <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
             <div className="flex justify-between items-center gap-2">
-              <h5 className="subHeadingColor text-base">Total sales</h5>
+              <h5 className="subHeadingColor text-base">Sales (This Month)</h5>
             </div>
             <div>
               <h2 className="headingColor text-3xl font-semibold py-3">
-                $24,465
+                {formatMoney(totals?.salesThisMonth)}
               </h2>
             </div>
 
@@ -65,7 +83,7 @@ export default function KPIGrid() {
               </p>
             </div>
             <div>
-              <h2 className="headingColor text-3xl font-semibold py-3">7</h2>
+              <h2 className="headingColor text-3xl font-semibold py-3">{n(totals?.totalUsers)}</h2>
             </div>
 
             <div className="absolute right-6 bottom-6">

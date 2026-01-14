@@ -28,9 +28,22 @@ const StepTwo = ({ onBack }) => {
     password: "",
   });
 
+  const isValidEmail = (email) =>
+    typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const normalizePhone10 = (v) => String(v || "").replace(/\D/g, "").slice(0, 10);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setError("");
+
+    if (name === "phone") {
+      // digits only, max 10
+      const digits = normalizePhone10(value);
+      setFormData((prev) => ({ ...prev, phone: digits }));
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -41,17 +54,29 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setError("");
 
+  // Client validations
+  const email = String(formData.email || "").trim();
+  const phoneDigits = normalizePhone10(formData.phone);
+
+  if (!isValidEmail(email)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
+
+  if (phoneDigits.length !== 10) {
+    setError("Mobile number must be exactly 10 digits.");
+    return;
+  }
+
   try {
     setLoading(true);
 
     const payload = {
       name: formData.name,
-      email: formData.email,
+      email,
       password: formData.password,
       role: "ADMIN",
-      mobile: formData.phone
-        ? `${formData.countryCode || ""}${formData.phone}`
-        : null,
+      mobile: `${formData.countryCode || ""}${phoneDigits}`,
     };
 
     await authApi.register(payload);
@@ -118,6 +143,9 @@ const handleSubmit = async (e) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    onBlur={() =>
+                      setFormData((prev) => ({ ...prev, email: String(prev.email || "").trim() }))
+                    }
                     placeholder="Enter your email address"
                     className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
                     required
@@ -152,10 +180,13 @@ const handleSubmit = async (e) => {
 
                     <input
                       type="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]{10}"
+                      maxLength={10}
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="Enter your contact number"
+                      placeholder="Enter 10-digit mobile number"
                       className="flex-1 p-3 border border-gray-300 rounded-md outline-none text-sm"
                       required
                     />

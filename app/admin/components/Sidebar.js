@@ -1,203 +1,131 @@
 "use client";
+
 import Link from "next/link";
-import {
-  Home,
-  Building,
-  Users,
-  BarChart,
-  Settings,
-  LogOut,
-} from "lucide-react";
-import { usePathname } from "next/navigation";
+import { Home, Building, Users, BarChart, LogOut } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import apiClient from "../../../lib/apiClient";
 
 const MenuItems = [
   { name: "Dashboard", icon: Home, href: "/admin/dashboard" },
   { name: "Businesses", icon: Building, href: "/admin/business" },
   { name: "Reports", icon: BarChart, href: "/admin/allreports" },
-  { name: "Users", icon: Users, href: "/admin/user" },
+  { name: "Users", icon: Users, href: "/admin/users" },
 ];
-const MenuItemsbuttom = [
-  { name: "Logout", icon: LogOut },
-];
+const MenuItemsBottom = [{ name: "Logout", icon: LogOut }];
 
 export default function Sidebar({ open, setOpen }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      // call Next BFF, which forwards cookies to backend and clears them
+      await apiClient.post("/api/auth/logout");
+    } catch (e) {
+      // even if backend errors, we still route away
+      console.log("logout error:", e?.response?.data || e?.message || e);
+    } finally {
+      if (setOpen) setOpen(false);
+      router.push("/login");
+      router.refresh();
+    }
+  };
+
+  const SidebarContent = ({ showClose = false }) => (
+    <div className="w-64 bg-gray-900 border-r px-4 py-6 h-full flex flex-col">
+      <div className="flex items-center gap-2">
+        <div className="w-10 h-auto">
+          <Link href="/" onClick={() => setOpen && setOpen(false)}>
+            <img src="/DI.png" alt="Diaspora Insight" />
+          </Link>
+        </div>
+        <div>
+          <Link href="/" onClick={() => setOpen && setOpen(false)}>
+            <h4 className="font-semibold text-lg text-white">Diaspora Insight</h4>
+          </Link>
+          <p className="text-xs text-gray-400">
+            Accountability for cross-border capital
+          </p>
+        </div>
+
+        {showClose ? (
+          <div className="md:hidden ml-auto">
+            <button
+              onClick={() => setOpen && setOpen(false)}
+              className="text-white"
+              aria-label="Close sidebar"
+              type="button"
+            >
+              ✕
+            </button>
+          </div>
+        ) : null}
+      </div>
+
+      <nav className="space-y-2 py-6 flex-1">
+        {MenuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
+
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={() => setOpen && setOpen(false)}
+              className={`w-full block text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium ${
+                isActive ? "text-gray-400" : "text-white"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} />
+                <span>{item.name}</span>
+              </div>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="mt-auto pt-6 border-t border-gray-800">
+        {MenuItemsBottom.map((item) => {
+          const Icon = item.icon;
+          return (
+            <button
+              type="button"
+              key={item.name}
+              onClick={handleLogout}
+              className="w-full text-white text-left px-4 hover:text-gray-700 font-medium"
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} />
+                <span>{item.name}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
     <>
-      <aside className="fixed formobile">
-        <div
-          className={`fixed inset-0 bg-black/40 z-30 md:hidden transition-opacity ${
-            open ? "block" : "hidden"
-          }`}
-          onClick={() => setOpen && setOpen(false)}
-        />
-
-        <div
-          className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${
-            open ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 md:static md:shadow-none`}
-        >
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-auto ">
-              {/* <a href="/">
-                <h1>DI</h1>
-              </a> */}
-              <Link href="/">
-                <img src="/DI.png" alt="Diaspora Insight" />
-              </Link>
-            </div>
-            <div>
-              <a href="/">
-                <h4 className="font-semibold text-lg text-white">
-                  Diaspora Insight
-                </h4>
-              </a>
-              <p className="text-xs text-gray-400">
-                Accountability for cross-border capital
-              </p>
-            </div>
-            {/* close button for small screens */}
-            <div className="md:hidden ml-auto">
-              <button
-                onClick={() => setOpen && setOpen(false)}
-                className="text-white"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center gap-2"></div>
-
-          <nav className="space-y-2 py-6">
-            {MenuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-
-              return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={`w-full text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium
-                ${isActive ? "text-gray-400" : "text-white "}
-                `}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon size={16} />
-                    <span>{item.name}</span>
-                  </div>
-                </a>
-              );
-            })}
-          </nav>
-
-          <div style={{ position: "absolute", bottom: "5%" }}>
-            <nav className="space-y-2 py-6">
-              {MenuItemsbuttom.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <a
-                    href="/"
-                    key={item.name}
-                    className="w-full text-white text-left px-4  hover:text-gray-800 font-medium"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon size={16} />
-                      <span>{item.name}</span>
-                    </div>
-                  </a>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex md:fixed md:inset-y-0 md:left-0 md:z-30 md:h-screen">
+        <SidebarContent />
       </aside>
 
-      <aside
-        className={`fixed inset-0 bg-black/40 z-30 md:hidden md:none transition-opacity ${
-          open ? "block" : "hidden"
-        }`}
-        onClick={() => setOpen && setOpen(false)}
-      >
-        {/* Overlay for small screens */}
-        <div />
+      {/* Mobile overlay sidebar */}
+      {open ? (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setOpen && setOpen(false)}
+          />
 
-        <div
-          className={`w-64 fixed top-0 left-0 bg-gray-900 border-r px-4 py-6 relative h-[100vh] z-40 transform transition-transform duration-200 ${
-            open ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 md:static md:shadow-none`}
-        >
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-auto ">
-              <Link href="/">
-                <img src="/DI.png" alt="Diaspora Insight" />
-              </Link>
-            </div>
-            <div>
-              <a href="/">
-                <h4 className="font-semibold text-lg text-white">
-                  Diaspora Insight
-                </h4>
-              </a>
-              <p className="text-xs text-gray-400">
-                Accountability for cross-border capital
-              </p>
-            </div>
-            {/* close button for small screens */}
-            <div className="md:hidden ml-auto">
-              <button
-                onClick={() => setOpen && setOpen(false)}
-                className="text-white"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center gap-2"></div>
-
-          <nav className="space-y-2 py-6">
-            {MenuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-
-              return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={`w-full text-left px-4 py-2 rounded-sm hover:text-gray-600 font-medium
-                ${isActive ? "text-gray-400" : "text-white "}
-                `}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon size={16} />
-                    <span>{item.name}</span>
-                  </div>
-                </a>
-              );
-            })}
-          </nav>
-
-          <div style={{ position: "absolute", bottom: "5%" }}>
-            <nav className="space-y-2 py-6">
-              {MenuItemsbuttom.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <a
-                    href="/"
-                    key={item.name}
-                    className="w-full text-white text-left px-4 hover:text-gray-700 font-medium"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon size={16} />
-                      <span>{item.name}</span>
-                    </div>
-                  </a>
-                );
-              })}
-            </nav>
+          <div className="absolute inset-y-0 left-0 w-64 shadow-lg">
+            <SidebarContent showClose />
           </div>
         </div>
-      </aside>
+      ) : null}
     </>
   );
 }

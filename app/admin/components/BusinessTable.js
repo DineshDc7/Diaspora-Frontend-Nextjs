@@ -1,6 +1,8 @@
 "use client";
-import { Eye } from 'lucide-react';
-export default function BusinessTable() {
+
+import Link from "next/link";
+
+export default function BusinessTable({ businesses = [] }) {
   return (
     <>
       <div className="shadow-lg rounded-lg bg-white p-4">
@@ -14,9 +16,9 @@ export default function BusinessTable() {
           </div>
           <div className="flex gap-5 items-center">
             <div>
-              <a className="textColor" href="/admin/business">
+              <Link className="textColor" href="/admin/business">
                 View all
-              </a>
+              </Link>
             </div>
             {/* <div>
               <a
@@ -53,109 +55,40 @@ export default function BusinessTable() {
                 </tr>
               </thead>
               <tbody>
-           
-                <tr>
-                  <td className="py-4">
-                    <div>
-                      <h4 className="headingColor font-semibold text-sm">
-                        Kantor imigrasi kelas i denpasar
-                      </h4>
-                      <p className="textColor text-sm">Kano - Retail</p>
-                    </div>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Vishal Singh</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                      Retail
-                    </p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Kab Gianyar</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">0</p>
-                  </td>
-                  
-                </tr>
-                <tr>
-                  <td className="py-4">
-                    <div>
-                      <h4 className="headingColor font-semibold text-sm">
-                        Kantor imigrasi kelas i denpasar
-                      </h4>
-                      <p className="textColor text-sm">Kano - Retail</p>
-                    </div>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Vishal Singh</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                      Retail
-                    </p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Kab Gianyar</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">0</p>
-                  </td>
-                  
-                </tr>
-                <tr>
-                  <td className="py-4">
-                    <div>
-                      <h4 className="headingColor font-semibold text-sm">
-                        Kantor imigrasi kelas i denpasar
-                      </h4>
-                      <p className="textColor text-sm">Kano - Retail</p>
-                    </div>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Vishal Singh</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                      Retail
-                    </p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Kab Gianyar</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">0</p>
-                  </td>
-                  
-                </tr>
-                <tr>
-                  <td className="py-4">
-                    <div>
-                      <h4 className="headingColor font-semibold text-sm">
-                        Kantor imigrasi kelas i denpasar
-                      </h4>
-                      <p className="textColor text-sm">Kano - Retail</p>
-                    </div>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Vishal Singh</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
-                      Retail
-                    </p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">Kab Gianyar</p>
-                  </td>
-                  <td className="py-4 text-center">
-                    <p className="textColor text-sm">0</p>
-                  </td>
-                  
-                </tr>
-             
-
+                {businesses.length === 0 ? (
+                  <tr>
+                    <td className="py-6 text-center text-sm text-gray-500" colSpan={5}>
+                      No businesses found.
+                    </td>
+                  </tr>
+                ) : (
+                  businesses.map((b) => (
+                    <tr key={b.id}>
+                      <td className="py-4">
+                        <div>
+                          <h4 className="headingColor font-semibold text-sm">
+                            {b.businessName}
+                          </h4>
+                          <p className="textColor text-sm">{b.ownerPhone || "-"}</p>
+                        </div>
+                      </td>
+                      <td className="py-4 text-center">
+                        <p className="textColor text-sm">{b.ownerName || "-"}</p>
+                      </td>
+                      <td className="py-4 text-center">
+                        <p className="mx-auto text-blue-600 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 w-fit">
+                          {b.category || "-"}
+                        </p>
+                      </td>
+                      <td className="py-4 text-center">
+                        <p className="textColor text-sm">{b.city || "-"}</p>
+                      </td>
+                      <td className="py-4 text-center">
+                        <p className="textColor text-sm">0</p>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

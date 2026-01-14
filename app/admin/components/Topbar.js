@@ -1,12 +1,39 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { User, Menu } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
+import apiClient from "../../../lib/apiClient";
 
 
 export default function Topbar({ onMenuClick, title, subtitle }) {
 
   const isMobile = useIsMobile();
+
+  const [me, setMe] = useState(null);
+  const [meError, setMeError] = useState("");
+
+  const fetchMe = async () => {
+    try {
+      setMeError("");
+      const res = await apiClient.get("/api/auth/me");
+      setMe(res?.data?.data?.user || null);
+    } catch (err) {
+      setMe(null);
+      setMeError(err?.response?.data?.message || "");
+    }
+  };
+
+  useEffect(() => {
+    fetchMe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const roleLabel = (role) => {
+    if (role === "ADMIN") return "Admin";
+    if (role === "BUSINESS_OWNER") return "Business Owner";
+    if (role === "INVESTOR") return "Investor";
+    return role || "";
+  };
 
   return (
     <>
@@ -49,8 +76,17 @@ export default function Topbar({ onMenuClick, title, subtitle }) {
                 </div>
               </div>
               <div>
-                <p className="text-base subHeadingColor font-semibold">User Name</p>
-                <p className="text-sm subHeadingColor">Diaspora · London,UK</p>
+                <p className="text-base subHeadingColor font-semibold">
+                  {me?.name || "User"}
+                </p>
+                <p className="text-sm subHeadingColor">
+                  {/* {me?.email || ""}{me?.role ? ` · ${roleLabel(me.role)}` : ""} */}
+                  {me?.email || ""}
+
+                </p>
+                {meError ? (
+                  <p className="text-xs text-red-600 mt-1">{meError}</p>
+                ) : null}
               </div>
             </div>
           </div>
@@ -77,8 +113,20 @@ export default function Topbar({ onMenuClick, title, subtitle }) {
               </div>
             </div>
             <p className="text-sm subHeadingColor">
-                  Today · West Africa Time · Filters: All countries · All Sectors
-                </p>
+              Today · West Africa Time · Filters: All countries · All Sectors
+            </p>
+            <div className="mt-2">
+              <p className="text-sm subHeadingColor font-semibold">
+                {me?.name || "User"}
+              </p>
+              <p className="text-xs subHeadingColor">
+                {/* {me?.email || ""}{me?.role ? ` · ${roleLabel(me.role)}` : ""} */}
+                {me?.email || ""}
+              </p>
+              {meError ? (
+                <p className="text-xs text-red-600 mt-1">{meError}</p>
+              ) : null}
+            </div>
           </div>
         )}
       </div>
