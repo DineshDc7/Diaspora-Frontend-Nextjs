@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import BusinessLayout from "../components/BusinessLayout";
 const details = [
   {
@@ -30,9 +30,37 @@ const details = [
     category: "Retail",
     city: "Noida",
   },
+  {
+    business_name: "Nairobi Fresh Mart 5",
+    owner_name: "John Don",
+    number: "8989675847",
+    category: "Retail",
+    city: "Noida",
+  },
+  {
+    business_name: "Nairobi Fresh Mart 6",
+    owner_name: "John Don",
+    number: "8989675847",
+    category: "Retail",
+    city: "Noida",
+  },
 ];
 
 export default function BusinessInfo() {
+
+
+const ITEMS_PER_PAGE = 5;
+
+const [currentPage, setCurrentPage] = useState(1);
+
+const totalPages = Math.ceil(details.length / ITEMS_PER_PAGE);
+
+const paginatedDetails = details.slice(
+  (currentPage - 1) * ITEMS_PER_PAGE,
+  currentPage * ITEMS_PER_PAGE
+);
+
+
   return (
     <BusinessLayout>
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
@@ -73,44 +101,82 @@ export default function BusinessInfo() {
                         </div> */}
 
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[640px] border-collapse">
+              <table className="w-full min-w-[640px] border-collapse border border-neutral-100">
                 <thead>
-                  <tr className="secondaryColor text-center text-sm textColor">
-                    <th className="py-3 px-2 w-[30%] text-start">
+                  <tr className="secondaryColor text-center subHeadingColor text-base">
+                    <th className="p-4 w-[30%] text-start">
                       Business Name
                     </th>
-                    <th className="py-3 px-2 w-[19%]">Owner Name</th>
-                    <th className="py-3 px-2 w-[17%]">Phone</th>
-                    <th className="py-3 px-2 w-[17%]">Category</th>
-                    <th className="py-3 px-2 w-[17%]">City</th>
+                    <th className="p-4 w-[19%]">Owner Name</th>
+                    <th className="p-4 w-[17%]">Phone</th>
+                    <th className="p-4 w-[17%]">Category</th>
+                    <th className="p-4 w-[17%]">City</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {details.map((item) => (
+                  {paginatedDetails.map((item) => (
                     <tr
                       key={item.business_name}
                       className="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50"
                     >
-                      <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
+                      <td className="p-4 text-base font-semibold headingColor whitespace-nowrap">
                         {item.business_name}
                       </td>
-                      <td className="py-3 px-2 textColor text-center">
+                      <td className="p-4 textColor text-center">
                         {item.owner_name}
                       </td>
-                      <td className="py-3 px-2 textColor text-center">
+                      <td className="p-4 textColor text-center">
                         {item.number}
                       </td>
-                      <td className="py-3 px-2 textColor text-center">
+                      <td className="p-4 textColor text-center">
                         {item.category}
                       </td>
-                      <td className="py-3 px-2 textColor text-center">
+                      <td className="p-4 textColor text-center">
                         {item.city}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            <div className="flex justify-between items-center mt-4">
+              <p className="text-sm text-gray-500">
+                Page {currentPage} of {totalPages}
+              </p>
+
+              <div className="flex gap-2">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                  className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                >
+                  Prev
+                </button>
+
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-1 text-sm border rounded-md ${
+                      currentPage === i + 1
+                        ? "bg-gray-900 text-white"
+                        : "bg-white"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                  className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>

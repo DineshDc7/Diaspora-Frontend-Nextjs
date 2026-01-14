@@ -23,11 +23,11 @@ export function proxy(req) {
 
   const isProtected = isAdmin || isInvestor || isOwner;
 
-  if (isProtected && !accessToken) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
+  // if (isProtected && !accessToken) {
+  //   const url = req.nextUrl.clone();
+  //   url.pathname = "/login";
+  //   return NextResponse.redirect(url);
+  // }
 
   // Role-based access
   if (isAdmin && role && role !== "ADMIN") {

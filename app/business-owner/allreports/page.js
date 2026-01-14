@@ -9,40 +9,70 @@ import {
   ScrollText,
   User,
 } from "lucide-react";
-
+const details = [
+  {
+    date: "06 January 2026",
+    sales: "2700",
+    expenses: "456",
+    customer: "334",
+    pftlos: "+$44.33",
+  },
+  {
+    date: "05 January 2026",
+    sales: "2734",
+    expenses: "544",
+    customer: "222",
+    pftlos: "+$44.33",
+  },
+  {
+    date: "04 January 2026",
+    sales: "2700",
+    expenses: "456",
+    customer: "334",
+    pftlos: "+$44.33",
+  },
+  {
+    date: "03 January 2026",
+    sales: "2700",
+    expenses: "456",
+    customer: "334",
+    pftlos: "+$44.33",
+  },
+  {
+    date: "02 January 2026",
+    sales: "2700",
+    expenses: "456",
+    customer: "334",
+    pftlos: "+$44.33",
+  },
+  {
+    date: "01 January 2026",
+    sales: "2734",
+    expenses: "544",
+    customer: "222",
+    pftlos: "+$44.33",
+  },
+  {
+    date: "09 January 2026",
+    sales: "2700",
+    expenses: "456",
+    customer: "334",
+    pftlos: "+$44.33",
+  },
+];
 export default function AllReports() {
   const [openmodel, setOpenModel] = useState(false);
 
-  const details = [
-    {
-      date: "06 January 2026",
-      sales: "2700",
-      expenses: "456",
-      customer: "334",
-      pftlos: "+$44.33",
-    },
-    {
-      date: "05 January 2026",
-      sales: "2734",
-      expenses: "544",
-      customer: "222",
-      pftlos: "+$44.33",
-    },
-    {
-      date: "04 January 2026",
-      sales: "2700",
-      expenses: "456",
-      customer: "334",
-      pftlos: "+$44.33",
-    },
-    {
-      date: "03 January 2026",
-      sales: "2700",
-      expenses: "456",
-      customer: "334",
-      pftlos: "+$44.33",
-    },
-  ];
+  const ITEMS_PER_PAGE = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(details.length / ITEMS_PER_PAGE);
+
+  const paginatedDetails = details.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   return (
     <>
       <BusinessLayout>
@@ -61,40 +91,46 @@ export default function AllReports() {
 
               {/* Table */}
               <div className="mt-4 overflow-x-auto">
-                <table className="w-full min-w-[640px] border-collapse">
+                <table className="w-full min-w-[640px] border-collapse border border-neutral-100">
                   <thead>
-                    <tr className="secondaryColor text-left text-sm textColor">
-                      <th className="py-3 px-2 w-[21%]">Date</th>
-                      <th className="py-3 px-2 w-[16%] text-center">Sales</th>
-                      <th className="py-3 px-2 w-[16%] text-center">Expenses</th>
-                      <th className="py-3 px-2 w-[16%] text-center">Customers</th>
-                      <th className="py-3 px-2 w-[16%] text-center">Profit / Loss</th>
-                      <th className="py-3 px-2 w-[15%] text-center"></th>
+                    <tr className="secondaryColor text-left subHeadingColor text-base">
+                      <th className="p-4 w-[21%]">Date</th>
+                      <th className="p-4 w-[16%] text-center">Sales</th>
+                      <th className="p-4 w-[16%] text-center">
+                        Expenses
+                      </th>
+                      <th className="p-4 w-[16%] text-center">
+                        Customers
+                      </th>
+                      <th className="p-4 w-[16%] text-center">
+                        Profit / Loss
+                      </th>
+                      <th className="p-4 w-[15%] text-center"></th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    {details.map((item) => (
+                    {paginatedDetails.map((item) => (
                       <tr
                         key={item.date}
                         className="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50"
                       >
-                        <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
+                        <td className="p-4 text-base font-semibold headingColor whitespace-nowrap">
                           {item.date}
                         </td>
-                        <td className="py-3 px-2 text-center textColor font-medium">
+                        <td className="p-4 text-center textColor font-medium">
                           ${item.sales}
                         </td>
-                        <td className="py-3 px-2 text-center text-red-500">
+                        <td className="p-4 text-center text-red-500">
                           ${item.expenses}
                         </td>
-                        <td className="py-3 px-2 text-center textColor">
+                        <td className="p-4 text-center textColor">
                           {item.customer}
                         </td>
-                        <td className="py-3 px-2 text-center text-green-600 font-semibold">
+                        <td className="p-4 text-center text-green-600 font-semibold">
                           {item.pftlos}
                         </td>
-                        <td className="py-3 px-2 text-center">
+                        <td className="p-4 text-center">
                           <button
                             onClick={() => setOpenModel(true)}
                             className="flex gap-2 items-center mx-auto textprimaryColor text-sm font-semibold"
@@ -106,6 +142,46 @@ export default function AllReports() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              <div className="flex justify-between items-center mt-4">
+                <p className="text-sm text-gray-500">
+                  Page {currentPage} of {totalPages}
+                </p>
+
+                <div className="flex gap-2">
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`px-3 py-1 text-sm border rounded-md ${
+                        currentPage === i + 1
+                          ? "bg-gray-900 text-white"
+                          : "bg-white"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(p + 1, totalPages))
+                    }
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 "use client";
-
+  import { useState } from "react";
 import { useIsMobile } from "@/app/hooks/use-mobile";
 import OfficerLayout from "../components/OfficerLayout";
 import { ScrollText, BadgeDollarSign, Eye } from "lucide-react";
@@ -51,6 +51,20 @@ const details = [
 
 export default function DashboardPage() {
   const isMobile = useIsMobile();
+
+
+const ITEMS_PER_PAGE = 5;
+const [currentPage, setCurrentPage] = useState(1);
+
+const totalPages = Math.ceil(details.length / ITEMS_PER_PAGE);
+
+const paginatedDetails = details.slice(
+  (currentPage - 1) * ITEMS_PER_PAGE,
+  currentPage * ITEMS_PER_PAGE
+);
+
+
+
   return (
     <OfficerLayout title="Assign Business" subtitle="">
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
@@ -82,40 +96,40 @@ export default function DashboardPage() {
 
             {/* Table */}
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[640px] border-collapse">
+              <table className="w-full min-w-[640px] border-collapse border border-neutral-100">
                 <thead>
-                  <tr className="secondaryColor">
-                    <th className="text-start p-2 border-[#f1f3f7] w-[25%]">
+                  <tr className="secondaryColor text-left subHeadingColor text-base">
+                    <th className="text-start p-4 border-[#f1f3f7] w-[25%]">
                       <h5 className="subHeadingColor text-base">Business </h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[18%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[18%]">
                       <h5 className="subHeadingColor text-base">Owner</h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[12%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[12%]">
                       <h5 className="subHeadingColor text-base">Category</h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[18%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[18%]">
                       <h5 className="subHeadingColor text-base">City</h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[12%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[12%]">
                       <h5 className="subHeadingColor text-base">Reports</h5>
                     </th>
-                    <th className="text-center p-2 border-[#f1f3f7] w-[15%]">
+                    <th className="text-center p-4 border-[#f1f3f7] w-[15%]">
                       <h5 className="subHeadingColor text-base">Actions</h5>
                     </th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {details.map((item) => (
+                  {paginatedDetails.map((item) => (
                     <tr
                       key={item.bname}
                       className="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50"
                     >
-                      <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
+                      <td className="p-4 text-base font-semibold headingColor whitespace-nowrap">
                         {item.bname}
                       </td>
-                      <td className="py-3 px-2 text-center textColor">
+                      <td className="p-4 text-center textColor">
                         {item.owner}
                       </td>
                       <td className="p-2 py-4 border-b border-[#f1f3f7]">
@@ -123,14 +137,14 @@ export default function DashboardPage() {
                           {item.category}
                         </p>
                       </td>
-                      <td className="py-3 px-2 text-center textColor">
+                      <td className="p-4 text-center textColor">
                         {item.city}
                       </td>
                       
-                      <td className="py-3 px-2 text-center textColor">
+                      <td className="p-4 text-center textColor">
                         {item.reports}
                       </td>
-                      <td className="p-2 py-4 border-b text-center border-[#f1f3f7]">
+                      <td className="p-4 border-b text-center border-[#f1f3f7]">
                         <a
                           href="/field-officer/reports"
                           className="flex gap-2 justify-center items-center textprimaryColor text-sm font-semibold"
@@ -143,6 +157,46 @@ export default function DashboardPage() {
                 </tbody>
               </table>
             </div>
+
+            <div className="flex justify-between items-center mt-4">
+                <p className="text-sm text-gray-500">
+                  Page {currentPage} of {totalPages}
+                </p>
+
+                <div className="flex gap-2">
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`px-3 py-1 text-sm border rounded-md ${
+                        currentPage === i + 1
+                          ? "bg-gray-900 text-white"
+                          : "bg-white"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(p + 1, totalPages))
+                    }
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
           </div>
         </div>
       </div>

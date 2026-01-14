@@ -270,9 +270,9 @@ export default function AdminReport({ onMenuClick }) {
             {/* <div className="bg-neutral-50 p-4 mt-3"> */}
             {!isMobile && (
               <div className="py-5 overflow-x-auto">
-                <table className="min-w-[900px] w-full table-fixed p-2 border border-[#f1f3f7]">
+                <table className="min-w-[900px] w-full table-fixed p-2 border border-neutral-100">
                   <thead>
-                    <tr>
+                    <tr className="secondaryColor text-left subHeadingColor text-base">
                       <th className="text-start p-4 border-b border-gray-100 w-[20%]">
                         <h5 className="subHeadingColor text-base">Business</h5>
                       </th>
@@ -298,7 +298,7 @@ export default function AdminReport({ onMenuClick }) {
                   </thead>
                   <tbody>
                     {paginatedData.map((item, index) => (
-                      <tr key={index} className="border-b last:border-b-0">
+                      <tr key={index} className="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50">
                         <td className="p-4">
                           <h4 className="headingColor font-semibold text-sm">
                             {item.business}
