@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "../components/Header";
 import StepTwo from "./components/StepTwo";
 // import StepThree from "./components/StepThree";
 // import StepFour from "./components/StepFour";
 
-export default function InvestorSignup() {
+const InvestorSignupContent = () => {
   const [step] = useState(1);
   const searchParams = useSearchParams();
 
@@ -36,5 +36,13 @@ export default function InvestorSignup() {
       {step === 3 && <StepFour onBack={() => setStep(2)} />}
       */}
     </>
+  );
+};
+
+export default function InvestorSignup() {
+  return (
+    <Suspense fallback={null}>
+      <InvestorSignupContent />
+    </Suspense>
   );
 }

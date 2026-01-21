@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "../../components/RoleHeader";
 import StepOne from "../components/StepOne";
 import StepTwo from "./components/StepTwo";
-const Page = () => {
+
+const OwnerSignupContent = () => {
   const [step, setStep] = useState(1);
   const searchParams = useSearchParams();
 
@@ -25,6 +26,14 @@ const Page = () => {
         />
       )}
     </>
+  );
+};
+
+const Page = () => {
+  return (
+    <Suspense fallback={null}>
+      <OwnerSignupContent />
+    </Suspense>
   );
 };
 
