@@ -52,7 +52,7 @@ export default function Header() {
             <Link href="#" className="subHeadingColor hover:text-black">
               Support
             </Link>
-            <Link
+            {/* <Link
               href="/admin"
               className="text-blue-600 hover:text-blue-400"
             >
@@ -63,7 +63,7 @@ export default function Header() {
               className="text-blue-600 hover:text-blue-400"
             >
               Login
-            </Link>
+            </Link> */}
           </nav>
 
           {/* Mobile Menu Button */}
