@@ -14,8 +14,15 @@ import {
 } from "@/components/ui/select";
 
 
-const StepTwo = ({ onBack }) => {
+const StepTwo = ({ onBack, selectedRole = "ADMIN" }) => {
   const router = useRouter();
+  const roleValue = String(selectedRole || "ADMIN").toUpperCase();
+  const roleLabel = (role) => {
+    if (role === "ADMIN") return "Admin";
+    if (role === "BUSINESS_OWNER") return "Business Owner";
+    if (role === "INVESTOR") return "Investor";
+    return role;
+  };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -75,7 +82,7 @@ const handleSubmit = async (e) => {
       name: formData.name,
       email,
       password: formData.password,
-      role: "ADMIN",
+      role: roleValue,
       mobile: `${formData.countryCode || ""}${phoneDigits}`,
     };
 
@@ -104,11 +111,10 @@ const handleSubmit = async (e) => {
               {/* <p className="textColor mb-4 text-sm font-semibold"><span className="font-semibold">Step 2 of 2</span> - Create your admin workspace</p> */}
               <div>
                 <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
-                  Set up your Admin Account
+                  Set up your {roleLabel(roleValue)} Account
                 </h2>
                 <p className="textColor">
-                  Set up tools, permissions, and workflows to manage users and
-                  platform operations efficiently.
+                  Create your account to access your dashboard, manage your profile, and start using the platform.
                 </p>
               </div>
               <form className="md:py-6 pt-4" onSubmit={handleSubmit}>

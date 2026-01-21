@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { User, Menu, X, Upload } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Menu, X, Upload } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
 import {
   Select,
@@ -9,36 +9,75 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import apiClient from "@/lib/apiClient";
 
 export default function Topbar({ onMenuClick }) {
   const isMobile = useIsMobile();
   const [openModal, setOpenModal] = useState(false);
 
+  const [me, setMe] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    (async () => {
+      try {
+        const res = await apiClient.get("/api/auth/me");
+        const user = res?.data?.data?.user;
+        if (mounted) setMe(user || null);
+      } catch (e) {
+        // If not logged in or request fails, just hide user info
+        if (mounted) setMe(null);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const displayName = me?.name || "";
+  const displayRole = me?.role || "";
+  const initials = displayName
+    ? displayName
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((p) => p[0].toUpperCase())
+        .join("")
+    : "U";
+
   return (
     <>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <button onClick={() => onMenuClick && onMenuClick()} className="md:hidden p-2 rounded-md">
+          <button
+            onClick={() => onMenuClick && onMenuClick()}
+            className="md:hidden p-2 rounded-md"
+            aria-label="Open menu"
+          >
             <Menu />
           </button>
-
-          <div className="mb-2">
-            {!isMobile ? (
-              <h1 className="text-2xl font-semibold headingColor">Nairobi Fresh Mart</h1>
-            ) : (
-              <h1 className="text-xl font-semibold headingColor">Nairobi Fresh Mart</h1>
-            )}
-            <p className="text-sm font-semibold subHeadingColor">
-              Nairobi - Retail
-            </p>
-          </div>
         </div>
-        <div>
-          {!isMobile ? (
-            <button onClick={() => setOpenModal(true)} className="bg-green-700 text-white px-3 py-2 rounded-md">+ New Report</button>
-          ) : (
-            <button onClick={() => setOpenModal(true)} className="bg-green-700 text-white px-2 text-sm py-2 rounded-md">+ New Report</button>
-          )}
+
+        {/* User info (same idea as Admin) */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-full primaryColor flex items-center justify-center text-white text-sm font-semibold">
+              {initials}
+            </div>
+
+            {!isMobile ? (
+              <div className="leading-tight text-right">
+                <div className="text-sm font-semibold headingColor">
+                  {displayName || ""}
+                </div>
+                <div className="text-xs textColor">
+                  {displayRole ? displayRole.replace("_", " ") : ""}
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 

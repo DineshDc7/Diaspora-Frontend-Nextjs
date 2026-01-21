@@ -2,7 +2,7 @@
 
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import { Building2, Eye, X, Search, MoreHorizontal, Pencil } from "lucide-react";
+import { Building2, Eye, X, Search, MoreHorizontal, Pencil, Info } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
@@ -12,9 +12,25 @@ export default function AdminBusiness() {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
+
   // ✅ Edit support (same modal)
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedBusinessId, setSelectedBusinessId] = useState(null);
+
+  // ✅ Assign Owner modal
+  const [assignOwnerOpen, setAssignOwnerOpen] = useState(false);
+  const [ownersOptions, setOwnersOptions] = useState([]);
+  const [ownersLoading, setOwnersLoading] = useState(false);
+  const [ownersError, setOwnersError] = useState("");
+  const [selectedOwnerId, setSelectedOwnerId] = useState("");
+  const [assignOwnerLoading, setAssignOwnerLoading] = useState(false);
+  const [assignOwnerError, setAssignOwnerError] = useState("");
+
+  // ✅ View Details modal
+  const [viewDetailsOpen, setViewDetailsOpen] = useState(false);
+  const [viewDetailsLoading, setViewDetailsLoading] = useState(false);
+  const [viewDetailsError, setViewDetailsError] = useState("");
+  const [selectedBusinessDetails, setSelectedBusinessDetails] = useState(null);
 
   const isMobile = useIsMobile();
 
@@ -28,15 +44,18 @@ export default function AdminBusiness() {
     limit: 10,
     totalPages: 0,
   });
+
   const searchDebounceRef = useRef(null);
 
   const [addBusinessForm, setAddBusinessForm] = useState({
     businessName: "",
+    ownerUserId: "", // optional
     ownerName: "",
     ownerPhone: "",
     category: "",
     city: "",
   });
+
   const [addBusinessLoading, setAddBusinessLoading] = useState(false);
   const [addBusinessError, setAddBusinessError] = useState("");
 
@@ -49,8 +68,8 @@ export default function AdminBusiness() {
     try {
       const res = await apiClient.get("/api/admin/businesses", {
         params: {
-          page: 1,
-          limit: 10,
+          page: override.page ?? pagination?.page ?? 1,
+          limit: override.limit ?? pagination?.limit ?? 10,
           ...(searchText.trim() ? { search: searchText.trim() } : {}),
           ...override,
         },
@@ -68,6 +87,106 @@ export default function AdminBusiness() {
     }
   };
 
+  // ✅ Owner dropdown: fetch BUSINESS_OWNER users
+  const fetchOwnerOptions = async () => {
+    setOwnersLoading(true);
+    setOwnersError("");
+
+    try {
+      const res = await apiClient.get("/api/admin/users/options", {
+        params: { role: "BUSINESS_OWNER" },
+      });
+
+      const list = res?.data?.data?.users;
+      setOwnersOptions(Array.isArray(list) ? list : []);
+    } catch (err) {
+      setOwnersError(err?.response?.data?.message || "Failed to load owners");
+      setOwnersOptions([]);
+    } finally {
+      setOwnersLoading(false);
+    }
+  };
+
+  const openAssignOwnerForBusiness = async (businessId) => {
+    setOpenActionMenuId(null);
+    setSelectedBusinessId(businessId);
+    setSelectedOwnerId("");
+    setAssignOwnerError("");
+    setOwnersError("");
+    setAssignOwnerOpen(true);
+
+    await fetchOwnerOptions();
+  };
+
+  const closeAssignOwnerModal = () => {
+    setAssignOwnerError("");
+    setOwnersError("");
+    setSelectedOwnerId("");
+    setAssignOwnerOpen(false);
+  };
+
+  const openViewDetails = async (businessId) => {
+    setOpenActionMenuId(null);
+    setViewDetailsError("");
+    setSelectedBusinessDetails(null);
+    setViewDetailsOpen(true);
+    setViewDetailsLoading(true);
+
+    try {
+      const res = await apiClient.get(`/api/admin/businesses/${businessId}`);
+      const b = res?.data?.data?.business;
+      setSelectedBusinessDetails(b || null);
+    } catch (err) {
+      setViewDetailsError(err?.response?.data?.message || "Failed to load business details");
+      setSelectedBusinessDetails(null);
+    } finally {
+      setViewDetailsLoading(false);
+    }
+  };
+
+  const closeViewDetails = () => {
+    setViewDetailsError("");
+    setSelectedBusinessDetails(null);
+    setViewDetailsOpen(false);
+  };
+
+  // ✅ PUT /admin/businesses/:id/assign-owner (via Next API proxy)
+  const handleAssignOwner = async (e) => {
+    e.preventDefault();
+
+    if (!selectedBusinessId) {
+      setAssignOwnerError("Business not selected");
+      return;
+    }
+
+    if (!selectedOwnerId) {
+      setAssignOwnerError("Please select an owner");
+      return;
+    }
+
+    setAssignOwnerLoading(true);
+    setAssignOwnerError("");
+
+    try {
+      // ✅ backend is PUT, so frontend must use PUT
+      await apiClient.put(`/api/admin/businesses/${selectedBusinessId}/assign-owner`, {
+        ownerUserId: Number(selectedOwnerId),
+      });
+
+      closeAssignOwnerModal();
+
+      await fetchBusinesses({
+        page: pagination?.page || 1,
+        limit: pagination?.limit || 10,
+        ...(searchText.trim() ? { search: searchText.trim() } : {}),
+      });
+    } catch (err) {
+      setAssignOwnerError(err?.response?.data?.message || "Failed to assign owner");
+    } finally {
+      setAssignOwnerLoading(false);
+    }
+  };
+
   // ✅ Open modal in Edit mode and prefill values
   const openEditBusiness = async (businessId) => {
     setOpenActionMenuId(null);
@@ -76,13 +195,20 @@ export default function AdminBusiness() {
     setSelectedBusinessId(businessId);
 
     try {
+      // Make sure owners list exists for dropdown
+      await fetchOwnerOptions();
+
       const res = await apiClient.get(`/api/admin/businesses/${businessId}`);
       const b = res?.data?.data?.business;
 
+      const ownerUserId = b?.ownerUserId ? String(b.ownerUserId) : "";
+      const ownerPhone = b?.ownerUser?.mobile || b?.ownerPhone || "";
+
       setAddBusinessForm({
         businessName: b?.businessName || "",
-        ownerName: b?.ownerName || "",
-        ownerPhone: b?.ownerPhone || "",
+        ownerUserId,
+        ownerName: b?.ownerUser?.name || b?.ownerName || "",
+        ownerPhone: ownerPhone || "",
         category: b?.category || "",
         city: b?.city || "",
       });
@@ -94,7 +220,7 @@ export default function AdminBusiness() {
     }
   };
 
-  // ✅ Same handler for Create + Update
+  // ✅ Create + Update
   const handleSubmitBusiness = async (e) => {
     e.preventDefault();
     if (addBusinessLoading) return;
@@ -102,20 +228,41 @@ export default function AdminBusiness() {
     setAddBusinessLoading(true);
     setAddBusinessError("");
 
-    const phoneDigits = normalizePhone10(addBusinessForm.ownerPhone);
-    if (addBusinessForm.ownerPhone && phoneDigits.length !== 10) {
-      setAddBusinessError("Owner phone must be exactly 10 digits");
-      setAddBusinessLoading(false);
-      return;
-    }
-
     try {
+      const selectedOwner = ownersOptions.find(
+        (u) => String(u.id) === String(addBusinessForm.ownerUserId)
+      );
+
+      const hasOwnerSelected = Boolean(addBusinessForm.ownerUserId);
+
+      // If owner selected -> auto fill, else send placeholder (backend currently requires ownerName)
+      const finalOwnerName = hasOwnerSelected
+        ? (selectedOwner?.name || addBusinessForm.ownerName)
+        : "Owner not assigned";
+
+      const finalOwnerPhoneRaw = hasOwnerSelected
+        ? (selectedOwner?.mobile || addBusinessForm.ownerPhone)
+        : "";
+
+      // Validate phone if provided
+      const phoneDigits = normalizePhone10(finalOwnerPhoneRaw);
+      if (finalOwnerPhoneRaw && phoneDigits.length !== 10) {
+        setAddBusinessError("Owner phone must be exactly 10 digits");
+        setAddBusinessLoading(false);
+        return;
+      }
+
       const payload = {
         businessName: addBusinessForm.businessName,
-        ownerName: addBusinessForm.ownerName,
-        ownerPhone: phoneDigits ? phoneDigits : null,
         category: addBusinessForm.category,
         city: addBusinessForm.city,
+
+        // Optional assignment
+        ownerUserId: addBusinessForm.ownerUserId ? Number(addBusinessForm.ownerUserId) : null,
+
+        // Keep these for your current backend validation
+        ownerName: finalOwnerName,
+        ownerPhone: hasOwnerSelected && phoneDigits ? phoneDigits : null,
       };
 
       if (isEditMode && selectedBusinessId) {
@@ -129,6 +276,7 @@ export default function AdminBusiness() {
       setSelectedBusinessId(null);
       setAddBusinessForm({
         businessName: "",
+        ownerUserId: "",
         ownerName: "",
         ownerPhone: "",
         category: "",
@@ -150,7 +298,7 @@ export default function AdminBusiness() {
     if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
 
     searchDebounceRef.current = setTimeout(async () => {
-      await fetchBusinesses();
+      await fetchBusinesses({ page: 1 });
     }, 400);
 
     return () => {
@@ -170,6 +318,7 @@ export default function AdminBusiness() {
     setSelectedBusinessId(null);
     setAddBusinessForm({
       businessName: "",
+      ownerUserId: "",
       ownerName: "",
       ownerPhone: "",
       category: "",
@@ -177,6 +326,9 @@ export default function AdminBusiness() {
     });
     setOpenActionMenuId(null);
     setOpenModal(true);
+
+    // preload owner options for dropdown
+    fetchOwnerOptions();
   };
 
   const closeModal = () => {
@@ -197,40 +349,24 @@ export default function AdminBusiness() {
             <div className="xl:col-span-4 space-y-6">
               <div className="flex justify-between items-center">
                 <div className="mb-2 flex items-center gap-3">
-                  <button
-                    onClick={() => setOpen(true)}
-                    className="md:hidden p-2 rounded-md"
-                  >
+                  <button onClick={() => setOpen(true)} className="md:hidden p-2 rounded-md">
                     ☰
                   </button>
                   <div>
-                    <h1 className="text-2xl font-semibold headingColor">
-                      Businesses
-                    </h1>
+                    <h1 className="text-2xl font-semibold headingColor">Businesses</h1>
                     <p className="py-2 text-sm textColor">
-                      {loading
-                        ? "Loading..."
-                        : `Managing ${pagination.total || businesses.length} businesses`}
+                      {loading ? "Loading..." : `Managing ${pagination.total || businesses.length} businesses`}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  {!isMobile ? (
-                    <button
-                      onClick={openCreateModal}
-                      className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
-                    >
-                      <Building2 className="w-5 h-5" /> Add Business
-                    </button>
-                  ) : (
-                    <button
-                      onClick={openCreateModal}
-                      className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
-                    >
-                      <Building2 className="w-5 h-5" />
-                    </button>
-                  )}
+                  <button
+                    onClick={openCreateModal}
+                    className="primaryColor text-white text-sm font-semibold p-2 rounded-md flex gap-2"
+                  >
+                    <Building2 className="w-5 h-5" /> {!isMobile ? "Add Business" : ""}
+                  </button>
                 </div>
               </div>
 
@@ -247,55 +383,31 @@ export default function AdminBusiness() {
                 </div>
 
                 {error ? (
-                  <div className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-                    {error}
-                  </div>
+                  <div className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
                 ) : null}
 
-                {loading ? (
-                  <div className="py-6 text-sm text-gray-500">
-                    Loading businesses...
-                  </div>
-                ) : null}
+                {loading ? <div className="py-6 text-sm text-gray-500">Loading businesses...</div> : null}
 
                 <div className="py-5 overflow-x-auto">
                   <table className="min-w-[900px] w-full table-fixed border border-[#f1f3f7]">
                     <thead>
                       <tr className="secondaryColor">
-                        <th
-                          className="text-start p-2 border-[#f1f3f7] w-[28%]"
-                          style={{ verticalAlign: "center" }}
-                        >
+                        <th className="text-start p-2 border-[#f1f3f7] w-[28%]">
                           <h5 className="subHeadingColor text-base">Business</h5>
                         </th>
-                        <th
-                          className="text-center p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
+                        <th className="text-center p-2 border-[#f1f3f7] w-[15%]">
                           <h5 className="subHeadingColor text-base">Owner</h5>
                         </th>
-                        <th
-                          className="text-center p-2 border-[#f1f3f7] w-[12%]"
-                          style={{ verticalAlign: "center" }}
-                        >
+                        <th className="text-center p-2 border-[#f1f3f7] w-[12%]">
                           <h5 className="subHeadingColor text-base">Category</h5>
                         </th>
-                        <th
-                          className="text-center p-2 border-[#f1f3f7] w-[18%]"
-                          style={{ verticalAlign: "center" }}
-                        >
+                        <th className="text-center p-2 border-[#f1f3f7] w-[18%]">
                           <h5 className="subHeadingColor text-base">City</h5>
                         </th>
-                        <th
-                          className="text-center p-2 border-[#f1f3f7] w-[12%]"
-                          style={{ verticalAlign: "center" }}
-                        >
+                        <th className="text-center p-2 border-[#f1f3f7] w-[12%]">
                           <h5 className="subHeadingColor text-base">Reports</h5>
                         </th>
-                        <th
-                          className="text-center p-2 border-[#f1f3f7] w-[15%]"
-                          style={{ verticalAlign: "center" }}
-                        >
+                        <th className="text-center p-2 border-[#f1f3f7] w-[15%]">
                           <h5 className="subHeadingColor text-base">Actions</h5>
                         </th>
                       </tr>
@@ -306,17 +418,20 @@ export default function AdminBusiness() {
                         <tr key={item.id || index}>
                           <td className="p-2 py-4 border-b border-[#f1f3f7]">
                             <div>
-                              <h4 className="headingColor font-semibold text-sm">
-                                {item.businessName}
-                              </h4>
-                              <p className="textColor text-xs">
-                                {item.ownerPhone || "-"}
-                              </p>
+                              <h4 className="headingColor font-semibold text-sm">{item.businessName}</h4>
+                              <p className="textColor text-xs">{item.ownerPhone || item?.ownerUser?.mobile || "-"}</p>
                             </div>
                           </td>
 
                           <td className="p-2 text-center py-4 border-b border-[#f1f3f7]">
-                            <p className="textColor text-sm">{item.ownerName}</p>
+                            {item?.ownerUser ? (
+                              <div>
+                                <p className="textColor text-sm">{item.ownerUser.name}</p>
+                                <p className="textColor text-xs">{item.ownerUser.email}</p>
+                              </div>
+                            ) : (
+                              <p className="textColor text-sm">{item.ownerName || "-"}</p>
+                            )}
                           </td>
 
                           <td className="p-2 py-4 border-b border-[#f1f3f7]">
@@ -334,57 +449,113 @@ export default function AdminBusiness() {
                           </td>
 
                           <td className="p-2 py-4 border-b border-[#f1f3f7] relative">
-  <div className="flex justify-center">
-    <button
-      type="button"
-      onClick={() =>
-        setOpenActionMenuId(openActionMenuId === item.id ? null : item.id)
-      }
-      className="p-2 rounded-full hover:bg-gray-100"
-    >
-      <MoreHorizontal className="w-5 h-5 text-gray-600" />
-    </button>
+                            <div className="flex justify-center">
+                              <button
+                                type="button"
+                                onClick={() => setOpenActionMenuId(openActionMenuId === item.id ? null : item.id)}
+                                className="p-2 rounded-full hover:bg-gray-100"
+                              >
+                                <MoreHorizontal className="w-5 h-5 text-gray-600" />
+                              </button>
 
-    {openActionMenuId === item.id && (
-      <>
-        {/* Action menu (same like Users) */}
-        <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
-          <ul className="p-2 text-sm space-y-1">
-            <li
-              onClick={() => {
-                openEditBusiness(item.id);
-                setOpenActionMenuId(null);
-              }}
-              className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-            >
-              <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                <Pencil className="w-3 h-3" /> Edit
-              </div>
-            </li>
+                              {openActionMenuId === item.id && (
+                                <div className="absolute right-20 bottom-0 z-50 w-45 rounded-md bg-white text-start shadow-md border">
+                                  <ul className="p-2 text-sm space-y-1">
+                                    <li
+                                      onClick={async () => {
+                                        setOpenActionMenuId(null);
+                                        await openViewDetails(item.id);
+                                      }}
+                                      className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                    >
+                                      <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                        <Info className="w-3 h-3" /> View Details
+                                      </div>
+                                    </li>
+                                    <li
+                                      onClick={() => {
+                                        openEditBusiness(item.id);
+                                        setOpenActionMenuId(null);
+                                      }}
+                                      className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                    >
+                                      <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                        <Pencil className="w-3 h-3" /> Edit
+                                      </div>
+                                    </li>
 
-            <li
-              onClick={() => {
-                setOpenActionMenuId(null);
-              }}
-              className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-            >
-              <Link
-                href="/admin/allreports"
-                className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
-              >
-                <Eye className="w-3 h-3" /> View Reports
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </>
-    )}
-  </div>
-</td>
+                                    <li
+                                      onClick={async () => {
+                                        setOpenActionMenuId(null);
+                                        await openAssignOwnerForBusiness(item.id);
+                                      }}
+                                      className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                    >
+                                      <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                        <Pencil className="w-3 h-3" /> Assign Owner
+                                      </div>
+                                    </li>
+
+                                    <li className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded">
+                                      <Link
+                                        href="/admin/allreports"
+                                        className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                                      >
+                                        <Eye className="w-3 h-3" /> View Reports
+                                      </Link>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+
+                  {!loading && businesses.length === 0 ? (
+                    <div className="py-6 text-sm text-gray-500">No businesses found.</div>
+                  ) : null}
+
+                  {/* Pagination */}
+                  {pagination?.totalPages > 1 && (
+                    <div className="mt-4 flex items-center justify-between">
+                      <p className="text-sm text-gray-600">
+                        Page {pagination.page} of {pagination.totalPages}
+                      </p>
+
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            fetchBusinesses({
+                              page: pagination.page - 1,
+                              limit: pagination.limit,
+                            })
+                          }
+                          disabled={pagination.page <= 1 || loading}
+                          className="rounded-md border px-3 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Prev
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            fetchBusinesses({
+                              page: pagination.page + 1,
+                              limit: pagination.limit,
+                            })
+                          }
+                          disabled={
+                            pagination.page >= pagination.totalPages || loading
+                          }
+                          className="rounded-md border px-3 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -392,14 +563,12 @@ export default function AdminBusiness() {
         </main>
       </div>
 
-      {/* Modal */}
+      {/* Add/Edit Business Modal */}
       {openModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">
-                {isEditMode ? "Edit Business" : "Add New Business"}
-              </h2>
+              <h2 className="text-lg font-semibold">{isEditMode ? "Edit Business" : "Add New Business"}</h2>
               <button onClick={closeModal}>
                 <X className="h-5 w-5" color="#797979" />
               </button>
@@ -407,25 +576,18 @@ export default function AdminBusiness() {
 
             <form className="space-y-4" onSubmit={handleSubmitBusiness}>
               {addBusinessError ? (
-                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-                  {addBusinessError}
-                </div>
+                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{addBusinessError}</div>
               ) : null}
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  Business Name
-                </label>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Business Name</label>
                 <input
                   type="text"
                   placeholder="ABC Store"
                   value={addBusinessForm.businessName}
                   onChange={(e) => {
                     setAddBusinessError("");
-                    setAddBusinessForm((p) => ({
-                      ...p,
-                      businessName: e.target.value,
-                    }));
+                    setAddBusinessForm((p) => ({ ...p, businessName: e.target.value }));
                   }}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -434,60 +596,72 @@ export default function AdminBusiness() {
 
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
-                  Owner Name
+                  Assign Business Owner (optional)
                 </label>
-                <input
-                  type="text"
-                  placeholder="John Doe"
-                  value={addBusinessForm.ownerName}
+                <select
+                  value={addBusinessForm.ownerUserId}
                   onChange={(e) => {
+                    const val = e.target.value;
                     setAddBusinessError("");
+                    const selectedOwner = ownersOptions.find((u) => String(u.id) === String(val));
                     setAddBusinessForm((p) => ({
                       ...p,
-                      ownerName: e.target.value,
+                      ownerUserId: val,
+                      ownerName: val ? (selectedOwner?.name || "") : "",
+                      ownerPhone: val ? (selectedOwner?.mobile || "") : "",
                     }));
                   }}
+                  disabled={ownersLoading}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  <option value="">{ownersLoading ? "Loading..." : "No owner assigned"}</option>
+                  {ownersOptions.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name} ({u.email})
+                    </option>
+                  ))}
+                </select>
+                {!addBusinessForm.ownerUserId ? (
+                  <p className="mt-2 text-xs text-gray-500">You can assign an owner later.</p>
+                ) : null}
               </div>
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  Owner Phone
-                </label>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  placeholder="1234567890"
-                  value={addBusinessForm.ownerPhone}
-                  onChange={(e) => {
-                    setAddBusinessError("");
-                    setAddBusinessForm((p) => ({
-                      ...p,
-                      ownerPhone: normalizePhone10(e.target.value),
-                    }));
-                  }}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
-                     focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+              {addBusinessForm.ownerUserId ? (
+                <>
+                  <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">Owner Name</label>
+                    <input
+                      type="text"
+                      value={addBusinessForm.ownerName}
+                      readOnly
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm bg-gray-50"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">Owner name is auto-filled from selected user.</p>
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">Owner Phone</label>
+                    <input
+                      type="text"
+                      value={addBusinessForm.ownerPhone}
+                      readOnly
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm bg-gray-50"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">Owner phone is auto-filled from selected user.</p>
+                  </div>
+                </>
+              ) : null}
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  Category
-                </label>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Category</label>
                 <input
                   type="text"
                   placeholder="Restaurant, Retail, etc."
                   value={addBusinessForm.category}
                   onChange={(e) => {
                     setAddBusinessError("");
-                    setAddBusinessForm((p) => ({
-                      ...p,
-                      category: e.target.value,
-                    }));
+                    setAddBusinessForm((p) => ({ ...p, category: e.target.value }));
                   }}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -495,19 +669,14 @@ export default function AdminBusiness() {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  City
-                </label>
+                <label className="mb-1 block text-sm font-medium text-gray-700">City</label>
                 <input
                   type="text"
                   placeholder="New York"
                   value={addBusinessForm.city}
                   onChange={(e) => {
                     setAddBusinessError("");
-                    setAddBusinessForm((p) => ({
-                      ...p,
-                      city: e.target.value,
-                    }));
+                    setAddBusinessForm((p) => ({ ...p, city: e.target.value }));
                   }}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
                      focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -538,6 +707,150 @@ export default function AdminBusiness() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Assign Owner Modal */}
+      {assignOwnerOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Assign Owner</h2>
+              <button onClick={closeAssignOwnerModal}>
+                <X className="h-5 w-5" color="#797979" />
+              </button>
+            </div>
+
+            <form className="space-y-4" onSubmit={handleAssignOwner}>
+              {ownersError ? (
+                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{ownersError}</div>
+              ) : null}
+
+              {assignOwnerError ? (
+                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{assignOwnerError}</div>
+              ) : null}
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Select Business Owner</label>
+                <select
+                  value={selectedOwnerId}
+                  onChange={(e) => {
+                    setAssignOwnerError("");
+                    setSelectedOwnerId(e.target.value);
+                  }}
+                  disabled={ownersLoading}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
+                    focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">{ownersLoading ? "Loading..." : "Select owner"}</option>
+                  {ownersOptions.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name} ({u.email})
+                    </option>
+                  ))}
+                </select>
+
+                {!ownersLoading && ownersOptions.length === 0 ? (
+                  <p className="mt-2 text-xs text-gray-500">No business owners found.</p>
+                ) : null}
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={closeAssignOwnerModal}
+                  className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 w-full"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={assignOwnerLoading}
+                  className="primaryColor rounded-md px-4 py-2 text-sm font-semibold text-white w-full disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {assignOwnerLoading ? "Assigning..." : "Assign Owner"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* View Details Modal */}
+      {viewDetailsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Business Details</h2>
+              <button onClick={closeViewDetails}>
+                <X className="h-5 w-5" color="#797979" />
+              </button>
+            </div>
+
+            {viewDetailsError ? (
+              <div className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{viewDetailsError}</div>
+            ) : null}
+
+            {viewDetailsLoading ? (
+              <div className="py-6 text-sm text-gray-500">Loading details...</div>
+            ) : null}
+
+            {!viewDetailsLoading && !viewDetailsError && selectedBusinessDetails ? (
+              <div className="space-y-3 text-sm">
+                <div>
+                  <p className="text-gray-500">Business Name</p>
+                  <p className="font-semibold">{selectedBusinessDetails.businessName || "-"}</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-gray-500">Category</p>
+                    <p className="font-semibold">{selectedBusinessDetails.category || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">City</p>
+                    <p className="font-semibold">{selectedBusinessDetails.city || "-"}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-gray-500">Owner</p>
+                  {selectedBusinessDetails.ownerUser ? (
+                    <div>
+                      <p className="font-semibold">{selectedBusinessDetails.ownerUser.name}</p>
+                      <p className="text-gray-600">{selectedBusinessDetails.ownerUser.email}</p>
+                      <p className="text-gray-600">{selectedBusinessDetails.ownerUser.mobile || "-"}</p>
+                    </div>
+                  ) : (
+                    <p className="font-semibold">{selectedBusinessDetails.ownerName || "Owner not assigned"}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-gray-500">Status</p>
+                    <p className="font-semibold">{selectedBusinessDetails.isActive ? "Active" : "Inactive"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Created</p>
+                    <p className="font-semibold">
+                      {selectedBusinessDetails.createdAt ? new Date(selectedBusinessDetails.createdAt).toLocaleString() : "-"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={closeViewDetails}
+                className="primaryColor w-full rounded-md px-4 py-2 text-sm font-semibold text-white"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

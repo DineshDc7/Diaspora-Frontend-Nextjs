@@ -2,11 +2,10 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
-  console.log("[/api/admin/users/overview] HIT ✅");
+  console.log("[/api/admin/users/options] HIT ✅");
 
   try {
     const BACKEND_URL = process.env.BACKEND_API_BASE_URL;
-
     if (!BACKEND_URL) {
       return NextResponse.json(
         { success: false, message: "BACKEND_API_BASE_URL not set" },
@@ -14,31 +13,27 @@ export async function GET(req) {
       );
     }
 
-    // Forward cookies (accessToken/refreshToken) to backend
-    const cookie = req.headers.get("cookie") || "";
-
-    // Forward query params exactly as sent by UI
     const { searchParams } = new URL(req.url);
-    const qs = searchParams.toString();
+    const role = searchParams.get("role"); // optional
 
+    const cookie = req.headers.get("cookie") || "";
     const base = String(BACKEND_URL).trim().replace(/\/+$/, "");
-    const backendUrl = `${base}/admin/users/overview${qs ? `?${qs}` : ""}`;
 
-    console.log("[/api/admin/users/overview] calling backend:", backendUrl);
+    const finalUrl = `${base}/admin/users/options${role ? `?role=${encodeURIComponent(role)}` : ""}`;
 
-    const backendRes = await axios.get(backendUrl, {
+    console.log("[/api/admin/users/options] calling backend:", finalUrl);
+
+    const backendRes = await axios.get(finalUrl, {
       headers: { Cookie: cookie },
       withCredentials: true,
       validateStatus: () => true,
     });
 
-    console.log("[/api/admin/users/overview] backend status:", backendRes.status);
-
     return NextResponse.json(backendRes.data, { status: backendRes.status });
   } catch (err) {
-    console.error("[/api/admin/users/overview] error:", err);
+    console.error("[/api/admin/users/options] error:", err);
     return NextResponse.json(
-      { success: false, message: "Server error" },
+      { success: false, message: "server error" },
       { status: 500 }
     );
   }

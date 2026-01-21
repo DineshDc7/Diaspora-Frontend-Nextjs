@@ -8,6 +8,7 @@ import {
   BadgeDollarSign,
   ScrollText,
   BadgePercent,
+  MoreHorizontal,
 } from "lucide-react";
 import {
   Select,
@@ -23,6 +24,7 @@ import apiClient from "../../../lib/apiClient";
 export default function AdminReport() {
   const [open, setOpen] = useState(false);
   const [openmodel, setOpenModel] = useState(false);
+  const [openActionRow, setOpenActionRow] = useState(null);
 
   // filters
   const [selectedBusiness, setSelectedBusiness] = useState(null); // string id
@@ -53,6 +55,7 @@ export default function AdminReport() {
   const [detailsError, setDetailsError] = useState("");
 
   const isMobile = useIsMobile();
+  const isLoss = (n) => Number(n) < 0;
 
   // helpers (same style as dashboard)
   const toObj = (data) => {
@@ -104,6 +107,47 @@ export default function AdminReport() {
     }
   };
 
+  const toPublicUploadUrl = (p) => {
+    if (!p) return null;
+
+    let s = String(p).replace(/\\/g, "/").trim();
+
+    // If backend ever returns an absolute URL, convert to a pathname.
+    try {
+      if (s.includes("://")) {
+        s = new URL(s).pathname;
+      }
+    } catch {
+      // ignore
+    }
+
+    // normalize leading slashes
+    s = s.replace(/^\/+/, "");
+
+    // remove common prefixes
+    s = s.replace(/^src\//, "");
+    s = s.replace(/^public\//, "");
+
+    // Ensure we always open via the public `/uploads/...` path (this matches how the app serves uploads).
+    // Also avoid double-prefix like `/uploads/uploads/...`.
+    if (!s.startsWith("uploads/")) {
+      if (s.startsWith("reports/")) s = `uploads/${s}`;
+      else s = `uploads/${s}`;
+    }
+
+    while (s.startsWith("uploads/uploads/")) {
+      s = s.replace(/^uploads\/uploads\//, "uploads/");
+    }
+
+    return `/${s}`;
+  };
+
+  const openMediaInNewTab = (path) => {
+    const url = toPublicUploadUrl(path);
+    if (!url) return;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   const computeRowMetrics = (row) => {
     const obj = toObj(row?.data);
 
@@ -117,8 +161,9 @@ export default function AdminReport() {
     ]);
 
     const expenses = getMetric(obj, [
-      "expenses",
+      "expensesToday",
       "totalExpenses",
+      "expenses",
       "expense",
       "cost",
       "totalCost",
@@ -202,6 +247,7 @@ export default function AdminReport() {
     setDetailsError("");
     setDetailsLoading(true);
     setOpenModel(true);
+    setOpenActionRow(null);
 
     try {
       const res = await apiClient.get(`/api/admin/reports/${reportId}`);
@@ -419,7 +465,7 @@ export default function AdminReport() {
                           <h5 className="subHeadingColor text-base">Customers</h5>
                         </th>
                         <th className="text-center p-4 border-b border-gray-100 w-[14%]">
-                          <h5 className="subHeadingColor text-base">Profit</h5>
+                          <h5 className="subHeadingColor text-base">Profit/Loss</h5>
                         </th>
                         <th className="text-start p-4 border-b border-gray-100 w-[12%]">
                           <h5 className="subHeadingColor text-base">Actions</h5>
@@ -440,10 +486,15 @@ export default function AdminReport() {
                           return (
                             <tr key={item.id} className="border-b last:border-b-0">
                               <td className="p-4">
-                                <h4 className="headingColor font-semibold text-sm">
-                                  {item.business?.businessName ||
-                                    (item.businessId ? `Business #${item.businessId}` : "-")}
-                                </h4>
+                                <div>
+                                  <h4 className="headingColor font-semibold text-sm">
+                                    {item.business?.businessName ||
+                                      (item.businessId ? `Business #${item.businessId}` : "-")}
+                                  </h4>
+                                  <p className="textColor text-xs">
+                                    {item.business?.ownerName || "-"}
+                                  </p>
+                                </div>
                               </td>
                               <td className="p-4 text-center text-sm font-semibold textColor">
                                 {formatDate(item.createdAt)}
@@ -457,16 +508,42 @@ export default function AdminReport() {
                               <td className="p-4 text-center text-sm font-semibold textColor">
                                 {customers}
                               </td>
-                              <td className="p-4 text-center text-green-700 text-sm font-semibold">
+                              <td
+                                className={`p-4 text-center text-sm font-semibold ${
+                                  isLoss(profit) ? "text-red-600" : "text-green-700"
+                                }`}
+                              >
                                 {formatMoney(profit)}
                               </td>
-                              <td className="p-4 text-center">
+                              <td className="p-4 text-center relative">
                                 <button
-                                  onClick={() => openReportModal(item.id)}
-                                  className="flex gap-2 items-center textprimaryColor text-sm font-semibold"
+                                  onClick={() =>
+                                    setOpenActionRow((p) => (p === item.id ? null : item.id))
+                                  }
+                                  className="p-2 rounded-md hover:bg-gray-100"
+                                  aria-label="Open actions"
+                                  type="button"
                                 >
-                                  <Eye className="w-5 h-5" /> View
+                                  <MoreHorizontal className="w-5 h-5 text-gray-600" />
                                 </button>
+
+                                {openActionRow === item.id && (
+                                  <div className="absolute right-4 bottom-2 z-50 w-45 rounded-md bg-white text-start shadow-md border">
+                                    <ul className="p-2 text-sm space-y-1">
+                                      <li
+                                        onClick={() => {
+                                          openReportModal(item.id);
+                                          setOpenActionRow(null);
+                                        }}
+                                        className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                      >
+                                        <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                          <Eye className="w-3 h-3" /> View Details
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                )}
                               </td>
                             </tr>
                           );
@@ -499,17 +576,42 @@ export default function AdminReport() {
                                 {item.business?.businessName ||
                                   (item.businessId ? `Business #${item.businessId}` : "-")}
                               </h4>
+                              <p className="textColor text-xs">{item.business?.ownerName || "-"}</p>
                               <p className="text-xs text-gray-500 mt-1">
                                 Date: {formatDate(item.createdAt)}
                               </p>
                             </div>
 
-                            <button
-                              onClick={() => openReportModal(item.id)}
-                              className="textprimaryColor text-sm font-semibold flex items-center gap-1"
-                            >
-                              <Eye className="w-4 h-4" /> View
-                            </button>
+                            <div className="relative">
+                              <button
+                                onClick={() =>
+                                  setOpenActionRow((p) => (p === item.id ? null : item.id))
+                                }
+                                className="p-2 rounded-md hover:bg-gray-100"
+                                aria-label="Open actions"
+                                type="button"
+                              >
+                                <MoreHorizontal className="w-5 h-5 text-gray-600" />
+                              </button>
+
+                              {openActionRow === item.id && (
+                                <div className="absolute right-0 top-10 z-50 w-45 rounded-md bg-white text-start shadow-md border">
+                                  <ul className="p-2 text-sm space-y-1">
+                                    <li
+                                      onClick={() => {
+                                        openReportModal(item.id);
+                                        setOpenActionRow(null);
+                                      }}
+                                      className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                    >
+                                      <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                        <Eye className="w-3 h-3" /> View Details
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
                           </div>
 
                           <div className="grid grid-cols-2 gap-3 mt-4 text-sm">
@@ -542,8 +644,12 @@ export default function AdminReport() {
 
                             <div>
                               <p className="text-gray-500 text-sm">
-                                Profit:
-                                <span className="font-semibold text-xs text-green-700">
+                                Profit/Loss:
+                                <span
+                                  className={`font-semibold text-xs ${
+                                    isLoss(profit) ? "text-red-600" : "text-green-700"
+                                  }`}
+                                >
                                   {" "}
                                   {formatMoney(profit)}
                                 </span>
@@ -601,6 +707,7 @@ export default function AdminReport() {
                   setSelectedReportId(null);
                   setReportDetails(null);
                   setDetailsError("");
+                  setOpenActionRow(null);
                 }}
               >
                 <X className="h-5 w-5" color="#ffffffff" />
@@ -619,10 +726,15 @@ export default function AdminReport() {
               ) : null}
             </div>
 
-            <h5 className="text-base headingColor px-6">
-              {reportDetails?.business?.businessName ||
-                (reportDetails?.businessId ? `Business #${reportDetails.businessId}` : "-")}
-            </h5>
+            <div className="px-6">
+              <h5 className="text-base headingColor">
+                {reportDetails?.business?.businessName ||
+                  (reportDetails?.businessId ? `Business #${reportDetails.businessId}` : "-")}
+              </h5>
+              {/* <p className="textColor text-xs">
+                Owner: {reportDetails?.business?.ownerName || "-"}
+              </p> */}
+            </div>
 
             {(() => {
               const obj = toObj(reportDetails?.data);
@@ -635,8 +747,9 @@ export default function AdminReport() {
                 "grossSales",
               ]);
               const expenses = getMetric(obj, [
-                "expenses",
+                "expensesToday",
                 "totalExpenses",
+                "expenses",
                 "expense",
                 "cost",
                 "totalCost",
@@ -694,7 +807,11 @@ export default function AdminReport() {
                       <h5 className="text-sm font-semibold subHeadingColor">
                         Net Profit/Loss
                       </h5>
-                      <h3 className="text-lg font-semibold headingColor">
+                      <h3
+                        className={`text-lg font-semibold ${
+                          isLoss(profit) ? "text-red-600" : "headingColor"
+                        }`}
+                      >
                         {formatMoney(profit)}
                       </h3>
                     </div>
@@ -706,13 +823,61 @@ export default function AdminReport() {
               );
             })()}
 
-            <div className="flex gap-4 p-6">
-              <button className="w-full p-4 bg-blue-50 textprimaryColor font-semibold rounded-md">
-                View Photo
-              </button>
-              <button className="w-full p-4 bg-blue-50 textprimaryColor font-semibold rounded-md">
-                View Video
-              </button>
+            <div className="px-6 pb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-md border border-gray-200 p-4">
+                  <p className="text-xs font-semibold text-gray-600 mb-2">Photo</p>
+
+                  {reportDetails?.photoPath ? (
+                    <button
+                      type="button"
+                      onClick={() => openMediaInNewTab(reportDetails.photoPath)}
+                      className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold textprimaryColor hover:bg-gray-50"
+                    >
+                      View Photo
+                    </button>
+                  ) : (
+                    <p className="text-sm text-gray-500">No photo uploaded.</p>
+                  )}
+
+                  {/* {reportDetails?.photoPath ? (
+                    <p className="mt-2 text-xs text-gray-500 break-all">
+                      {String(reportDetails.photoPath)}
+                    </p>
+                  ) : null} */}
+                </div>
+
+                <div className="rounded-md border border-gray-200 p-4">
+                  <p className="text-xs font-semibold text-gray-600 mb-2">Video</p>
+
+                  {reportDetails?.videoPath ? (
+                    <button
+                      type="button"
+                      onClick={() => openMediaInNewTab(reportDetails.videoPath)}
+                      className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold textprimaryColor hover:bg-gray-50"
+                    >
+                      View Video
+                    </button>
+                  ) : (
+                    <p className="text-sm text-gray-500">No video uploaded.</p>
+                  )}
+
+                  {/* {reportDetails?.videoPath ? (
+                    <p className="mt-2 text-xs text-gray-500 break-all">
+                      {String(reportDetails.videoPath)}
+                    </p>
+                  ) : null} */}
+                </div>
+              </div>
+
+              {reportDetails?.notes ? (
+                <div className="mt-4 rounded-md border border-gray-200 p-3">
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Notes</p>
+                  <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                    {String(reportDetails.notes)}
+                  </p>
+                </div>
+              ) : null}
             </div>
 
             <div className="px-6 pt-2 border-t border-gray-300">

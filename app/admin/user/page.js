@@ -1,8 +1,7 @@
 "use client";
 
 import Sidebar from "../components/Sidebar";
-import Topbar from "../components/Topbar";
-import { Users, User, Pencil, X, Ellipsis } from "lucide-react";
+import { Users, User, Pencil, X, Ellipsis, Eye } from "lucide-react";
 import { Search } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
@@ -28,7 +27,6 @@ export default function AdminUser() {
   const [openmodal, setOpenmodal] = useState(false);
   const [openActionRow, setOpenActionRow] = useState(null);
   const [openeditmodal, setOpenEditmodal] = useState(false);
-  const [assignBusiness, setAssignBusiness] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0].id);
   const [searchText, setSearchText] = useState("");
   const searchDebounceRef = useRef(null);
@@ -36,6 +34,19 @@ export default function AdminUser() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+    hasPrevPage: false,
+    hasNextPage: false,
+    prevPage: null,
+    nextPage: null,
+  });
   const [stats, setStats] = useState({
     totalUsers: 0,
     countsByRole: { ADMIN: 0, INVESTOR: 0, BUSINESS_OWNER: 0 },
@@ -59,6 +70,11 @@ export default function AdminUser() {
   });
   const [editUserLoading, setEditUserLoading] = useState(false);
   const [editUserError, setEditUserError] = useState("");
+  const [statusUpdatingId, setStatusUpdatingId] = useState(null);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [viewUser, setViewUser] = useState(null);
+  const [viewUserLoading, setViewUserLoading] = useState(false);
+  const [viewUserError, setViewUserError] = useState("");
   const fetchOverviewNow = async (override = {}) => {
     setLoading(true);
     setError("");
@@ -74,8 +90,8 @@ export default function AdminUser() {
       const res = await apiClient.get("/api/admin/users/overview", {
         params: {
           tab: tabMap[activeTab] || "all",
-          page: 1,
-          limit: 10,
+          page,
+          limit,
           ...(searchText.trim() ? { search: searchText.trim() } : {}),
           ...override,
         },
@@ -84,6 +100,26 @@ export default function AdminUser() {
       const data = res?.data?.data;
 
       setUsers(Array.isArray(data?.users) ? data.users : []);
+
+      const rawPagination = data?.pagination || { total: 0, page, limit, totalPages: 0 };
+
+      const totalPages = Number(rawPagination.totalPages) || 0;
+      const currentPage = Number(rawPagination.page) || page;
+
+      const hasPrev = currentPage > 1;
+      const hasNext = totalPages > 0 ? currentPage < totalPages : false;
+
+      setPagination({
+        total: Number(rawPagination.total) || 0,
+        page: currentPage,
+        limit: Number(rawPagination.limit) || limit,
+        totalPages,
+
+        hasPrevPage: rawPagination.hasPrevPage ?? hasPrev,
+        hasNextPage: rawPagination.hasNextPage ?? hasNext,
+        prevPage: rawPagination.prevPage ?? (hasPrev ? currentPage - 1 : null),
+        nextPage: rawPagination.nextPage ?? (hasNext ? currentPage + 1 : null),
+      });
       setStats(
         data?.stats || {
           totalUsers: 0,
@@ -111,7 +147,7 @@ export default function AdminUser() {
     };
 
     fetchOverview();
-  }, [activeTab, searchText]);
+  }, [activeTab, searchText, page, limit]);
   // Helper to normalize phone input to digits only and max 10 chars
   const normalizeMobile10 = (value) => String(value || "").replace(/\D/g, "").slice(0, 10);
 
@@ -150,6 +186,24 @@ export default function AdminUser() {
     }
   };
 
+  // Helper to open View Details modal (read-only)
+  const openViewForUser = async (userId) => {
+    setViewUser(null);
+    setViewUserError("");
+    setViewUserLoading(true);
+
+    try {
+      const res = await apiClient.get(`/api/admin/users/${userId}`);
+      const user = res?.data?.data?.user;
+      setViewUser(user || null);
+      setOpenViewModal(true);
+    } catch (err) {
+      setViewUserError(err?.response?.data?.message || "Failed to load user details");
+      setOpenViewModal(true);
+    } finally {
+      setViewUserLoading(false);
+    }
+  };
   // Helper to open Edit modal and prefill using API
   const openEditForUser = async (userId) => {
     setSelectedUserId(userId);
@@ -204,6 +258,33 @@ export default function AdminUser() {
       setEditUserLoading(false);
     }
   };
+
+  // Block/Unblock handler
+  // UI semantics: Switch checked = BLOCKED (isActive=false)
+  const handleToggleUserStatus = async (user, checked) => {
+    if (!user?.id) return;
+
+    const nextIsActive = !checked;
+
+    // Optimistic update
+    const prevUsers = users;
+    setStatusUpdatingId(user.id);
+    setUsers((p) => p.map((u) => (u.id === user.id ? { ...u, isActive: nextIsActive } : u)));
+
+    try {
+      await apiClient.patch(`/api/admin/users/${user.id}/status`, { isActive: nextIsActive });
+      // Keep stats consistent (simplest + safest)
+      await fetchOverviewNow();
+    } catch (err) {
+      // Revert optimistic update
+      setUsers(prevUsers);
+      setError(err?.response?.data?.message || "Failed to update user status");
+    } finally {
+      setStatusUpdatingId(null);
+    }
+  };
+
+
 
   return (
     <>
@@ -353,7 +434,10 @@ export default function AdminUser() {
                   <input
                     type="text"
                     value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
+                    onChange={(e) => {
+                      setSearchText(e.target.value);
+                      setPage(1);
+                    }}
                     placeholder="Search users by name, email, or role"
                     className="w-full rounded-lg border text-sm border-gray-300 py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -366,6 +450,7 @@ export default function AdminUser() {
                       onClick={() => {
                         setActiveTab(tab.id);
                         setSearchText("");
+                        setPage(1);
                       }}
                       className={`px-4 py-2 text-sm font-medium transition font-semibold text-lg
               ${
@@ -423,7 +508,7 @@ export default function AdminUser() {
                       </thead>
                       <tbody>
                         {users.map((user, index) => (
-                          <tr key={index}>
+                          <tr key={user.id || index}>
                             <td className="p-2 py-4 border-b border-[#f1f3f7]">
                               <h4 className="subHeadingColor font-semibold text-sm">
                                 {user.name}
@@ -456,11 +541,11 @@ export default function AdminUser() {
                             </td>
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                               <Switch
-                                id="airplane-mode"
-                                className="
-                                          data-[state=unchecked]:bg-green-500
-                                          data-[state=checked]:bg-red-500
-                                        "
+                                id={`block-${user.id}`}
+                                checked={!user.isActive}
+                                disabled={statusUpdatingId === user.id}
+                                onCheckedChange={(checked) => handleToggleUserStatus(user, checked)}
+                                className="data-[state=unchecked]:bg-green-500 data-[state=checked]:bg-red-500"
                               />
                             </td>
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
@@ -487,6 +572,18 @@ export default function AdminUser() {
                                       <ul className="p-2 text-sm space-y-1">
                                         <li
                                           onClick={() => {
+                                            openViewForUser(user.id);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Eye className="w-3 h-3" /> View Details
+                                          </div>
+                                        </li>
+
+                                        <li
+                                          onClick={() => {
                                             openEditForUser(user.id);
                                             setOpenActionRow(null);
                                           }}
@@ -494,18 +591,6 @@ export default function AdminUser() {
                                         >
                                           <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
                                             <Pencil className="w-3 h-3" /> Edit
-                                          </div>
-                                        </li>
-                                        <li
-                                          onClick={() => {
-                                            setAssignBusiness(true);
-                                            setOpenActionRow(null);
-                                          }}
-                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                        >
-                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                            <Pencil className="w-3 h-3" />{" "}
-                                            Assign Business
                                           </div>
                                         </li>
                                       </ul>
@@ -518,6 +603,57 @@ export default function AdminUser() {
                         ))}
                       </tbody>
                     </table>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="text-sm text-gray-600">
+                        Showing {pagination.total === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1}
+                        {" - "}
+                        {Math.min(pagination.page * pagination.limit, pagination.total)}
+                        {" of "}
+                        {pagination.total}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => pagination.prevPage && setPage(pagination.prevPage)}
+                          disabled={!pagination.hasPrevPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Prev
+                        </button>
+
+                        <div className="text-sm text-gray-700">
+                          Page {pagination.page} / {Math.max(1, pagination.totalPages || 1)}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => pagination.nextPage && setPage(pagination.nextPage)}
+                          disabled={!pagination.hasNextPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Next
+                        </button>
+
+                        <div className="ml-2 flex items-center gap-2">
+                          <span className="text-sm text-gray-600">Rows</span>
+                          <select
+                            value={limit}
+                            onChange={(e) => {
+                              const v = parseInt(e.target.value, 10) || 10;
+                              setLimit(v);
+                              setPage(1);
+                            }}
+                            className="rounded-md border px-2 py-1 text-sm"
+                          >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -602,7 +738,10 @@ export default function AdminUser() {
                             </td>
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                               <Switch
-                                id={`block-admin-${user.id || index}`}
+                                id={`block-${user.id}`}
+                                checked={!user.isActive}
+                                disabled={statusUpdatingId === user.id}
+                                onCheckedChange={(checked) => handleToggleUserStatus(user, checked)}
                                 className="data-[state=unchecked]:bg-green-500 data-[state=checked]:bg-red-500"
                               />
                             </td>
@@ -631,6 +770,18 @@ export default function AdminUser() {
                                       <ul className="p-2 text-sm space-y-1">
                                         <li
                                           onClick={() => {
+                                            openViewForUser(user.id);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Eye className="w-3 h-3" /> View Details
+                                          </div>
+                                        </li>
+
+                                        <li
+                                          onClick={() => {
                                             openEditForUser(user.id);
                                             setOpenActionRow(null);
                                           }}
@@ -638,17 +789,6 @@ export default function AdminUser() {
                                         >
                                           <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
                                             <Pencil className="w-3 h-3" /> Edit
-                                          </div>
-                                        </li>
-                                        <li
-                                          onClick={() => {
-                                            setAssignBusiness(true);
-                                            setOpenActionRow(null);
-                                          }}
-                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                        >
-                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                            <Pencil className="w-3 h-3" /> Assign Business
                                           </div>
                                         </li>
                                       </ul>
@@ -661,6 +801,57 @@ export default function AdminUser() {
                         ))}
                       </tbody>
                     </table>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="text-sm text-gray-600">
+                        Showing {pagination.total === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1}
+                        {" - "}
+                        {Math.min(pagination.page * pagination.limit, pagination.total)}
+                        {" of "}
+                        {pagination.total}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => pagination.prevPage && setPage(pagination.prevPage)}
+                          disabled={!pagination.hasPrevPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Prev
+                        </button>
+
+                        <div className="text-sm text-gray-700">
+                          Page {pagination.page} / {Math.max(1, pagination.totalPages || 1)}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => pagination.nextPage && setPage(pagination.nextPage)}
+                          disabled={!pagination.hasNextPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Next
+                        </button>
+
+                        <div className="ml-2 flex items-center gap-2">
+                          <span className="text-sm text-gray-600">Rows</span>
+                          <select
+                            value={limit}
+                            onChange={(e) => {
+                              const v = parseInt(e.target.value, 10) || 10;
+                              setLimit(v);
+                              setPage(1);
+                            }}
+                            className="rounded-md border px-2 py-1 text-sm"
+                          >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -745,7 +936,10 @@ export default function AdminUser() {
                             </td>
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                               <Switch
-                                id={`block-owner-${user.id || index}`}
+                                id={`block-${user.id}`}
+                                checked={!user.isActive}
+                                disabled={statusUpdatingId === user.id}
+                                onCheckedChange={(checked) => handleToggleUserStatus(user, checked)}
                                 className="data-[state=unchecked]:bg-green-500 data-[state=checked]:bg-red-500"
                               />
                             </td>
@@ -774,6 +968,18 @@ export default function AdminUser() {
                                       <ul className="p-2 text-sm space-y-1">
                                         <li
                                           onClick={() => {
+                                            openViewForUser(user.id);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Eye className="w-3 h-3" /> View Details
+                                          </div>
+                                        </li>
+
+                                        <li
+                                          onClick={() => {
                                             openEditForUser(user.id);
                                             setOpenActionRow(null);
                                           }}
@@ -781,17 +987,6 @@ export default function AdminUser() {
                                         >
                                           <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
                                             <Pencil className="w-3 h-3" /> Edit
-                                          </div>
-                                        </li>
-                                        <li
-                                          onClick={() => {
-                                            setAssignBusiness(true);
-                                            setOpenActionRow(null);
-                                          }}
-                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                        >
-                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                            <Pencil className="w-3 h-3" /> Assign Business
                                           </div>
                                         </li>
                                       </ul>
@@ -804,6 +999,57 @@ export default function AdminUser() {
                         ))}
                       </tbody>
                     </table>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="text-sm text-gray-600">
+                        Showing {pagination.total === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1}
+                        {" - "}
+                        {Math.min(pagination.page * pagination.limit, pagination.total)}
+                        {" of "}
+                        {pagination.total}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => pagination.prevPage && setPage(pagination.prevPage)}
+                          disabled={!pagination.hasPrevPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Prev
+                        </button>
+
+                        <div className="text-sm text-gray-700">
+                          Page {pagination.page} / {Math.max(1, pagination.totalPages || 1)}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => pagination.nextPage && setPage(pagination.nextPage)}
+                          disabled={!pagination.hasNextPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Next
+                        </button>
+
+                        <div className="ml-2 flex items-center gap-2">
+                          <span className="text-sm text-gray-600">Rows</span>
+                          <select
+                            value={limit}
+                            onChange={(e) => {
+                              const v = parseInt(e.target.value, 10) || 10;
+                              setLimit(v);
+                              setPage(1);
+                            }}
+                            className="rounded-md border px-2 py-1 text-sm"
+                          >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -886,7 +1132,10 @@ export default function AdminUser() {
                             </td>
                             <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
                               <Switch
-                                id={`block-investor-${user.id || index}`}
+                                id={`block-${user.id}`}
+                                checked={!user.isActive}
+                                disabled={statusUpdatingId === user.id}
+                                onCheckedChange={(checked) => handleToggleUserStatus(user, checked)}
                                 className="data-[state=unchecked]:bg-green-500 data-[state=checked]:bg-red-500"
                               />
                             </td>
@@ -915,6 +1164,18 @@ export default function AdminUser() {
                                       <ul className="p-2 text-sm space-y-1">
                                         <li
                                           onClick={() => {
+                                            openViewForUser(user.id);
+                                            setOpenActionRow(null);
+                                          }}
+                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                                        >
+                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                                            <Eye className="w-3 h-3" /> View Details
+                                          </div>
+                                        </li>
+
+                                        <li
+                                          onClick={() => {
                                             openEditForUser(user.id);
                                             setOpenActionRow(null);
                                           }}
@@ -922,17 +1183,6 @@ export default function AdminUser() {
                                         >
                                           <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
                                             <Pencil className="w-3 h-3" /> Edit
-                                          </div>
-                                        </li>
-                                        <li
-                                          onClick={() => {
-                                            setAssignBusiness(true);
-                                            setOpenActionRow(null);
-                                          }}
-                                          className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                        >
-                                          <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                            <Pencil className="w-3 h-3" /> Assign Business
                                           </div>
                                         </li>
                                       </ul>
@@ -945,6 +1195,57 @@ export default function AdminUser() {
                         ))}
                       </tbody>
                     </table>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="text-sm text-gray-600">
+                        Showing {pagination.total === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1}
+                        {" - "}
+                        {Math.min(pagination.page * pagination.limit, pagination.total)}
+                        {" of "}
+                        {pagination.total}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => pagination.prevPage && setPage(pagination.prevPage)}
+                          disabled={!pagination.hasPrevPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Prev
+                        </button>
+
+                        <div className="text-sm text-gray-700">
+                          Page {pagination.page} / {Math.max(1, pagination.totalPages || 1)}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => pagination.nextPage && setPage(pagination.nextPage)}
+                          disabled={!pagination.hasNextPage || loading}
+                          className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          Next
+                        </button>
+
+                        <div className="ml-2 flex items-center gap-2">
+                          <span className="text-sm text-gray-600">Rows</span>
+                          <select
+                            value={limit}
+                            onChange={(e) => {
+                              const v = parseInt(e.target.value, 10) || 10;
+                              setLimit(v);
+                              setPage(1);
+                            }}
+                            className="rounded-md border px-2 py-1 text-sm"
+                          >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1261,114 +1562,84 @@ export default function AdminUser() {
         </div>
       )}
 
-      {assignBusiness && (
+      {/* View Details Modal */}
+      {openViewModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-xl rounded-lg bg-white p-6 shadow-lg">
-            {/* Header */}
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Assign Business</h2>
-              <button onClick={() => setAssignBusiness(false)}>
+              <h2 className="text-lg font-semibold">User Details</h2>
+              <button
+                onClick={() => {
+                  setViewUserError("");
+                  setViewUser(null);
+                  setOpenViewModal(false);
+                }}
+              >
                 <X className="h-5 w-5" color="#797979" />
               </button>
             </div>
 
-            {/* Body */}
+            {viewUserError ? (
+              <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{viewUserError}</div>
+            ) : null}
 
-            <div>
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search users by name, email, or role"
-                  className="w-full rounded-lg border text-sm border-gray-300 py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            {viewUserLoading ? (
+              <div className="py-2 text-sm text-gray-500">Loading...</div>
+            ) : null}
+
+            {!viewUserLoading && !viewUserError ? (
+              <div className="space-y-3">
+                <div className="rounded-md border bg-neutral-50 p-3">
+                  <div className="text-xs text-gray-500">Name</div>
+                  <div className="text-sm font-semibold text-gray-800">{viewUser?.name || "-"}</div>
+                </div>
+
+                <div className="rounded-md border bg-neutral-50 p-3">
+                  <div className="text-xs text-gray-500">Email</div>
+                  <div className="text-sm font-semibold text-gray-800">{viewUser?.email || "-"}</div>
+                </div>
+
+                <div className="rounded-md border bg-neutral-50 p-3">
+                  <div className="text-xs text-gray-500">Phone</div>
+                  <div className="text-sm font-semibold text-gray-800">{viewUser?.mobile || "-"}</div>
+                </div>
+
+                <div className="rounded-md border bg-neutral-50 p-3">
+                  <div className="text-xs text-gray-500">Role</div>
+                  <div className="text-sm font-semibold text-gray-800">
+                    {viewUser?.role === "BUSINESS_OWNER" ? "Owner" : viewUser?.role || "-"}
+                  </div>
+                </div>
+
+                <div className="rounded-md border bg-neutral-50 p-3">
+                  <div className="text-xs text-gray-500">Status</div>
+                  <div className="text-sm font-semibold text-gray-800">
+                    {viewUser?.isActive ? "Active" : "Blocked"}
+                  </div>
+                </div>
+
+                <div className="rounded-md border bg-neutral-50 p-3">
+                  <div className="text-xs text-gray-500">Joined</div>
+                  <div className="text-sm font-semibold text-gray-800">
+                    {viewUser?.createdAt ? new Date(viewUser.createdAt).toLocaleString() : "-"}
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setViewUserError("");
+                      setViewUser(null);
+                      setOpenViewModal(false);
+                    }}
+                    className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
-
-              <div className="py-5 overflow-x-auto max-h-[500px] overflow-y-auto">
-                <table className="min-w-[400px] md:min-w-full w-full table-fixed border border-[#f1f3f7]">
-                  <thead>
-                    <tr className="secondaryColor">
-                      <th
-                        className="text-start p-2 border-[#f1f3f7] w-[40%]"
-                        style={{ verticalAlign: "center" }}
-                      >
-                        <h5 className="subHeadingColor text-sm">
-                          Business Name
-                        </h5>
-                      </th>
-                      <th
-                        className="text-center p-2 border-[#f1f3f7] w-[30%]"
-                        style={{ verticalAlign: "center" }}
-                      >
-                        <h5 className="subHeadingColor text-sm">Category</h5>
-                      </th>
-                      <th
-                        className="text-center p-2 border-[#f1f3f7] w-[30%]"
-                        style={{ verticalAlign: "center" }}
-                      >
-                        <h5 className="subHeadingColor text-sm">Actions</h5>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                        <div>
-                          <h4 className="subHeadingColor font-semibold text-sm">
-                            Demo Business Name 1
-                          </h4>
-                        </div>
-                      </td>
-
-                      <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                        <p className="textColor text-sm">Retail</p>
-                      </td>
-                      <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                        <button className="flex gap-2 mx-auto items-center primaryColor text-white px-5 py-2 text-sm font-semibold rounded-md">
-                          Assign
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                        <div>
-                          <h4 className="subHeadingColor font-semibold text-sm">
-                            Demo Business Name 2
-                          </h4>
-                        </div>
-                      </td>
-
-                      <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                        <p className="textColor text-sm">Retail</p>
-                      </td>
-                      <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                        <button className="flex gap-2 mx-auto items-center primaryColor text-white px-5 py-2 text-sm font-semibold rounded-md">
-                          Assign
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 py-4 border-b border-[#f1f3f7]">
-                        <div>
-                          <h4 className="subHeadingColor font-semibold text-sm">
-                            Demo Business Name 3
-                          </h4>
-                        </div>
-                      </td>
-
-                      <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                        <p className="textColor text-sm">Retail</p>
-                      </td>
-                      <td className="text-center p-2 py-4 border-b border-[#f1f3f7]">
-                        <button className="flex gap-2 mx-auto items-center primaryColor text-white px-5 py-2 text-sm font-semibold rounded-md">
-                          Assign
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            ) : null}
           </div>
         </div>
       )}

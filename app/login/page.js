@@ -33,7 +33,8 @@ const Page = () => {
       const payload = { email: form.email, password: form.password };
       const res = await authApi.login(payload);
 
-      const user = res?.data?.user;
+      // Backend response shape: { success, message, data: { user } }
+      const user = res?.data?.data?.user || res?.data?.user;
       const role = user?.role;
 
       if (role === "ADMIN") router.push("/admin/dashboard");

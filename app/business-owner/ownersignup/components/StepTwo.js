@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { authApi } from "@/lib/api/auth";
 import {
   Select,
   SelectContent,
@@ -12,8 +12,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const StepTwo = ({ onBack }) => {
-    const router = useRouter();
+const StepTwo = ({ onBack, selectedRole = "BUSINESS_OWNER" }) => {
+  const router = useRouter();
+
+  const roleValue = String(selectedRole || "BUSINESS_OWNER").toUpperCase();
+  const roleLabel = (role) => {
+    if (role === "ADMIN") return "Admin";
+    if (role === "BUSINESS_OWNER") return "Business Owner";
+    if (role === "INVESTOR") return "Investor";
+    return role;
+  };
+
+  const isValidEmail = (email) =>
+    typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const normalizePhone10 = (v) => String(v || "").replace(/\D/g, "").slice(0, 10);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,15 +42,73 @@ const StepTwo = ({ onBack }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError("");
+
+    if (name === "phone") {
+      const digits = normalizePhone10(value);
+      setFormData((prev) => ({ ...prev, phone: digits }));
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    router.push("/business-owner/overview");
+    if (submitting) return;
+
+    setError("");
+
+    const email = String(formData.email || "").trim();
+    const phoneDigits = normalizePhone10(formData.phone);
+
+    if (!formData.name || !String(formData.name).trim()) {
+      setError("Full name is required.");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (phoneDigits.length !== 10) {
+      setError("Mobile number must be exactly 10 digits.");
+      return;
+    }
+
+    if (!formData.password || String(formData.password).length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const payload = {
+        name: String(formData.name).trim(),
+        email,
+        password: formData.password,
+        role: roleValue,
+        mobile: `${formData.countryCode || ""}${phoneDigits}`,
+      };
+
+      await authApi.register(payload);
+
+      // Redirect based on role
+      if (roleValue === "ADMIN") router.push("/admin/dashboard");
+      else if (roleValue === "INVESTOR") router.push("/investors/overview");
+      else router.push("/business-owner/overview");
+
+      router.refresh();
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to create account");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -46,14 +120,18 @@ const StepTwo = ({ onBack }) => {
               {/* <p className="textColor mb-4 text-sm font-semibold"><span className="font-semibold">Step 2 of 2</span> - Create your admin workspace</p> */}
               <div>
                 <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
-                  Set up your Business Owner Account
+                  Set up your {roleLabel(roleValue)} Account
                 </h2>
                 <p className="textColor">
-                  Set up tools, permissions, and workflows to manage users and
-                  platform operations efficiently.
+                  Create your account to access your dashboard, manage your profile, and start using the platform.
                 </p>
               </div>
               <form className="md:py-6 pt-4" onSubmit={handleSubmit}>
+                {error ? (
+                  <div className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {error}
+                  </div>
+                ) : null}
                 {/* Full Name */}
                 <div className="mb-4">
                   <label className="block text-sm font-semibold mb-2 textColor">
@@ -80,6 +158,9 @@ const StepTwo = ({ onBack }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    onBlur={() =>
+                      setFormData((prev) => ({ ...prev, email: String(prev.email || "").trim() }))
+                    }
                     placeholder="Enter your email address"
                     className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
                     required
@@ -114,10 +195,13 @@ const StepTwo = ({ onBack }) => {
 
                     <input
                       type="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]{10}"
+                      maxLength={10}
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="Enter your contact number"
+                      placeholder="Enter 10-digit mobile number"
                       className="flex-1 p-3 border border-gray-300 rounded-md outline-none text-sm"
                       required
                     />
@@ -161,9 +245,10 @@ const StepTwo = ({ onBack }) => {
                 <div className="space-y-3">
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-md primaryColor text-white font-semibold"
+                    disabled={submitting}
+                    className="w-full py-3 rounded-md primaryColor text-white font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Create Account
+                    {submitting ? "Creating..." : "Create Account"}
                   </button>
                   {/* <button
                     type="submit"

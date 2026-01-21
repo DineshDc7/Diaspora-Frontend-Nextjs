@@ -13,13 +13,23 @@ const roleRoutes = {
     2: "/admin/signup",
 };
 
+const roleValues = {
+  0: "INVESTOR",
+  1: "BUSINESS_OWNER",
+  2: "ADMIN",
+};
+
 const onContinue = () => {
   const selectedRoute = roleRoutes[activeIndex];
-  console.log("selectedRoute",selectedRoute);
+  const role = roleValues[activeIndex];
 
-  if (!selectedRoute) return;
+  console.log("selectedRoute", selectedRoute);
+  console.log("selectedRole", role);
 
-  router.push(selectedRoute);
+  if (!selectedRoute || !role) return;
+
+  // Pass role to next screen so it can show in heading
+  router.push(`${selectedRoute}?role=${encodeURIComponent(role)}`);
 };
 
   const cardBase = "p-4 rounded-lg cursor-pointer transition-all duration-200";

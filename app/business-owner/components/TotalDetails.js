@@ -1,61 +1,114 @@
 "use client";
-import { ScrollText, BadgeDollarSign, User, Percent } from "lucide-react";
-export default function TotalDetails() {
-    return (
-        <>
-            <div className="shadow-lg rounded-lg bg-white p-4 pb-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-6 gap-5">
-                    <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
-                        <div className="flex justify-between items-center gap-2">
-                            <div>
-                                <h5 className="subHeadingColor text-base">Total Sales</h5>
-                                <h2 className="headingColor text-3xl font-semibold py-3">$24,345</h2>
-                            </div>
-                            <div className="absolute right-6 bottom-6">
-                                <BadgeDollarSign className="w-15 h-15" color="#cfdced" />
-                            </div>
-                        </div>
 
-                    </div>
-                    <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
-                        <div className="flex justify-between items-center gap-2">
-                            <div>
-                                <h5 className="subHeadingColor text-base">Total Expenses</h5>
-                                <h2 className="headingColor text-3xl font-semibold py-3">$24,345</h2>
-                            </div>
-                            <div className="absolute right-6 bottom-6">
-                                <ScrollText className="w-15 h-15" color="#cfdced" />
-                            </div>
-                        </div>
+import { ScrollText, BadgeDollarSign, Building2, Percent } from "lucide-react";
 
-                    </div>
-                    <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
-                        <div className="flex justify-between items-center gap-2">
-                            <div>
-                                <h5 className="subHeadingColor text-base">Total Profit/Loss</h5>
-                                <h2 className="headingColor text-3xl font-semibold py-3">+$45</h2>
-                            </div>
-                            <div className="absolute right-6 bottom-6">
-                               <Percent className="w-15 h-15" color="#cfdced" />
-                            </div>
-                        </div>
+function toNumber(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
 
-                    </div>
-                    <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
-                        <div className="flex justify-between items-center gap-2">
-                            <div>
-                                <h5 className="subHeadingColor text-base">Total Customers</h5>
-                                <h2 className="headingColor text-3xl font-semibold py-3">120</h2>
-                            </div>
-                            <div>
-                                <User className="w-15 h-15" color="#cfdced" />
-                            </div>
-                        </div>
+function formatCurrency(v) {
+  const n = toNumber(v);
+  // Simple formatting (USD). Change currency later if needed.
+  return n.toLocaleString(undefined, { style: "currency", currency: "USD" });
+}
 
-                    </div>
+export default function TotalDetails({ overview }) {
+  // API shape:
+  // overview.totals.kpis.{today|thisMonth|last30Days}.{sales, expenses, profitLoss}
+  // overview.totals.totalReports
+  // overview.businesses
+  const kpis = overview?.totals?.kpis;
 
-                </div>
+  // Use "thisMonth" as the default for the "Total" cards
+  const sales = kpis?.thisMonth?.sales ?? 0;
+  const expenses = kpis?.thisMonth?.expenses ?? 0;
+  const profitLoss = kpis?.thisMonth?.profitLoss ?? 0;
+
+  const totalReports = overview?.totals?.totalReports ?? 0;
+  const totalBusinesses = Array.isArray(overview?.businesses) ? overview.businesses.length : 0;
+
+  return (
+    <div className="shadow-lg rounded-lg bg-white p-4 pb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 mt-6 gap-5">
+        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+          <div className="flex justify-between items-center gap-2">
+            <div>
+              <h5 className="subHeadingColor text-base">Total Businesses</h5>
+              <h2 className="headingColor text-3xl font-semibold py-3">{toNumber(totalBusinesses)}</h2>
             </div>
-        </>
-    );
+            <div className="absolute right-6 bottom-6">
+              <Building2 className="w-15 h-15" color="#cfdced" />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+          <div className="flex justify-between items-center gap-2">
+            <div>
+              <h5 className="subHeadingColor text-base">Total Reports</h5>
+              <h2 className="headingColor text-3xl font-semibold py-3">{toNumber(totalReports)}</h2>
+            </div>
+            <div className="absolute right-6 bottom-6">
+              <ScrollText className="w-15 h-15" color="#cfdced" />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+          <div className="flex justify-between items-center gap-2">
+            <div>
+              <h5 className="subHeadingColor text-base">Sales (This Month)</h5>
+              <h2 className="headingColor text-3xl font-semibold py-3">{formatCurrency(sales)}</h2>
+            </div>
+            <div className="absolute right-6 bottom-6">
+              <BadgeDollarSign className="w-15 h-15" color="#cfdced" />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+          <div className="flex justify-between items-center gap-2">
+            <div>
+              <h5 className="subHeadingColor text-base">Expenses (This Month)</h5>
+              <h2 className="headingColor text-3xl font-semibold py-3">{formatCurrency(expenses)}</h2>
+            </div>
+            <div className="absolute right-6 bottom-6">
+              <ScrollText className="w-15 h-15" color="#cfdced" />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+          <div className="flex justify-between items-center gap-2">
+            <div>
+              <h5 className="subHeadingColor text-base">Profit/Loss (This Month)</h5>
+              <h2
+                className={`text-3xl font-semibold py-3 ${
+                  profitLoss > 0
+                    ? "text-green-600"
+                    : profitLoss < 0
+                    ? "text-red-600"
+                    : "text-gray-700"
+                }`}
+              >
+                {profitLoss >= 0 ? "+" : ""}
+                {formatCurrency(profitLoss)}
+              </h2>
+              <small className="block text-xs text-gray-500">
+                {profitLoss > 0
+                  ? "Profitable this month"
+                  : profitLoss < 0
+                  ? "Loss this month"
+                  : "Break-even"}
+              </small>
+            </div>
+            <div className="absolute right-6 bottom-6">
+              <Percent className="w-15 h-15" color={profitLoss > 0 ? "#22c55e" : profitLoss < 0 ? "#ef4444" : "#a3a3a3"} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

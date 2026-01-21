@@ -18,9 +18,9 @@ const Header = () => {
 
          <div className='md:mt-auto mt-5'>
             <div className="md:flex gap-2">
-                <p className="px-3 md:my-auto my-2 py-1 font-semibold text-sm subHeadingColor rounded-full secondaryColor">
+                {/* <p className="px-3 md:my-auto my-2 py-1 font-semibold text-sm subHeadingColor rounded-full secondaryColor">
                   Role Selected - Admin
-                </p>
+                </p> */}
                 <p className="px-3 py-1 font-semibold text-sm textColor rounded-full">
                   Already have an account? <a href="/login" className="text-blue-700">Login</a>
                 </p>

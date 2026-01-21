@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { authApi } from "@/lib/api/auth";
 import {
   Select,
   SelectContent,
@@ -12,8 +12,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const StepTwo = ({ onBack, onContinue }) => {
+const StepTwo = ({ onBack, selectedRole = "INVESTOR" }) => {
+  const router = useRouter();
+
+  const roleValue = String(selectedRole || "INVESTOR").toUpperCase();
+  const roleLabel = (role) => {
+    if (role === "ADMIN") return "Admin";
+    if (role === "BUSINESS_OWNER") return "Business Owner";
+    if (role === "INVESTOR") return "Investor";
+    return role;
+  };
+
+  const isValidEmail = (email) =>
+    typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const normalizePhone10 = (v) => String(v || "").replace(/\D/g, "").slice(0, 10);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,21 +42,70 @@ const StepTwo = ({ onBack, onContinue }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError("");
+
+    if (name === "phone") {
+      const digits = normalizePhone10(value);
+      setFormData((prev) => ({ ...prev, phone: digits }));
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submitting) return;
 
-    const payload = {
-      ...formData,
-      phone: `${formData.countryCode}${formData.phone}`,
-    };
+    setError("");
 
-    console.log("Form Submitted:", payload);
+    const email = String(formData.email || "").trim();
+    const phoneDigits = normalizePhone10(formData.phone);
+
+    if (!formData.name || !String(formData.name).trim()) {
+      setError("Full name is required.");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (phoneDigits.length !== 10) {
+      setError("Mobile number must be exactly 10 digits.");
+      return;
+    }
+
+    if (!formData.password || String(formData.password).length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const payload = {
+        name: String(formData.name).trim(),
+        email,
+        password: formData.password,
+        role: roleValue,
+        mobile: `${formData.countryCode || ""}${phoneDigits}`,
+      };
+
+      await authApi.register(payload);
+
+      // Investor dashboard
+      router.push("/investors/overview");
+      router.refresh();
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to create account");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -48,19 +115,22 @@ const StepTwo = ({ onBack, onContinue }) => {
           <div className="grid md:grid-cols-3 grid-cols-1 md:gap-6">
             <div className="md:col-span-2 col-span-1 flex flex-col justify-center md:pr-16 px-5">
               <p className="textColor mb-4 text-sm font-semibold">
-                <span className="font-semibold">Step 1 of 3</span> - Create your
-                investor workspace
+                <span className="font-semibold">Sign up</span> - Create your investor workspace
               </p>
               <div>
                 <h2 className="text-xl md:text-3xl font-bold mb-4 headingColor">
-                  Set up your Investor Account
+                  Set up your {roleLabel(roleValue)} Account
                 </h2>
                 <p className="textColor">
-                  Set up tools, permissions, and workflows to manage users and
-                  platform operations efficiently.
+                  Create your account to access your dashboard, manage your profile, and start using the platform.
                 </p>
               </div>
               <form className="py-6" onSubmit={handleSubmit}>
+                {error ? (
+                  <div className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {error}
+                  </div>
+                ) : null}
                 {/* Full Name */}
                 <div className="mb-4">
                   <label className="block text-sm font-semibold mb-2 textColor">
@@ -87,6 +157,9 @@ const StepTwo = ({ onBack, onContinue }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    onBlur={() =>
+                      setFormData((prev) => ({ ...prev, email: String(prev.email || "").trim() }))
+                    }
                     placeholder="Enter your email address"
                     className="w-full p-3 border border-gray-300 rounded-md outline-none text-sm"
                     required
@@ -121,10 +194,13 @@ const StepTwo = ({ onBack, onContinue }) => {
 
                     <input
                       type="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]{10}"
+                      maxLength={10}
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="Enter your contact number"
+                      placeholder="Enter 10-digit mobile number"
                       className="flex-1 p-3 border border-gray-300 rounded-md outline-none text-sm"
                       required
                     />
@@ -166,25 +242,12 @@ const StepTwo = ({ onBack, onContinue }) => {
 
                 {/* Submit */}
                 <div className="flex gap-3 items-center">
-                  {/* <button
-                    type="submit"
-                    onClick={onBack}
-                    className="w-full py-2 rounded-md secondaryColor textColor text-sm font-semibold"
-                  >
-                    Back Previous Step
-                  </button> */}
                   <button
                     type="submit"
-                    className="w-full py-2 rounded-md secondaryColor textColor text-sm font-semibold"
+                    disabled={submitting}
+                    className="w-full py-2 rounded-md primaryColor text-white text-sm font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Skip for Now
-                  </button>
-                  <button
-                    type="submit"
-                    onClick={onContinue}
-                    className="w-full py-2 rounded-md primaryColor text-white text-sm font-semibold"
-                  >
-                    Continue to Step 2
+                    {submitting ? "Creating..." : "Create Account"}
                   </button>
                 </div>
 
@@ -197,6 +260,7 @@ const StepTwo = ({ onBack, onContinue }) => {
                   </div>
                   <div>
                     <button
+                      type="button"
                       onClick={onBack}
                       className="text-blue-500 text-sm font-semibold"
                     >

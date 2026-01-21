@@ -93,7 +93,7 @@ const Reports = ({ reports = [] }) => {
                   <h5 className="subHeadingColor text-base">Customers</h5>
                 </th>
                 <th className="text-center pb-4 border-b border-gray-100 w-[10%]">
-                  <h5 className="subHeadingColor text-base">Profit</h5>
+                  <h5 className="subHeadingColor text-base">Profit/Loss</h5>
                 </th>
               </tr>
             </thead>
@@ -120,12 +120,19 @@ const Reports = ({ reports = [] }) => {
                   ]);
 
                   const expenses = getMetric(obj, [
-                    "expenses",
+                    // common keys used by your backend/business-owner reports
+                    "expensesToday",
+                    "expenseToday",
                     "totalExpenses",
+                    "totalExpense",
+                    "expenses",
                     "expense",
                     "cost",
                     "totalCost",
                     "cogs",
+                    "operatingExpenses",
+                    "expenseAmount",
+                    "expense_value",
                   ]);
 
                   const customers = getMetric(obj, [
@@ -135,15 +142,43 @@ const Reports = ({ reports = [] }) => {
                     "customersToday",
                   ]);
 
-                  const profit = obj && obj.profit !== undefined ? pickNumber(obj.profit) : sales - expenses;
+                  // Backend can return included Business/User with different keys depending on model associations.
+                  // Support common shapes:
+                  // - r.business (aliased include)
+                  // - r.Business (Sequelize default include key)
+                  // - r.businessDetails (custom)
+                  const businessObj = r?.business || r?.Business || r?.businessDetails || null;
+
+                  const businessName =
+                    businessObj?.businessName ||
+                    r?.businessName ||
+                    "-";
+
+                  // Prefer assigned owner (ownerUser) if present. Fallback to stored ownerName.
+                  const ownerName =
+                    businessObj?.ownerUser?.name ||
+                    businessObj?.ownerUser?.email ||
+                    businessObj?.ownerName ||
+                    r?.ownerName ||
+                    "";
+
+                  // Profit/Loss: prefer explicit keys if present, otherwise compute sales-expenses
+                  const profitFromData = getMetric(obj, ["profitLoss", "profit", "netProfit", "net", "profit_today"]);
+                  const profit = profitFromData !== 0 ? profitFromData : sales - expenses;
+                  const profitIsLoss = profit < 0;
 
                   return (
                     <tr key={r.id}>
                       <td className="py-4">
                         <h4 className="headingColor font-semibold text-sm">
-                          Business #{r.businessId}
+                          {businessName}
                         </h4>
-                        <p className="textColor text-xs">{r.reportType || "-"}</p>
+                        {ownerName ? (
+                          <p className="textColor text-xs">{ownerName}</p>
+                        ) : (
+                          <p className="textColor text-xs">Owner not assigned</p>
+                        )}
+                        <p className="textColor text-[11px] mt-1">{r.reportType || "-"}</p>
                       </td>
                       <td className="py-4 text-center">
                         <p className="textColor text-sm font-semibold">{formatDate(r.createdAt)}</p>
@@ -158,7 +193,13 @@ const Reports = ({ reports = [] }) => {
                         <p className="textColor text-sm font-semibold">{customers || 0}</p>
                       </td>
                       <td className="py-4 text-center">
-                        <p className="text-green-700 text-sm font-semibold">{formatMoney(profit)}</p>
+                        <p
+                          className={`${
+                            profitIsLoss ? "text-red-600" : "text-green-700"
+                          } text-sm font-semibold`}
+                        >
+                          {formatMoney(profit)}
+                        </p>
                       </td>
                     </tr>
                   );

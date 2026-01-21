@@ -1,7 +1,8 @@
 import axios from "axios";
+import { NextResponse } from "next/server";
 
 export async function GET(req, context) {
-  const params = await context.params; // ✅ important
+  const params = await context.params; // ✅ Next 15 dynamic params are async
   const id = params?.id;
 
   console.log("[/api/admin/users/:id] GET HIT ✅", id);
@@ -9,7 +10,7 @@ export async function GET(req, context) {
   try {
     const BACKEND_URL = process.env.BACKEND_API_BASE_URL;
     if (!BACKEND_URL) {
-      return Response.json(
+      return NextResponse.json(
         { success: false, message: "BACKEND_API_BASE_URL not set" },
         { status: 500 }
       );
@@ -17,7 +18,9 @@ export async function GET(req, context) {
 
     const cookie = req.headers.get("cookie") || "";
 
-    const backendUrl = `${String(BACKEND_URL).replace(/\/+$/, "")}/admin/users/${id}`;
+    const base = String(BACKEND_URL).trim().replace(/\/+$/, "");
+    const backendUrl = `${base}/admin/users/${id}`;
+
     console.log("[/api/admin/users/:id] calling backend:", backendUrl);
 
     const backendRes = await axios.get(backendUrl, {
@@ -26,10 +29,10 @@ export async function GET(req, context) {
       validateStatus: () => true,
     });
 
-    return Response.json(backendRes.data, { status: backendRes.status });
+    return NextResponse.json(backendRes.data, { status: backendRes.status });
   } catch (err) {
     console.error("[/api/admin/users/:id] GET error:", err);
-    return Response.json(
+    return NextResponse.json(
       { success: false, message: "Server error" },
       { status: 500 }
     );
@@ -37,7 +40,7 @@ export async function GET(req, context) {
 }
 
 export async function PUT(req, context) {
-  const params = await context.params; // ✅ important
+  const params = await context.params; // ✅ Next 15 dynamic params are async
   const id = params?.id;
 
   console.log("[/api/admin/users/:id] PUT HIT ✅", id);
@@ -45,7 +48,7 @@ export async function PUT(req, context) {
   try {
     const BACKEND_URL = process.env.BACKEND_API_BASE_URL;
     if (!BACKEND_URL) {
-      return Response.json(
+      return NextResponse.json(
         { success: false, message: "BACKEND_API_BASE_URL not set" },
         { status: 500 }
       );
@@ -54,7 +57,9 @@ export async function PUT(req, context) {
     const cookie = req.headers.get("cookie") || "";
     const body = await req.json();
 
-    const backendUrl = `${String(BACKEND_URL).replace(/\/+$/, "")}/admin/users/${id}`;
+    const base = String(BACKEND_URL).trim().replace(/\/+$/, "");
+    const backendUrl = `${base}/admin/users/${id}`;
+
     console.log("[/api/admin/users/:id] calling backend:", backendUrl);
     console.log("[/api/admin/users/:id] body:", body);
 
@@ -67,10 +72,10 @@ export async function PUT(req, context) {
       validateStatus: () => true,
     });
 
-    return Response.json(backendRes.data, { status: backendRes.status });
+    return NextResponse.json(backendRes.data, { status: backendRes.status });
   } catch (err) {
     console.error("[/api/admin/users/:id] PUT error:", err);
-    return Response.json(
+    return NextResponse.json(
       { success: false, message: "Server error" },
       { status: 500 }
     );
