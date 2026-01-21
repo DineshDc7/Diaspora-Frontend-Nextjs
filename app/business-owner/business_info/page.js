@@ -92,8 +92,12 @@ export default function BusinessInfo() {
                         <td className="py-3 px-2 text-base font-semibold headingColor whitespace-nowrap">
                           {b.businessName || "-"}
                         </td>
-                        <td className="py-3 px-2 textColor text-center">{b.ownerName || "-"}</td>
-                        <td className="py-3 px-2 textColor text-center">{b.ownerPhone || "-"}</td>
+                        <td className="py-3 px-2 textColor text-center">
+                          {b?.ownerUser?.name || b.ownerName || "-"}
+                        </td>
+                        <td className="py-3 px-2 textColor text-center">
+                          {b?.ownerUser?.mobile || b.ownerPhone || "-"}
+                        </td>
                         <td className="py-3 px-2 textColor text-center">{b.category || "-"}</td>
                         <td className="py-3 px-2 textColor text-center">{b.city || "-"}</td>
                         <td className="py-3 px-2 textColor text-center relative">
@@ -180,12 +184,16 @@ export default function BusinessInfo() {
 
               <div>
                 <p className="text-xs text-gray-500">Owner Name</p>
-                <p className="font-semibold">{viewBusiness.ownerName || "-"}</p>
+                <p className="font-semibold">
+                  {viewBusiness?.ownerUser?.name || viewBusiness.ownerName || "-"}
+                </p>
               </div>
 
               <div>
                 <p className="text-xs text-gray-500">Owner Phone</p>
-                <p className="font-semibold">{viewBusiness.ownerPhone || "-"}</p>
+                <p className="font-semibold">
+                  {viewBusiness?.ownerUser?.mobile || viewBusiness.ownerPhone || "-"}
+                </p>
               </div>
 
               <div>
