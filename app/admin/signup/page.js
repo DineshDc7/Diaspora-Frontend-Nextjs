@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "../components/Header";
 import StepTwo from "./components/StepTwo";
-const Page = () => {
+
+const SignupContent = () => {
   const [step, setStep] = useState(1);
   const searchParams = useSearchParams();
 
@@ -16,7 +17,7 @@ const Page = () => {
   return (
     <>
       <Header />
-      
+
       {step === 1 && (
         <StepTwo
           onBack={() => window.history.back()}
@@ -24,6 +25,14 @@ const Page = () => {
         />
       )}
     </>
+  );
+};
+
+const Page = () => {
+  return (
+    <Suspense fallback={null}>
+      <SignupContent />
+    </Suspense>
   );
 };
 
