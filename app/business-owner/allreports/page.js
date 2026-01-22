@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import BusinessLayout from "../components/BusinessLayout";
 import apiClient from "@/lib/apiClient";
 import {
@@ -61,6 +62,79 @@ export default function AllReports() {
   const [selectedReport, setSelectedReport] = useState(null);
   const [openActionRow, setOpenActionRow] = useState(null);
 
+  // Action menu portal state
+  const actionBtnRefs = useRef({});
+  const [actionMenu, setActionMenu] = useState({
+    top: 0,
+    left: 0,
+    placement: "down",
+    width: 176, // matches w-44
+    report: null,
+  });
+
+  const toggleActionMenu = (rowId, report) => {
+    if (openActionRow === rowId) {
+      setOpenActionRow(null);
+      setActionMenu((p) => ({ ...p, report: null }));
+      return;
+    }
+
+    try {
+      const el = actionBtnRefs.current?.[rowId];
+      if (el && typeof window !== "undefined") {
+        const rect = el.getBoundingClientRect();
+        const menuHeight = 160; // safe estimate for menu height
+        const gap = 8;
+
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+        const placement = spaceBelow < menuHeight && spaceAbove > menuHeight ? "up" : "down";
+
+        // Align menu to the right edge of the button
+        const left = Math.max(8, Math.min(window.innerWidth - 8 - 176, rect.right - 176));
+        const top = placement === "down" ? rect.bottom + gap : rect.top - gap;
+
+        setActionMenu({ top, left, placement, width: 176, report });
+      } else {
+        setActionMenu({ top: 0, left: 0, placement: "down", width: 176, report });
+      }
+    } catch {
+      setActionMenu({ top: 0, left: 0, placement: "down", width: 176, report });
+    }
+
+    setOpenActionRow(rowId);
+  };
+
+  // Close action dropdown on outside click or scroll
+  useEffect(() => {
+    if (!openActionRow) return;
+
+    const handleClickOutside = (e) => {
+      const btn = actionBtnRefs.current?.[openActionRow];
+      if (!btn) return;
+
+      // If click is neither on the button nor inside the dropdown, close it
+      const dropdown = document.querySelector("[data-action-dropdown]");
+      if (dropdown && (dropdown.contains(e.target) || btn.contains(e.target))) return;
+
+      setOpenActionRow(null);
+      setActionMenu((p) => ({ ...p, report: null }));
+    };
+
+    const handleScroll = () => {
+      setOpenActionRow(null);
+      setActionMenu((p) => ({ ...p, report: null }));
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, true); // capture scrolls from parents
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll, true);
+    };
+  }, [openActionRow]);
+
   // File input refs (for custom UI)
   const photoInputRef = useRef(null);
   const videoInputRef = useRef(null);
@@ -100,6 +174,7 @@ export default function AllReports() {
   const openCreateReport = () => {
     setCreateError("");
     setOpenActionRow(null);
+    setActionMenu((p) => ({ ...p, report: null }));
     // Default business selection: current filter if present
     setReportForm((p) => ({
       ...p,
@@ -271,11 +346,13 @@ export default function AllReports() {
     setSelectedReport(r);
     setOpenModel(true);
     setOpenActionRow(null);
+    setActionMenu((p) => ({ ...p, report: null }));
   };
 
   const closeReport = () => {
     setOpenModel(false);
     setOpenActionRow(null);
+    setActionMenu((p) => ({ ...p, report: null }));
     setSelectedReport(null);
   };
 
@@ -369,8 +446,8 @@ export default function AllReports() {
               ) : null}
 
               {/* Table */}
-              <div className="mt-4 overflow-x-auto">
-                <table className="w-full min-w-[760px] border-collapse">
+              <div className="mt-4 overflow-x-auto overflow-y-visible">
+                <table className="w-full border-collapse">
                   <thead>
                     <tr className="secondaryColor text-left text-sm textColor">
                       <th className="py-3 px-2 w-[22%]">Date</th>
@@ -434,66 +511,13 @@ export default function AllReports() {
                             <div className="relative inline-block">
                               <button
                                 type="button"
-                                onClick={() =>
-                                  setOpenActionRow(openActionRow === r.id ? null : r.id)
-                                }
+                                ref={(el) => { actionBtnRefs.current[r.id] = el; }}
+                                onClick={() => toggleActionMenu(r.id, r)}
                                 className="p-2 rounded-md hover:bg-gray-100"
                                 aria-label="Actions"
                               >
                                 <MoreHorizontal className="w-5 h-5 text-gray-600" />
                               </button>
-
-                              {openActionRow === r.id ? (
-                                <div className="absolute right-0 mt-2 z-50 w-44 rounded-md bg-white text-start shadow-md border">
-                                  <ul className="p-2 text-sm space-y-1">
-                                    <li
-                                      onClick={() => {
-                                        openReport(r);
-                                        setOpenActionRow(null);
-                                      }}
-                                      className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
-                                    >
-                                      <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                        <Eye className="w-4 h-4" /> View
-                                      </div>
-                                    </li>
-
-                                    {/* <li
-                                      onClick={() => {
-                                        if (r?.photoPath)
-                                          window.open(`/${r.photoPath}`, "_blank");
-                                        setOpenActionRow(null);
-                                      }}
-                                      className={`cursor-pointer px-2 py-1 hover:bg-gray-100 rounded ${
-                                        !r?.photoPath
-                                          ? "opacity-50 pointer-events-none"
-                                          : ""
-                                      }`}
-                                    >
-                                      <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                        <ImageIcon className="w-4 h-4" /> Photo
-                                      </div>
-                                    </li> */}
-
-                                    {/* <li
-                                      onClick={() => {
-                                        if (r?.videoPath)
-                                          window.open(`/${r.videoPath}`, "_blank");
-                                        setOpenActionRow(null);
-                                      }}
-                                      className={`cursor-pointer px-2 py-1 hover:bg-gray-100 rounded ${
-                                        !r?.videoPath
-                                          ? "opacity-50 pointer-events-none"
-                                          : ""
-                                      }`}
-                                    >
-                                      <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
-                                        <VideoIcon className="w-4 h-4" /> Video
-                                      </div>
-                                    </li> */}
-                                  </ul>
-                                </div>
-                              ) : null}
                             </div>
                           </td>
                         </tr>
@@ -877,6 +901,39 @@ export default function AllReports() {
           </div>
         </div>
       )}
+      {/* Action Menu Portal Dropdown */}
+      {openActionRow && actionMenu.report && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              data-action-dropdown
+              className="fixed z-[9999]"
+              style={{
+                left: actionMenu.left,
+                top: actionMenu.placement === "down" ? actionMenu.top : actionMenu.top,
+                transform: actionMenu.placement === "up" ? "translateY(-100%)" : "none",
+                width: actionMenu.width,
+              }}
+            >
+              <div className="rounded-md bg-white text-start shadow-md border">
+                <ul className="p-2 text-sm space-y-1">
+                  <li
+                    onClick={() => {
+                      openReport(actionMenu.report);
+                      setOpenActionRow(null);
+                      setActionMenu((p) => ({ ...p, report: null }));
+                    }}
+                    className="cursor-pointer px-2 py-1 hover:bg-gray-100 rounded"
+                  >
+                    <div className="flex gap-2 items-center textprimaryColor text-sm font-semibold">
+                      <Eye className="w-4 h-4" /> View
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </>
   );
 }
