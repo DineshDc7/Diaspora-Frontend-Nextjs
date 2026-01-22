@@ -30,61 +30,61 @@ export default function TotalDetails({ overview }) {
 
   return (
     <div className="shadow-lg rounded-lg bg-white p-4 pb-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 mt-6 gap-5">
-        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mt-6 gap-4 sm:gap-5">
+        <div className="p-4 sm:p-5 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
           <div className="flex justify-between items-center gap-2">
             <div>
-              <h5 className="subHeadingColor text-base">Total Businesses</h5>
-              <h2 className="headingColor text-3xl font-semibold py-3">{toNumber(totalBusinesses)}</h2>
+              <h5 className="subHeadingColor text-sm sm:text-base">Total Businesses</h5>
+              <h2 className="headingColor text-2xl sm:text-3xl font-semibold py-3">{toNumber(totalBusinesses)}</h2>
             </div>
-            <div className="absolute right-6 bottom-6">
-              <Building2 className="w-15 h-15" color="#cfdced" />
+            <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6">
+              <Building2 className="w-10 h-10 sm:w-12 sm:h-12" color="#cfdced" />
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+        <div className="p-4 sm:p-5 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
           <div className="flex justify-between items-center gap-2">
             <div>
-              <h5 className="subHeadingColor text-base">Total Reports</h5>
-              <h2 className="headingColor text-3xl font-semibold py-3">{toNumber(totalReports)}</h2>
+              <h5 className="subHeadingColor text-sm sm:text-base">Total Reports</h5>
+              <h2 className="headingColor text-2xl sm:text-3xl font-semibold py-3">{toNumber(totalReports)}</h2>
             </div>
-            <div className="absolute right-6 bottom-6">
-              <ScrollText className="w-15 h-15" color="#cfdced" />
+            <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6">
+              <ScrollText className="w-10 h-10 sm:w-12 sm:h-12" color="#cfdced" />
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+        <div className="p-4 sm:p-5 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
           <div className="flex justify-between items-center gap-2">
             <div>
-              <h5 className="subHeadingColor text-base">Sales (This Month)</h5>
-              <h2 className="headingColor text-3xl font-semibold py-3">{formatCurrency(sales)}</h2>
+              <h5 className="subHeadingColor text-sm sm:text-base">Sales (This Month)</h5>
+              <h2 className="headingColor text-2xl sm:text-3xl font-semibold py-3">{formatCurrency(sales)}</h2>
             </div>
-            <div className="absolute right-6 bottom-6">
-              <BadgeDollarSign className="w-15 h-15" color="#cfdced" />
+            <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6">
+              <BadgeDollarSign className="w-10 h-10 sm:w-12 sm:h-12" color="#cfdced" />
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+        <div className="p-4 sm:p-5 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
           <div className="flex justify-between items-center gap-2">
             <div>
-              <h5 className="subHeadingColor text-base">Expenses (This Month)</h5>
-              <h2 className="headingColor text-3xl font-semibold py-3">{formatCurrency(expenses)}</h2>
+              <h5 className="subHeadingColor text-sm sm:text-base">Expenses (This Month)</h5>
+              <h2 className="headingColor text-2xl sm:text-3xl font-semibold py-3">{formatCurrency(expenses)}</h2>
             </div>
-            <div className="absolute right-6 bottom-6">
-              <ScrollText className="w-15 h-15" color="#cfdced" />
+            <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6">
+              <ScrollText className="w-10 h-10 sm:w-12 sm:h-12" color="#cfdced" />
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
+        <div className="p-4 sm:p-5 bg-neutral-50 rounded-lg shadow-[0px_10px_15px_#e4e4e4] relative">
           <div className="flex justify-between items-center gap-2">
             <div>
-              <h5 className="subHeadingColor text-base">Profit/Loss (This Month)</h5>
+              <h5 className="subHeadingColor text-sm sm:text-base">Profit/Loss (This Month)</h5>
               <h2
-                className={`text-3xl font-semibold py-3 ${
+                className={`text-2xl sm:text-3xl font-semibold py-3 ${
                   profitLoss > 0
                     ? "text-green-600"
                     : profitLoss < 0
@@ -103,8 +103,8 @@ export default function TotalDetails({ overview }) {
                   : "Break-even"}
               </small>
             </div>
-            <div className="absolute right-6 bottom-6">
-              <Percent className="w-15 h-15" color={profitLoss > 0 ? "#22c55e" : profitLoss < 0 ? "#ef4444" : "#a3a3a3"} />
+            <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6">
+              <Percent className="w-10 h-10 sm:w-12 sm:h-12" color={profitLoss > 0 ? "#22c55e" : profitLoss < 0 ? "#ef4444" : "#a3a3a3"} />
             </div>
           </div>
         </div>
